@@ -1,50 +1,88 @@
 project: 
   type: website
+  resources:
+    - CNAME
+  render:
+    - content/index.qmd
+    - content/sb.qmd
+    - content/fgb.qmd
+    - content/gr.qmd
+    - content/fk.qmd
+    - content/oc.qmd
+    - content/cb.qmd
+    - content/mb.qmd
+    - content/ch.qmd
+    - content/ci.qmd
+    - content/pm.qmd
+    - content/as.qmd
+    - content/hi.qmd
 
 website: 
   page-navigation: true
   title: "NOAA quarto simple" 
-  site-url: "https://nmfs-opensci.github.io/NOAA-quarto-simple" 
-  repo-url: "https://github.com/nmfs-opensci/NOAA-quarto-simple"
-  repo-actions: [edit, source, issue]
-  favicon: images/favicon.ico
+  site-url: "https://ci-cmg.github.io/SoundscapesWebsiteDev/content/" 
+  repo-url: "https://github.com/CI-CMG/SoundscapesWebsiteDev"
+  repo-actions: [source, issue]
+  favicon: images/image.png
   
   page-footer:
     right: "This page is built with [Quarto](https://quarto.org/)."
     left: "&copy; CC-1.0"
   
   sidebar:
-    background: "#D9E3E4"
-    logo: "https://raw.githubusercontent.com/nmfs-opensci/assets/main/logo/nmfs-opensci-logo3.png"
+    background: "#AABFC1"
+    logo: images/image.png
     favicon: images/favicon.ico
     pinned: true
     align: center
     tools: 
       - icon: globe
-        href: https://nmfs-opensci.github.io
-        text: "NMFS Open Science"
-      - icon: github
-        href: https://github.com/nmfs-opensci
-        text: "NMFS OpenSci"
+        href: https://sanctuaries.noaa.gov/
+        text: "Office of National Marine Sanctuaries"
 
     style: "docked"
     search: true
     collapse-level: 1
     contents:
-      - href: index.qmd
+      - text: <b>General</b>
+      - href: content/index.qmd
         text: Home
-      - href: content/add-content.qmd
-        text: Add content
-      - href: content/customizing.qmd
-        text: Customizing
-      - href: content/rendering.qmd
-        text: Rendering
-      - href: content/rmarkdown.Rmd
-        text: R Markdown files
-      - href: content/code.qmd
-        text: Code in your files
-      - href: content/acknowledgements.qmd
-        text: Acknowledgements
+      - href: https://sanctuaries.noaa.gov/science/monitoring/sound/
+        target: _blank
+        text: ONMS Sound Project Page
+      - href: https://pmc.ncbi.nlm.nih.gov/articles/PMC12702305/
+        target: _blank
+        text: NOAA Noise Reference Station Network
+      - text: <br>
+      - text: <b>Eastern Region</b>
+      - href: content/sb.qmd
+        text: Stellwagen Bank
+      - href: content/fgb.qmd
+        text: Flower Garden Banks
+      - href: content/gr.qmd
+        text: Gray's Reef
+      - href: content/fk.qmd
+        text: Florida Keys
+      - text: <br>
+      - text: <b>West Coast Region</b>
+      - href: content/oc.qmd
+        text: Olympic Coast
+      - href: content/cb.qmd
+        text: Greater Farallones and Cordell Bank 
+      - href: content/mb.qmd
+        text: Monterey Bay
+      - href: content/ch.qmd
+        text: Chumash Heritage
+      - href: content/ci.qmd
+        text: Channel Islands
+      - text: <br>
+      - text: <b>Pacific Islands Region</b>
+      - href: content/pm.qmd
+        text: Papahānaumokuākea
+      - href: content/as.qmd
+        text: American Samoa
+      - href: content/hi.qmd
+        text: Hawaiian Islands Humpback Whale
 
 format:
   html:
@@ -54,10 +92,11 @@ format:
     code-copy: true
     code-overflow: wrap
     toc: true
+    page-layout: full
 
 
 filters:
   - include-files.lua
   - quarto
-
+  
   

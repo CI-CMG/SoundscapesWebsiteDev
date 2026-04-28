@@ -1,0 +1,122 @@
+```{python}
+#| include: false
+import pandas as pd
+from datetime import date
+from tabulate import tabulate
+from IPython.display import display, HTML, Image
+import os
+import ipywidgets as widgets
+from pythonFunctions import generalFunctions as gf
+
+sites = ["SB01", "SB03"]
+
+inputDir = os.path.normpath(os.path.join(os.getcwd(), "resources"))
+metaFile = os.path.join(inputDir, "ONMSSound_IndicatorCategories.xlsx")
+metadata = pd.read_excel(metaFile, sheet_name="Summary", header=1)
+lookup = [row for index, row in metadata.iterrows() if row.iloc[4] in sites]
+dicts = [l.to_dict() for l in lookup]
+
+df = pd.read_excel(metaFile, sheet_name="Standard Report Text", engine_kwargs={'keep_links': True})
+standardTextDict = pd.Series(df.iloc[:, 3].values, index=df.iloc[:, 1]).to_dict()
+
+for key in standardTextDict:
+    value = standardTextDict[key]
+    if isinstance(value, str):  # Only process if it's a string
+        while "**" in value:
+            value = value.replace("**", "<b>", 1)
+            value = value.replace("**", "</b>", 1)
+        standardTextDict[key] = value
+```
+ 
+---
+title: "U.S. Ocean Sound Monitoring and Condition Reporting"
+date: "today"
+output: 
+  html_document: 
+    fig_caption: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
+## Why are we monitoring ocean sound?
+```{python}
+#| echo: false
+display(HTML(standardTextDict["What is ocean sound?"]))
+#display(HTML(gf.makeImage("MBNMS.jpg", "MarineLife")))
+```
+:::
+
+::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
+## Overview of NOAA ocean sound monitoring effort
+```{python}
+#| echo: false
+display(HTML(standardTextDict["When, where, & why are we listening?"]))
+display(HTML(gf.embedMapViewer("https://www.ncei.noaa.gov/maps/passive-acoustic-data/?monitoringProgram=ONMS&monitoringProgram=NRS")))
+```
+### NOAA underwater sound data available through NCEI Passive Acoustic Data Archive, summarized in these reports  
+```{python}
+#| echo: false
+display(HTML(standardTextDict["gantt"]))
+display(HTML(gf.makeImage("gantt_ONMS-SS-NRS.jpg","Gantt", altText= "Gantt chart showing time periods that U.S. sound data are stored in NOAA’s NCEI repository and presented in this report, labeled by monitoring site and color-coded by monitoring project. Time periods begin in 2014 and go through the present.")))
+#| display(HTML(gf.makeImage("map_ONMS.jpg","Gantt")))
+display(HTML(standardTextDict["gantt fc"]))
+```
+:::
+
+::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
+## Understanding ocean sound
+```{python}
+#| echo: false
+display(HTML(standardTextDict["Understanding Ocean Sound"]))
+```
+
+```{python}
+#| echo: false
+display(HTML(gf.makeImage("sanctsound_scene_no_logo.png", "soundscapeInfographic", altText= "Infographic of icons representing examples of different sound sources in the ocean.")))
+display(HTML(standardTextDict["SS Infographic fc"]))
+display(HTML(standardTextDict["Soundscapes"]))
+```
+
+```{python}
+#| echo: false
+
+display(HTML(gf.makeImage("sanctsound_amplitude_frequency.png", "amp&freqInfographic", 600, altText= "Infographic showing spectrogram cartoons ranging from low to high intensity of sound (amplitude measured in decibels) at different pitches (frequency measured in hertz).")))
+display(HTML(standardTextDict["SS how do we measure sound fc"]))
+```
+
+
+### Ocean Sound Conditions
+```{python}
+#| echo: false
+display(HTML(standardTextDict["Seasonal soundscape conditions"]))
+display(HTML(gf.makeImage("plot_SB03_HMDSeasonalSPL.jpg", "seasons", altText= "Line graph of seasonal median sound levels (sound intensity measured by mean-square pressure in microPascal per Hertz) across a range of frequencies (~10 to ~24,000 hertz) for all data at a given monitoring site, with annual recording effort represented by a bar graph underneath. Each season is a different colored line. Modeled ambient sound levels from wind are shown as solid black lines. Frequency bands indicative of a sound source of interest are highlighted in semi-transparent gray and labeled; peak frequencies of interest for some fish species are labeled with vertical dashed lines and labeled by species.")))
+display(HTML(standardTextDict["Seasonal condition fc"]))
+```
+### Ocean Sound Indicators
+```{python}
+#| echo: false
+display(HTML(standardTextDict["Indicators from ocean sound"]))
+display(HTML(gf.makeImage("MB01_FinalRosePlotV2.png", "fish", altText= "Line graph of seasonal median sound levels (sound intensity measured by mean-square pressure in microPascal per Hertz) across a range of frequencies (~10 to ~24,000 hertz) for all data at a given monitoring site, with annual recording effort represented by a bar graph underneath. Each season is a different colored line. Modeled ambient sound levels from wind are shown as solid black lines. Frequency bands indicative of a sound source of interest are highlighted in semi-transparent gray and labeled; peak frequencies of interest for some fish species are labeled with vertical dashed lines and labeled by species.")))
+display(HTML(standardTextDict["MB diel fish HOME fc"]))
+
+display(HTML(standardTextDict["What is ocean sound? pt 2"]))
+```
+:::
+
+::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
+## What are we learning?
+```{python}
+#| echo: false
+display(HTML(standardTextDict["What are we learning?"]))
+```
+:::
+
+<!-- ::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"} -->
+<!-- ## Testing images -->
+<!-- ```{python} -->
+<!-- #| echo: false -->
+<!-- display(HTML(gf.makeButtonsFit(['OC02', 'HI08'], "plot_***-***status.jpg", "FOI"))) -->
+<!-- ``` -->
+<!-- ::: -->
