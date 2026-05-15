@@ -57,7 +57,7 @@ dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #nmfs G
 #outDir =  "C:/Users/emma.beretta/Documents/SoundscapesWebsite/" #for NOAA computer
 #outDir =  "C:/Users/embe5980/SoundscapesWebsite/" #for CIRES computer
 #outDir =  "X:/Emma_Beretta/SoundscapesWebsite/" #for Emma GCP workstation
-outDir =  "C:/Users/pam_user/Documents/GitHub/SoundscapesWebsite/" #Samara GCP WW
+outDir =  "C:/Users/pam_user/Documents/GitHub/SoundscapesWebsiteDev/" #Samara GCP WW
 
 outDirC = paste0( outDir,"content/resources/") #context
 #outDirP = paste0( outDir,"products/", substr(tolower(site),start = 1, stop =2),"/" )#products
