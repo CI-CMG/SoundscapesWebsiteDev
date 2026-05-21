@@ -90,9 +90,9 @@ format:
       light: [cosmo, theme.scss] 
       dark: [cosmo, theme-dark.scss]
     grid: 
-      body-width: 1200      
-      sidebar-width: 250     
-      margin-width: 250  
+      body-width: "1200px"     
+      sidebar-width: "250px" 
+      margin-width: "250px" 
     code-copy: true
     code-overflow: wrap
     toc: true
