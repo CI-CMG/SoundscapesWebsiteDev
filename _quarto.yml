@@ -89,6 +89,10 @@ format:
     theme:
       light: [cosmo, theme.scss] 
       dark: [cosmo, theme-dark.scss]
+    grid: 
+      content-width: 1200px  # Makes the text/content area wider (default is 900px)
+      sidebar-width: 250px  # Optional: adjusts your sidebar size
+      margin-width: 250px   # Optional: adjusts the right-hand margin size
     code-copy: true
     code-overflow: wrap
     toc: true
