@@ -32,15 +32,15 @@ rm(list=ls())
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
 
 
-ONMSsites = c("ci05")
+ONMSsites = c("gr01")
 
 
 ## directories ####
-outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
+#outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
 #outDir   =  "F:/CODE/GitHub/SoundscapesWebsite/" # your local git repo 
 #outDir   =  "/Users/quca3108/SoundscapesWebsite/" # Quincy local git repo
-#outDir = "X:/Emma_Beretta/SoundscapesWebsite/" #for GCP workstation remote desktop Emma
-#outDir   = "~/GitHub/SoundscapesWebsiteDev/" #GCP WW
+outDir = "X:/Emma_Beretta/SoundscapesWebsite/" #for GCP workstation remote desktop Emma
+#outDir   = "~/GitHub/SoundscapesWebsite/" #GCP WW
 
 
 outDirG  =  paste0(outDir,"content/resources/") #where save graphics
@@ -797,13 +797,10 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     seasont$Season <- factor(seasont$Season, levels = c("Upwelling", "Post-Upwelling", "Winter"))
     seasont <- season[order(seasont$Season), ]
     
-  } else if (site %in% c("fk07", "fgb01", "fk08")){
+  } else if (site %in% c("fk07", "fgb01")){
     summary2$Season <- factor(summary2$Season, levels = c("Spring", "Summer", "Fall"))
     
-  } else if (site == "fk06"){
-    summary2$Season <- factor(summary2$Season, levels = c("Winter", "Spring", "Summer")) 
-    
-  } else if ( sidx == "wssf") {
+  }  else if ( sidx == "wssf") {
     summary2$Season <- factor(summary2$Season, levels = c("Winter", "Spring", "Summer", "Fall"))
     seasont$Season <- factor(seasont$Season, levels =  c("Winter", "Spring", "Summer", "Fall"))
     seasont <- season[order(seasont$Season), ]
