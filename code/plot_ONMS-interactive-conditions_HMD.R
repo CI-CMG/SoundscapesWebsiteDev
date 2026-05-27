@@ -191,7 +191,7 @@ p_interactive
 
 
 
-#TRYING NEW METHOD
+#TRYING NEW METHOD using ggiraph
 
 install.packages("ggiraph")
 
@@ -310,6 +310,7 @@ g <- girafe(ggobj = p,
          opts_selection(type = "multiple", css = "opacity:1;"),
          opts_selection_inv(css = "opacity:0.1;")  # fades unselected years
        ))
+
 
 install.packages("htmlwidgets")
 library(htmlwidgets)

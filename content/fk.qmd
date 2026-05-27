@@ -106,9 +106,14 @@ display(HTML(standardTextDict["Annual condition fc"]))
 ```
 
 
-```{r}
-#| echo: false
-htmltools::includeHTML("C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/myFK06plot.html")
+
+```{python}
+from IPython.display import HTML
+
+with open("C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/myFK06plot.html", "r") as f:
+    html_content = f.read()
+
+HTML(html_content)
 ```
 
 <!-- ### How often are sources of interest likely present? -->
