@@ -106,7 +106,7 @@ display(HTML(standardTextDict["Annual condition fc"]))
 ```
 
 
-```{python}
+```{r}
 #| echo: false
 htmltools::includeHTML("C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/myFK06plot.html")
 ```
