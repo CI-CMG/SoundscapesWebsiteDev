@@ -108,7 +108,7 @@ display(HTML(standardTextDict["Annual condition fc"]))
 
 ```{python}
 #| echo: false
-htmltools::includeHTML("C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/myplot.html")
+htmltools::includeHTML("C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/myFK06plot.html")
 ```
 
 <!-- ### How often are sources of interest likely present? -->
