@@ -183,7 +183,7 @@ def addPlotly(sourceHTML):
                 scrolling="auto"
                 frameborder="0"
                 width="100%"
-                height="950px"
+                height="100%"
             >
             </iframe>
 			"""
