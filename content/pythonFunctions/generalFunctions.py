@@ -180,7 +180,7 @@ def addPlotly(sourceHTML):
                 src="resources/{sourceHTML}"
                 name="targetframe"
                 allowTransparency="true"
-                scrolling="no"
+                # scrolling="no"
                 frameborder="0"
                 width="700px"
                 height="850px"

@@ -108,6 +108,7 @@ display(HTML(standardTextDict["Annual condition fc"]))
 
 
 ```{python}
+#| echo: false
 display(HTML(gf.addPlotly("myFK06plot.html")))
 ```
 
