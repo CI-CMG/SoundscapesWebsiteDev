@@ -403,23 +403,31 @@ g1
 
 
 
+# 
+# #combine effort and SPL interactive graphs
+# combined <- browsable(
+#   tagList(
+#     as.tags(g),
+#     tags$hr(),
+#     as.tags(g1)
+#   )
+# )
+# 
+# #preview
+# html_print(combined)
+# 
+# #save
+# save_html(combined, "combined_plotFK06.html")
 
-#combine effort and SPL interactive graphs
-combined <- browsable(
-  tagList(
-    as.tags(g),
-    tags$hr(),
-    as.tags(g1)
-  )
-)
-
-#preview
-html_print(combined)
-
-#save
-save_html(combined, "combined_plotFK06.html")
 
 
+saveWidget(g, file = "myFK06plot.html", selfcontained = TRUE)
+saveWidget(g1, file = "myFK06effortplot.html", selfcontained = TRUE)
+
+
+
+
+browseURL("combined_plotFK06.html")
 
 
 
