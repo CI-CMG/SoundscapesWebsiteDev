@@ -1,6 +1,8 @@
 #use this script after running plot_ONMS-conditions_HMD.R
 library(plotly)
 
+
+
 # 1. Build the plot as you did, but add a 'text' aesthetic for the hover tooltip
 pInt <- ggplot() +
   # Wind models (keep as is)
@@ -196,7 +198,8 @@ p_interactive
 install.packages("ggiraph")
 
 library(ggiraph)
-
+library(htmlwidgets)
+library(htmltools)
 
 
 
@@ -256,12 +259,20 @@ p = ggplot() +
   #median HMD values- each year
   geom_line_interactive(data = mallData[mallData$Quantile == "50%",], 
                         aes(x = Frequency, y = SoundLevel, color = Year, group = Year,
-                            # tooltip = paste0("Year: ", Year, "<br>Freq: ", 
-                            #                  Frequency, " Hz<br>Level: ", 
-                            #                  round(SoundLevel, 1), " dB"),
-                            tooltip = paste0("Year: ", Year),
+                            tooltip = paste0("Year: ", Year),                                      
                             data_id = Year), 
                         linewidth = 2) +
+  
+  # geom_point_interactive(data = mallData[mallData$Quantile == "50%",],
+  #                        aes(x = Frequency, y = SoundLevel, 
+  #                            color = Year,
+  #                            data_id = Year,
+  #                              #paste0(Year, "_", Frequency),  # unique per point
+  #                            tooltip = paste0("Year: ", Year,
+  #                                             "<br>Frequency: ", round(Frequency, 1), " Hz",
+  #                                             "<br>Sound Level: ", round(SoundLevel, 1), " dB")),
+  #                        size = 1,      # small points
+  #                        alpha = 0) +   # fully transparent
   
   #median HMD values- all data
   geom_line_interactive(data = mALL[mALL$Quantile == "50%",], 
@@ -270,10 +281,22 @@ p = ggplot() +
                             # tooltip = paste0("All Years Median<br>Freq: ", 
                             #                  Frequency, " Hz<br>Level: ", 
                             #                  round(SoundLevel, 1), " dB"),
-                            tooltip = paste0("All Years Median"),                                      
+                            tooltip = paste0("Year: ", Year),
+                                             # "<br>Frequency: ", round(Frequency, 1), " Hz",
+                                             # "<br>Sound Level: ", round(SoundLevel, 1), " dB"),                                      
                             data_id = "all"), 
                         color = "black", linewidth = 1,
                             linetype = "dotted") +
+  
+  # geom_point_interactive(data = mALL[mALL$Quantile == "50%",],
+  #                        aes(x = Frequency, y = SoundLevel, 
+  #                            group = 1,
+  #                            data_id = "all",
+  #                            tooltip = paste0("Year: ", Year,
+  #                                             "<br>Frequency: ", round(Frequency, 1), " Hz",
+  #                                             "<br>Sound Level: ", round(SoundLevel, 1), " dB")),
+  #                        size = 1,      # small points
+  #                        alpha = 0) +   # fully transparent
   
   scale_y_continuous(limits = c(30, NA)) +  # use to manually scale y minimum so vert line labels are visible
   
@@ -301,41 +324,104 @@ p
 
 
 
-g <- 
-  girafe(ggobj = p,
-       width_svg = 10,
-       height_svg = 10,
-       options = list(
-         opts_hover(css = "stroke-width:3;opacity:1;"),
-         opts_hover_inv(css = "opacity:0.1;"),
-         opts_tooltip(css = "background:white;padding:6px;border-radius:4px;border:1px solid #ccc;font-size:12px;"),
-         opts_sizing(rescale = TRUE),
-         opts_selection(type = "multiple", css = "opacity:1;"),
-         opts_selection_inv(css = "opacity:0.1;")  # fades unselected years
-       ))
 
 g <- girafe(ggobj = p,
-       width_svg = 10,
-       height_svg = 10,
+       width_svg = 9,
+       height_svg = 9,
        options = list(
-         opts_selection(type = "multiple", css = "opacity:1;"),
-         opts_selection_inv(css = "opacity:0.1;"),
          opts_hover(css = "stroke-width:3;opacity:1;"),
          opts_hover_inv(css = "opacity:0.1;"),
-         opts_tooltip(css = "background:white;padding:6px;border-radius:4px;border:1px solid #ccc;font-size:12px;"),
-         opts_sizing(rescale = TRUE)
+         opts_tooltip(css = "background:white;padding:6px;border-radius:4px;border:1px solid #ccc;font-size:12px;", use_cursor_pos = TRUE),
+         opts_sizing(rescale = TRUE, width = 1)
        ))
 
 g
 
 
-install.packages("htmlwidgets")
-library(htmlwidgets)
-
-saveWidget(g, file = "myFK05plot.html", selfcontained = TRUE)
 
 
-browseURL("myFK05plot.html")
+saveWidget(g, file = "myFK06plot.html", selfcontained = TRUE)
+
+
+browseURL("myFK06plot.html")
+
+
+#Adding effort graph
+
+p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year))) +
+  geom_col_interactive(aes(tooltip = paste0("Year: ", year, 
+                                            #"<br>Month: ", month.abb[as.integer(month)], 
+                                            "<br>Days: ", dy),
+                           data_id = as.factor(year)), position = "dodge", width = .4) +  # Use dodge to separate bars for each year within the same month
+  #coord_flip() +
+  labs(
+    title = effort_title,
+    subtitle = paste0(toupper(site), " has ", udaysAG, 
+                      " unique days: ", as.character(stAG), " to ", as.character(edAG)),
+    x = "",
+    y = "Days",
+    fill = legend_label,
+    # Update your p1 labs call:
+    #caption = "Data&nbsp;from&nbsp;months&nbsp;with&nbsp;effort&nbsp;below&nbsp;the&nbsp;red&nbsp;horizontal&nbsp;line&nbsp;are&nbsp;excluded&nbsp;from&nbsp;annual&nbsp;sound&nbsp;levels&nbsp;figure&nbsp;above"
+    caption = "Data from months with effort below the red horizontal line are excluded from annual sound levels figure above"
+  ) +
+  scale_x_discrete(labels = month.abb[month_nums]) +  # Show month names instead of numbers
+  #scale_fill_manual(values = rev(gray.colors(length(unique(summary$year))))) +  # Create grayscale colors
+  scale_fill_manual(values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0),
+    axis.title.y = element_text(size = 14),
+    axis.text.y = element_text(size = 14),
+    axis.text.x = element_text(size = 14, hjust = 1, angle = 30),  
+    plot.subtitle = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    plot.caption = ggtext::element_markdown(hjust = 0, size = 11),
+    legend.position = "right" 
+  ) +
+  #adding marker for cutoff threshold (months need more than 23 days of data to be kept in line graph)
+  geom_hline(yintercept = siteInfo$MThreshold,    
+             linetype = "dashed",
+             color = "red",
+             linewidth = .5)
+
+p1
+
+
+
+g1 <- girafe(ggobj = p1,
+                   width_svg = 9,
+                   height_svg = 2.25,
+                   options = list(
+                     opts_hover(css = "opacity:1;stroke-width:2;"),
+                     opts_hover_inv(css = "opacity:0.3;"),
+                     opts_tooltip(css = "background:white;padding:6px;border-radius:4px;border:1px solid #ccc;font-size:12px;"),
+                     opts_sizing(rescale = TRUE)
+                   ))
+
+g1
+
+
+
+
+#combine effort and SPL interactive graphs
+combined <- browsable(
+  tagList(
+    as.tags(g),
+    tags$hr(),
+    as.tags(g1)
+  )
+)
+
+#preview
+html_print(combined)
+
+#save
+save_html(combined, "combined_plotFK06.html")
+
+
+
+
 
 
 getwd()
