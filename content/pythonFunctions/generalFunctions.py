@@ -180,10 +180,10 @@ def addPlotly(sourceHTML):
                 src="resources/{sourceHTML}"
                 name="targetframe"
                 allowTransparency="true"
-                scrolling="auto"
+                scrolling="no"
                 frameborder="0"
                 width="100%"
-                height="100%"
+                height="900px"
             >
             </iframe>
 			"""
