@@ -192,7 +192,7 @@ def addGirafe(site):
     return f"""
             <iframe
                 src="resources/plot_{site}_HMDYearSPLInteractive.html"
-                width="700px"
+                width="100%"
                 height="950px"
                 frameborder="0"
                 scrolling="auto"
@@ -200,7 +200,7 @@ def addGirafe(site):
             <hr style="border: 1px solid black; margin: 10px 0;">
             <iframe
                 src="resources/plot_{site}_HMDEffortInteractive.html"
-                width="700px"
+                width="100%"
                 height="650px"
                 frameborder="0"
                 scrolling="auto"
