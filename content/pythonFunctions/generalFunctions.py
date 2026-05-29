@@ -195,7 +195,7 @@ def addGirafe(site):
                 width="100%"
                 height="950px"
                 frameborder="0"
-                scrolling="no"
+                scrolling="auto"
             ></iframe>
             <hr style="border: 1px solid black; margin: 10px 0;">
             <iframe
@@ -203,7 +203,7 @@ def addGirafe(site):
                 width="100%"
                 height="650px"
                 frameborder="0"
-                scrolling="no"
+                scrolling="auto"
             ></iframe>
           """
   
