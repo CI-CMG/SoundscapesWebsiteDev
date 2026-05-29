@@ -326,8 +326,8 @@ p
 
 
 g <- girafe(ggobj = p,
-       width_svg = 9,
-       height_svg = 9,
+       width_svg = 8,
+       height_svg = 8,
        options = list(
          opts_hover(css = "stroke-width:3;opacity:1;"),
          opts_hover_inv(css = "opacity:0.1;"),
@@ -390,8 +390,8 @@ p1
 
 
 g1 <- girafe(ggobj = p1,
-                   width_svg = 9,
-                   height_svg = 2.25,
+                   width_svg = 8,
+                   height_svg = 2,
                    options = list(
                      opts_hover(css = "opacity:1;stroke-width:2;"),
                      opts_hover_inv(css = "opacity:0.3;"),
@@ -420,16 +420,17 @@ g1
 # save_html(combined, "combined_plotFK06.html")
 
 
-saveWidget(g, "C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/plot_FK06_HMDYearSPLInteractive.html", 
+saveWidget(g, "C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/plot_FK06_HMDYearSPLInteractiveSmall.html", 
            selfcontained = TRUE)
 
 
-saveWidget(g1, "C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/plot_FK06_HMDEffortInteractive.html", 
+saveWidget(g1, "C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/plot_FK06_HMDEffortInteractiveSmall.html", 
            selfcontained = TRUE)
 
 
-saveWidget(g, file = "myFK06plot.html", selfcontained = TRUE)
-saveWidget(g1, file = "myFK06effortplot.html", selfcontained = TRUE)
+
+# saveWidget(g, file = "myFK06plot.html", selfcontained = TRUE)
+# saveWidget(g1, file = "myFK06effortplot.html", selfcontained = TRUE)
 
 
 
