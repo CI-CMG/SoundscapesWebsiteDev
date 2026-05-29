@@ -420,6 +420,13 @@ g1
 # save_html(combined, "combined_plotFK06.html")
 
 
+saveWidget(g, "C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/plot_FK06_HMDYearSPLInteractive.html", 
+           selfcontained = TRUE)
+
+
+saveWidget(g1, "C:/Users/embe5980/SoundscapesWebsiteDev/content/resources/plot_FK06_HMDEffortInteractive.html", 
+           selfcontained = TRUE)
+
 
 saveWidget(g, file = "myFK06plot.html", selfcontained = TRUE)
 saveWidget(g1, file = "myFK06effortplot.html", selfcontained = TRUE)
