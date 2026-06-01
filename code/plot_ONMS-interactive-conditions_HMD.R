@@ -457,27 +457,27 @@ getwd()
 
 # rename columns for all your FOI dataframes before the ggplot
 FOIs_rect <- FOIs %>% 
-  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 85)
+  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 100)
 
 FOIsL_rect <- FOIsL %>% 
-  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 85)
+  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 100)
 
 FOIsRange_rect <- FOIsRange %>% 
-  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 85)
+  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 100)
 
 FOIsRangeL_rect <- FOIsRangeL %>% 
-  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 85)
+  mutate(xmin = FQstart, xmax = FQend, ymin = 27, ymax = 100)
 
 
 
 
 
 # helper function to convert rect data to ribbon-compatible format
-make_ribbon_data <- function(df, y_min = 27, y_max = 85) {
+make_ribbon_data <- function(df, y_min = 27, y_max = 100) {
   df %>%
     rowwise() %>%
     reframe(
-      x    = c(FQstart, FQend),
+      frequency    = c(FQstart, FQend),
       ymin = y_min,
       ymax = y_max,
       Label = Label
@@ -497,67 +497,60 @@ pl = ggplot() +
   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windLow,], aes(x = variable, y = value), color = "black", linewidth = 1) +
   scale_x_log10(labels = label_number(),limits = (c(10,fqupper)), guide = "axis_logticks") +  # Log scale for x-axis
   
-  scale_color_manual(values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
-  scale_fill_manual(values =  rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
+  scale_color_manual(name = "Year", values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
+  scale_fill_manual(name = "Year", values =  rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
   
   # Add vertical lines at FOIs, label on right side
   #geom_vline(data = FOIs, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "black",linewidth = .5) +
-  geom_segment(data = FOIs, 
-               aes(x = FQstart, xend = FQstart, y = 27, yend = 85),
-               linetype = "dashed", color = "black", linewidth = 0.5) +
+  #geom_segment(data = FOIs, 
+               # aes(x = FQstart, xend = FQstart, y = 27, yend = 85),
+               # linetype = "dashed", color = "black", linewidth = 0.5) +
+  
+  #geom_text(data = FOIs, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 1, hjust = 0.45, size = 4) +
   
   
-  geom_text(data = FOIs, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 1, hjust = 0.45, size = 4) +
-  #geom_rect(data = FOIs_rect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-  #          fill = "gray", alpha = 0.2) +  # Adjust alpha for transparency
-  geom_ribbon(data = FOIs_rib, aes(x = x, ymin = ymin, ymax = ymax), fill = "gray", alpha = 0.2)+
   # Add vertical lines at FOIs, label on left side
   #geom_vline(data = FOIsL, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "black",linewidth = .5) +
-  geom_segment(data = FOIsL, 
-               aes(x = FQstart, xend = FQstart, y = 27, yend = 85),
-               linetype = "dashed", color = "black", linewidth = 0.5) +
+  #geom_segment(data = FOIsL, 
+               # aes(x = FQstart, xend = FQstart, y = 27, yend = 85),
+               # linetype = "dashed", color = "black", linewidth = 0.5) +
   
-  
-  geom_text(data = FOIsL, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 0, hjust = 0.5, size = 4) +
+  #geom_text(data = FOIsL, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 0, hjust = 0.5, size = 4) +
   
   # Add vertical set dash lines and grey shaded region at FOI ranges
-  #geom_vline(data = FOIsRange, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "red",linewidth = .5) +
-  #geom_vline(data = FOIsRange, aes(xintercept = FQend, color = Label), linetype = "dashed", color = "red",linewidth = .5) +
   #geom_rect(data = FOIsRange_rect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), 
   #          fill = "gray", alpha = 0.2)+  # Adjust alpha for transparency
-  geom_ribbon(data = FOIsRange_rib, aes(x = x, ymin = ymin, ymax = ymax), fill = "gray", alpha = 0.2)+
+  #geom_ribbon(data = FOIsRange_rib, aes(x = frequency, ymin = ymin, ymax = ymax), fill = "gray", alpha = 0.2)+
   
-  geom_text(data = FOIsRange, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 1, hjust = 0.45, size = 4) +
+  #geom_text(data = FOIsRange, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 1, hjust = 0.45, size = 4) +
   
   # Add vertical set dash lines and grey shaded region at FOI ranges, label on left
-  #geom_vline(data = FOIsRangeL, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "red",linewidth = .5) +
-  #geom_vline(data = FOIsRangeL, aes(xintercept = FQend, color = Label), linetype = "dotdash", color = "red",linewidth = .5) +
   # geom_rect(data = FOIsRangeL_rect, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), 
   #           fill = "gray", alpha = 0.2)+  # Adjust alpha for transparency
-  geom_ribbon(data = FOIsRangeL_rib, aes(x = x, ymin = ymin, ymax = ymax), fill = "gray", alpha = 0.2)+
+  #geom_ribbon(data = FOIsRangeL_rib, aes(x = frequency, ymin = ymin, ymax = ymax), fill = "gray", alpha = 0.2)+
   
-  geom_text(data = FOIsRangeL, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 0, hjust = 0.5, size = 4) +
+  #geom_text(data = FOIsRangeL, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 0, hjust = 0.5, size = 4) +
   
-  # geom_ribbon(data = mallData %>% pivot_wider(names_from = Quantile, values_from = SoundLevel),
-  #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year), alpha = 0.2) +
   
   #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
   geom_ribbon(data = mallData %>%
                             filter(Year != oldest_year) %>%
-                            pivot_wider(names_from = Quantile, values_from = SoundLevel),
-                          aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year),
+                            pivot_wider(names_from = Quantile, values_from = SoundLevel)%>%
+                filter(!is.na(`25%`) & !is.na(`75%`)),
+                          aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year),
                           alpha = 0.1) +
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   geom_ribbon(data = mallData %>% 
                             filter(Year == oldest_year) %>% 
-                            pivot_wider(names_from = Quantile, values_from = SoundLevel),
-                          aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year), 
+                            pivot_wider(names_from = Quantile, values_from = SoundLevel)%>%
+                filter(!is.na(`25%`) & !is.na(`75%`)),
+                          aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
                           alpha = 0.3) + # High alpha for visibility
   
   #median HMD values- each year
   geom_line(data = mallData[mallData$Quantile == "50%",], 
-                        aes(x = Frequency, y = SoundLevel, color = Year), 
+                        aes(x = Frequency, y = SoundLevel, color = Year, fill = Year), 
                         linewidth = 2) +
   
   #median HMD values- all data
@@ -597,3 +590,17 @@ pl
 
 ggplotly(pl)
 
+
+p <- ggplotly(pl)
+
+# Add rotated text manually for each FOI label
+p <- p %>% add_annotations(
+  x = log10(FOIs$FQstart),  # log10 because of scale_x_log10
+  y = 35,
+  text = FOIsRange$Label,
+  textangle = -90,          # plotly uses degrees, negative = clockwise
+  showarrow = FALSE,
+  xref = "x", yref = "y"
+)
+
+p
