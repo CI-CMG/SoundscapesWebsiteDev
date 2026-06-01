@@ -201,7 +201,7 @@ def addGirafe(site):
             <iframe
                 src="resources/plot_{site}_HMDEffortInteractive.html"
                 width="100%"
-                height="650px"
+                height="250px"
                 frameborder="0"
                 scrolling="auto"
             ></iframe>
