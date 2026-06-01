@@ -326,8 +326,8 @@ p
 
 
 g <- girafe(ggobj = p,
-       width_svg = 4,
-       height_svg = 4,
+       width_svg = 9,
+       height_svg = 9,
        options = list(
          opts_hover(css = "stroke-width:3;opacity:1;"),
          opts_hover_inv(css = "opacity:0.1;"),
@@ -390,8 +390,8 @@ p1
 
 
 g1 <- girafe(ggobj = p1,
-                   width_svg = 4,
-                   height_svg = 1,
+                   width_svg = 9,
+                   height_svg = 2.25,
                    options = list(
                      opts_hover(css = "opacity:1;stroke-width:2;"),
                      opts_hover_inv(css = "opacity:0.3;"),
