@@ -14,11 +14,11 @@ def makeButtonsFit(sites, generalFormat, identifier, altText=""):
                     }}
                     </script>
     """
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsite/refs/heads/main/content/resources"
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     initialFile = generalFormat.replace('***', sites[0], 1)
     parts = initialFile.split('***')
     cwd = os.getcwd()
-    directory_path = cwd.split("SoundscapesWebsite")[0]+ "SoundscapesWebsite/SoundscapesWebsite/content/resources"
+    directory_path = cwd.split("SoundscapesWebsite")[0]+ "SoundscapesWebsiteDev/SoundscapesWebsiteDev/content/resources"
     
     fullFileName = ""
     for root, dirs, files in os.walk(directory_path):
@@ -34,7 +34,7 @@ def makeButtonsFit(sites, generalFormat, identifier, altText=""):
         initialFile = generalFormat.replace('***', site, 1)
         parts = initialFile.split('***')
         cwd = os.getcwd()
-        directory_path = cwd.split("SoundscapesWebsite")[0]+ "SoundscapesWebsite/SoundscapesWebsite/content/resources"
+        directory_path = cwd.split("SoundscapesWebsite")[0]+ "SoundscapesWebsiteDev/SoundscapesWebsiteDev/content/resources"
         
         fullFileName = ""
         for root, dirs, files in os.walk(directory_path):
@@ -69,7 +69,7 @@ def makeButtons(sites, generalFormat, identifier, altText=""):
                     }}
                     </script>
     """
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsite/refs/heads/main/content/resources"
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", sites[0])
     initialImage = f'<img alt="{altText}" src="{path}" width="700" id="{identifier}" onclick="this.requestFullscreen()">'
@@ -134,7 +134,7 @@ def makeButtonsWithLabels(uniqueImageIDs, buttonLabels, generalFormat, identifie
                     }}
                     </script>
     """
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsite/refs/heads/main/content/resources"
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", uniqueImageIDs[0])
     initialImage = f'<img alt="{altTexts[0]}" src="{path}" width="700" id="{identifier}" onclick="this.requestFullscreen()">'
@@ -169,7 +169,7 @@ def makeButtonsWithLabels(uniqueImageIDs, buttonLabels, generalFormat, identifie
     return buttons + initialImage + scripts
   
 def makeImage(imageName, identifier, width=700, altText=""):
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsite/refs/heads/main/content/resources"
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     path = f'{inputDir}/{imageName}'
     initialImage = f'<img alt="{altText}" src="{path}" width="{width}" id="{identifier}" onclick="this.requestFullscreen()" style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #ccc;">'
     return initialImage
@@ -224,7 +224,7 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
                     }}
                     </script>
     """
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsite/refs/heads/main/content/resources"
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", sites[0])
     initialImage = f"""
