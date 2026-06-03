@@ -209,3 +209,90 @@ def addGirafe(site):
   
 def embedMapViewer(srcLink):
     return f'<embed src="{srcLink}" style="width:900px; height: 800px;">'
+    
+def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
+    buttons = ""
+    scripts = f"""
+                    <script>
+                    function toggle{identifier}() {{
+                        var imgElement = document.getElementById('{identifier}');
+                        if (!document.fullscreenElement) {{
+                            imgElement.requestFullscreen();
+                        }} else {{
+                            document.exitFullscreen();
+                        }}
+                    }}
+                    </script>
+    """
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsite/refs/heads/main/content/resources"
+    path = f'{inputDir}/{generalFormat}'
+    path = path.replace("***", sites[0])
+    initialImage = f"""
+            <iframe
+                src="resources/{path}"
+                alt="{altText}"
+                name="targetframe"
+                allowTransparency="true"
+                scrolling="no"
+                frameborder="0"
+                width="100%"
+                height="900px"
+                id="{identifier}"
+            >
+            </iframe>
+			"""
+    
+    for site in sites:
+        path = f'{inputDir}/{generalFormat}'
+        path = path.replace("***", site)
+        
+        othersToLight = ""
+        for s in sites:
+            if s != site:
+                othersToLight += f"""const otherButton{s} = document.getElementById('{s}{identifier}button');
+                        otherButton{s}.style.backgroundColor = '#008CBA';"""
+        
+        initialColor = "#008CBA"
+        if site == sites[0]:
+            initialColor = "#BA2F00"
+            
+        buttons += f'<button id="{site}{identifier}button" onclick="{site}{identifier}()" style="padding: 10px; color: white; margin: 4px 0; background-color: {initialColor}; text-transform: uppercase; width: 100px; display: block;">{site}</button>'
+
+        scripts += f"""
+                    <script>
+                    function {site}{identifier}() {{
+                        var imgElement = document.getElementById('{identifier}');
+                        imgElement.src = "{path}";
+                        const thisButton = document.getElementById('{site}{identifier}button');
+                        thisButton.style.backgroundColor = '#BA2F00';
+                        {othersToLight}
+                    }}
+                    </script>
+        """
+
+    # Update the return statement like this:
+    container_start = f'<div style="display: flex; flex-direction: row; align-items: flex-start; gap: 20px;">'
+
+    # Wrap the buttons in their own vertical column
+    button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
+
+    # The image stays as it is
+    path = f'{inputDir}/{generalFormat}'.replace("***", sites[0])
+    image_html = f"""
+            <iframe
+                src="resources/{path}"
+                alt="{altText}"
+                name="targetframe"
+                allowTransparency="true"
+                scrolling="no"
+                frameborder="0"
+                width="100%"
+                height="900px"
+                id="{identifier}"
+            >
+            </iframe>
+			"""
+
+    container_end = '</div>'
+
+    return container_start + button_column + image_html + container_end + scripts

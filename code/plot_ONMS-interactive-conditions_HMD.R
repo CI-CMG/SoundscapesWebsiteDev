@@ -1,5 +1,8 @@
 #use this script after running plot_ONMS-conditions_HMD.R
 
+library(htmlwidgets)
+library(htmltools)
+library(plotly)
 
 # 
 # # 1. Build the plot as you did, but add a 'text' aesthetic for the hover tooltip
@@ -180,9 +183,6 @@
 #TRYING NEW METHOD using ggiraph
 
 
-library(ggiraph)
-library(htmlwidgets)
-library(htmltools)
 
 
 
@@ -435,7 +435,7 @@ getwd()
 
 
 #TRYING plotly again- have to use becuase ggirafe you cant select years 
-library(plotly)
+
 
 
 
@@ -532,7 +532,7 @@ pl = ggplot() +
               #filter(!is.na(`25%`) & !is.na(`75%`)),
               aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
               alpha = 0.3, 
-              show.legend = FALSE) + # High alpha for visibility
+              show.legend = FALSE) + 
   
   #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
   geom_ribbon(data = ribbonData %>%
@@ -797,4 +797,4 @@ outDirC  =  paste0(outDir,"context/") #where to get context
 # Save the entire HTML layout bundle natively
 htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "_interactveAnnualSPL.html"))
 
-getwd()
+
