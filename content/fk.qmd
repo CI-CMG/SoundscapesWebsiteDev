@@ -110,7 +110,7 @@ display(HTML(standardTextDict["Annual condition fc"]))
 
 ```{python}
 #| echo: false
-display(HTML(gf.makeButtons(sitesInt, "plot_***_interactiveAnnualSPL.html", "IYearSPL")))
+display(HTML(gf.makeButtonsPlotly(sitesInt, "plot_***_interactiveAnnualSPL.html", "IYearSPL")))
 ```
 
 <!-- ### How often are sources of interest likely present? -->
