@@ -231,7 +231,6 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
             <iframe
                 src="resources/{path}"
                 alt="{altText}"
-                name="targetframe"
                 allowTransparency="true"
                 scrolling="no"
                 frameborder="0"
@@ -282,7 +281,6 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
             <iframe
                 src="resources/{path}"
                 alt="{altText}"
-                name="targetframe"
                 allowTransparency="true"
                 scrolling="no"
                 frameborder="0"
