@@ -722,13 +722,14 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
   ) +
   geom_hline(yintercept = siteInfo$MThreshold,    
              linetype = "dashed",
+             text = paste0("Threshold = ", siteInfo$MThreshold),
              color = "red",
              linewidth = .5)
 
 
 
 # change height based on how many years are in this sites dataset
-p1_interactive <- ggplotly(p1, tooltip = "text", height = 260, width = 800) %>% 
+p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = 260, width = 800) %>% 
   layout(
     autosize = TRUE,
     
