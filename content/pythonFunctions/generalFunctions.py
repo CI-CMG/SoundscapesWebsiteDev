@@ -227,9 +227,11 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", sites[0])
+    with open(path, "r", encoding="utf-8") as file:
+    	html_content = file.read()
     initialImage = f"""
             <iframe
-                src="resources/{path}"
+                srcdoc="{html_content}"
                 alt="{altText}"
                 allowTransparency="true"
                 scrolling="no"
@@ -261,7 +263,9 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
                     <script>
                     function {site}{identifier}() {{
                         var imgElement = document.getElementById('{identifier}');
-                        imgElement.src = "{path}";
+                        with open(path, "r", encoding="utf-8") as file:
+    						html_content = file.read()
+                        imgElement.srcdoc = "{html_content}";
                         const thisButton = document.getElementById('{site}{identifier}button');
                         thisButton.style.backgroundColor = '#BA2F00';
                         {othersToLight}
