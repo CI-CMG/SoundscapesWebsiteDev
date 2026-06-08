@@ -224,32 +224,42 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
                     }}
                     </script>
     """
-    inputDir = "https://github.com/CI-CMG/SoundscapesWebsiteDev/tree/main/content/resources"
+    inputDir = "resources"
     path = f'{inputDir}/{generalFormat}'
-    path = path.replace("***", sites[0])
-    initialImage = f"""
-            <iframe
-                src="resources/{path}"
-                alt="{altText}"
-                allowTransparency="true"
-                scrolling="no"
-                frameborder="0"
-                width="100%"
-                height="900px"
-                id="{identifier}"
-            >
-            </iframe>
-			"""
+    initialImage = ""
+    first = true
+    for site in sites:
+    	displayType = "none"
+    	if first:
+    		displayType = "inline"
+    	path = path.replace("***", site])
+    	initialImage = f"""
+            	<iframe
+               	 src="resources/{path}"
+               	 display="{displayType}"
+               	 alt="{altText}"
+               	 allowTransparency="true"
+               	 scrolling="no"
+               	 frameborder="0"
+               	 width="100%"
+                 height="900px"
+               	 id="{identifier}{site}"
+            	>
+            	</iframe>
+		"""
     
     for site in sites:
         path = f'{inputDir}/{generalFormat}'
         path = path.replace("***", site)
         
         othersToLight = ""
+        othersToNone = ""
         for s in sites:
             if s != site:
                 othersToLight += f"""const otherButton{s} = document.getElementById('{s}{identifier}button');
                         otherButton{s}.style.backgroundColor = '#008CBA';"""
+                othersToNone += f"""const otherFrame{s} = document.getElementById('{identifier}{s}')
+                		otherFrame{s}.style.display = 'none''"""
         
         initialColor = "#008CBA"
         if site == sites[0]:
@@ -260,11 +270,12 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
         scripts += f"""
                     <script>
                     function {site}{identifier}() {{
-                        var imgElement = document.getElementById('{identifier}');
-                        imgElement.src = "{path}";
+                        var imgElement = document.getElementById('{identifier}{site}');
+                        imgElement.style.display = "inline";
                         const thisButton = document.getElementById('{site}{identifier}button');
                         thisButton.style.backgroundColor = '#BA2F00';
                         {othersToLight}
+                        {othersToNone}
                     }}
                     </script>
         """
