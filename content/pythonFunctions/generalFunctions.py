@@ -232,7 +232,7 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     	displayType = "none"
     	if first:
     		displayType = "inline"
-    	path = path.replace("***", site])
+    	path = path.replace("***", site)
     	initialImage = f"""
             	<iframe
                	 src="resources/{path}"
