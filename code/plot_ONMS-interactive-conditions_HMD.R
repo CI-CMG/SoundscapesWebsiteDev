@@ -521,7 +521,7 @@ pl = ggplot() +
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   geom_ribbon(data = ribbonData %>% 
-                filter(Year == oldest_year & segment == 1)%>%
+                filter(Year == oldest_year & segment == 0)%>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               #%>%
                 #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -531,7 +531,7 @@ pl = ggplot() +
  
   #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
   geom_ribbon(data = ribbonData %>%
-                filter(Year != oldest_year & segment == 1) %>%
+                filter(Year != oldest_year & segment == 0) %>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               # %>%
                 #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -540,11 +540,11 @@ pl = ggplot() +
               show.legend = FALSE) 
   
   #only sites with a data gap need the following ribbons
-  if (3 %in% ribbonData$segment){
+  if (2 %in% ribbonData$segment){
  
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   pl <- pl + geom_ribbon(data = ribbonData %>% 
-                filter(Year == oldest_year & segment == 3)%>%
+                filter(Year == oldest_year & segment == 2)%>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               #%>%
               #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -554,7 +554,7 @@ pl = ggplot() +
   
   #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
   geom_ribbon(data = ribbonData %>%
-                filter(Year != oldest_year & segment == 3) %>%
+                filter(Year != oldest_year & segment == 2) %>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               # %>%
               #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -822,6 +822,6 @@ outDirC  =  paste0(outDir,"context/") #where to get context
 
 
 # Save the entire HTML layout bundle natively
-htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "_interactveAnnualSPL.html"))
+htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "_interactiveAnnualSPL.html"))
 
 
