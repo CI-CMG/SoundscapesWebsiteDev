@@ -508,16 +508,16 @@ pl = ggplot() +
   
   
   #median HMD values- each year
-  # geom_line(data = mallData[mallData$Quantile == "50%",], 
-  #           aes(x = Frequency, y = SoundLevel, color = Year, fill = Year,
-  #               text = paste0("Year: ", Year), ),
-  #           linewidth = 2) +
-  # 
-  # #median HMD values- all data
-  # geom_line(data = mALL[mALL$Quantile == "50%",], 
-  #           aes(x = Frequency, y = SoundLevel), 
-  #           color = "black", linewidth = 1,
-  #           linetype = "dotted") +
+  geom_line(data = mallData[mallData$Quantile == "50%",],
+            aes(x = Frequency, y = SoundLevel, color = Year, fill = Year,
+                text = paste0("Year: ", Year), ),
+            linewidth = 2) +
+
+  #median HMD values- all data
+  geom_line(data = mALL[mALL$Quantile == "50%",],
+            aes(x = Frequency, y = SoundLevel),
+            color = "black", linewidth = 1,
+            linetype = "dotted") +
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   geom_ribbon(data = ribbonData %>% 
