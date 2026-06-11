@@ -27,7 +27,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "gr01" 
+site  = "nrs08" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -57,7 +57,7 @@ dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP wo
 #outDir =  "C:/Users/emma.beretta/Documents/SoundscapesWebsite/" #for NOAA computer
 #outDir =  "C:/Users/embe5980/SoundscapesWebsite/" #for CIRES computer
 outDir =  "X:/Emma_Beretta/SoundscapesWebsite/" #for Emma GCP workstation
-#outDir =  "C:/Users/pam_user/Documents/GitHub/SoundscapesWebsite/" #Samara GCP WW
+#outDir =  "C:/Users/pam_user/Documents/GitHub/SoundscapesWebsiteDev/" #Samara GCP WW
 
 outDirC = paste0( outDir,"content/resources/") #context
 outDirP = paste0( outDir,"products/", substr(tolower(site),start = 1, stop =2),"/" )#products
