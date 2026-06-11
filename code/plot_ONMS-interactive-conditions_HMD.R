@@ -510,12 +510,13 @@ pl = ggplot() +
   #median HMD values- each year
   geom_line(data = mallData[mallData$Quantile == "50%",],
             aes(x = Frequency, y = SoundLevel, color = Year, fill = Year,
-                text = paste0("Year: ", Year), ),
+                text = paste0("Year: ", Year) ),
             linewidth = 2) +
 
   #median HMD values- all data
   geom_line(data = mALL[mALL$Quantile == "50%",],
-            aes(x = Frequency, y = SoundLevel),
+            aes(x = Frequency, y = SoundLevel,
+                text = "Median across all years" ),
             color = "black", linewidth = 1,
             linetype = "dotted") +
   
