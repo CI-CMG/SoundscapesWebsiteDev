@@ -232,7 +232,7 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     	with open(path, "r", encoding="utf-8") as file:
     		html_content = file.read()
     		flattened = "".join(html_content.splitlines())
-    		flattened = flattened.replace("/", "\/")
+    		flattened = flattened.replace("/", "\\/")
     		flattened = flattened.replace("'", '"')
     		htmlContents[sites[i]] = flattened
     path = generalPath.replace("***", sites[0])
@@ -286,19 +286,19 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
 
     # The image stays as it is
     path = generalPath.replace("***", sites[0])
-    image_html = f'''
+    image_html = f"""
             <iframe
-            	src = "{path}"
-                alt="{altText}"
-                allowTransparency="true"
-                scrolling="no"
-                frameborder="0"
-                width="100%"
-                height="900px"
-                id="{identifier}"
+            	src = '{path}'
+                alt='{altText}'
+                allowTransparency='true'
+                scrolling='no'
+                frameborder='0'
+                width='100%'
+                height='900px'
+                id='{identifier}'
             >
             </iframe>
-			'''
+			"""
 
     container_end = '</div>'
 
