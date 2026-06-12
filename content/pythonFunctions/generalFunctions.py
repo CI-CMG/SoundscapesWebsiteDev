@@ -224,7 +224,7 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
                     }}
                     </script>
     """
-    inputDir = "resources"
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     generalPath = f'{inputDir}/{generalFormat}'
     htmlContents = {}
     for i in range(len(sites)):
