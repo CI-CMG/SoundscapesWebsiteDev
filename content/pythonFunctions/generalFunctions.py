@@ -231,7 +231,8 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     	path = path.replace("***", sites[i])
     	with open(path, "r", encoding="utf-8") as file:
     		html_content = file.read()
-    		htmlContents[sites[i]] = html_content
+    		flattened = "".join(html_content.splitlines())
+    		htmlContents[sites[i]] = flattened
     initialImage = f"""
             <iframe
                 srcdoc="{htmlContents[sites[0]]}"
