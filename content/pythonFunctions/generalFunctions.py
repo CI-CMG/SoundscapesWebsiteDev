@@ -232,7 +232,8 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     	with open(path, "r", encoding="utf-8") as file:
     		html_content = file.read()
     		flattened = "".join(html_content.splitlines())
-    		flattened = flattened.replace("/", "\\/")
+    		flattened = flattened.replace("/", "\/")
+    		flattened = flattened.replace("'", '"')
     		htmlContents[sites[i]] = flattened
     initialImage = f"""
             <iframe
