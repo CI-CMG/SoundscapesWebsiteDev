@@ -237,14 +237,14 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     		htmlContents[sites[i]] = flattened
     initialImage = f"""
             <iframe
-                srcdoc="{htmlContents[sites[0]]}"
-                alt="{altText}"
-                allowTransparency="true"
-                scrolling="no"
-                frameborder="0"
-                width="100%"
-                height="900px"
-                id="{identifier}"
+                srcdoc='{htmlContents[sites[0]]}'
+                alt='{altText}'
+                allowTransparency='true'
+                scrolling='no'
+                frameborder='0'
+                width='100%'
+                height='900px'
+                id='{identifier}'
             >
             </iframe>
 			"""
