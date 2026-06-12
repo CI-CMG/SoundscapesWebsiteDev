@@ -226,41 +226,35 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     """
     inputDir = "resources"
     path = f'{inputDir}/{generalFormat}'
-    initialImage = ""
-    first = True
-    for site in sites:
-    	displayType = "none"
-    	if first:
-    		displayType = "inline"
-    		first = False
-    	path = path.replace("***", site)
-    	initialImage = f"""
-            	<iframe
-               	 src="resources/{path}"
-               	 display="{displayType}"
-               	 alt="{altText}"
-               	 allowTransparency="true"
-               	 scrolling="no"
-               	 frameborder="0"
-               	 width="100%"
-                 height="900px"
-               	 id="{identifier}{site}"
-            	>
-            	</iframe>
-		"""
+    htmlContents = {}
+    for i in range(len(sites)):
+    	path = path.replace("***", sites[i])
+    	with open(path, "r", encoding="utf-8") as file:
+    		html_content = file.read()
+    		htmlContents[sites[i]] = html_content
+    initialImage = f"""
+            <iframe
+                srcdoc="{htmlContents[sites[0]]}"
+                alt="{altText}"
+                allowTransparency="true"
+                scrolling="no"
+                frameborder="0"
+                width="100%"
+                height="900px"
+                id="{identifier}"
+            >
+            </iframe>
+			"""
     
     for site in sites:
         path = f'{inputDir}/{generalFormat}'
         path = path.replace("***", site)
         
         othersToLight = ""
-        othersToNone = ""
         for s in sites:
             if s != site:
                 othersToLight += f"""const otherButton{s} = document.getElementById('{s}{identifier}button');
                         otherButton{s}.style.backgroundColor = '#008CBA';"""
-                othersToNone += f"""const otherFrame{s} = document.getElementById('{identifier}{s}')
-                		otherFrame{s}.style.display = 'none''"""
         
         initialColor = "#008CBA"
         if site == sites[0]:
@@ -271,12 +265,11 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
         scripts += f"""
                     <script>
                     function {site}{identifier}() {{
-                        var imgElement = document.getElementById('{identifier}{site}');
-                        imgElement.style.display = "inline";
+                        var imgElement = document.getElementById('{identifier}');
+                        imgElement.srcdoc = "{htmlContents[site]}";
                         const thisButton = document.getElementById('{site}{identifier}button');
                         thisButton.style.backgroundColor = '#BA2F00';
                         {othersToLight}
-                        {othersToNone}
                     }}
                     </script>
         """
@@ -288,10 +281,9 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
 
     # The image stays as it is
-    path = f'{inputDir}/{generalFormat}'.replace("***", sites[0])
     image_html = f"""
             <iframe
-                src="resources/{path}"
+                srcdoc="{htmlContents[sites[0]]}"
                 alt="{altText}"
                 allowTransparency="true"
                 scrolling="no"
