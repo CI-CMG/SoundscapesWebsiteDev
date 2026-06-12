@@ -225,19 +225,20 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
                     </script>
     """
     inputDir = "resources"
-    path = f'{inputDir}/{generalFormat}'
+    generalPath = f'{inputDir}/{generalFormat}'
     htmlContents = {}
     for i in range(len(sites)):
-    	path = path.replace("***", sites[i])
+    	path = generalPath.replace("***", sites[i])
     	with open(path, "r", encoding="utf-8") as file:
     		html_content = file.read()
     		flattened = "".join(html_content.splitlines())
     		flattened = flattened.replace("/", "\/")
     		flattened = flattened.replace("'", '"')
     		htmlContents[sites[i]] = flattened
+    path = generalPath.replace("***", sites[0])
     initialImage = f"""
             <iframe
-                srcdoc='{htmlContents[sites[0]]}'
+            	src = '{path}'
                 alt='{altText}'
                 allowTransparency='true'
                 scrolling='no'
@@ -284,9 +285,10 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
 
     # The image stays as it is
+    path = generalPath.replace("***", sites[0])
     image_html = f'''
             <iframe
-                srcdoc="{htmlContents[sites[0]]}"
+            	src = "{path}"
                 alt="{altText}"
                 allowTransparency="true"
                 scrolling="no"
