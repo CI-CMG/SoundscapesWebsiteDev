@@ -266,7 +266,7 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
                     <script>
                     function {site}{identifier}() {{
                         var imgElement = document.getElementById('{identifier}');
-                        imgElement.srcdoc = "{htmlContents[site]}";
+                        imgElement.srcdoc = '{htmlContents[site]}';
                         const thisButton = document.getElementById('{site}{identifier}button');
                         thisButton.style.backgroundColor = '#BA2F00';
                         {othersToLight}
@@ -281,7 +281,7 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
     button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
 
     # The image stays as it is
-    image_html = f"""
+    image_html = f'''
             <iframe
                 srcdoc="{htmlContents[sites[0]]}"
                 alt="{altText}"
@@ -293,7 +293,7 @@ def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
                 id="{identifier}"
             >
             </iframe>
-			"""
+			'''
 
     container_end = '</div>'
 
