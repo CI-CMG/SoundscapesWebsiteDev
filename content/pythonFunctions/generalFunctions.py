@@ -177,7 +177,7 @@ def makeImage(imageName, identifier, width=700, altText=""):
 def addPlotly(sourceHTML, site="", identifier=""):
 	return f'''
             <iframe
-                src="resources/{sourceHTML}"
+                src="https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources/{sourceHTML}"
                 name="targetframe{site}{identifier}"
                 id="{site}{identifier}"
                 allowTransparency="true"
