@@ -175,9 +175,11 @@ def makeImage(imageName, identifier, width=700, altText=""):
     return initialImage
 
 def addPlotly(sourceHTML, site="", identifier=""):
+	repoRoot = os.getenv("GITHUB_WORKSPACE")
+	
 	return f'''
             <iframe
-                src="https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources/{sourceHTML}"
+                src="{repoRoot}/content/resources/{sourceHTML}"
                 name="targetframe{site}{identifier}"
                 id="{site}{identifier}"
                 allowTransparency="true"
