@@ -174,11 +174,12 @@ def makeImage(imageName, identifier, width=700, altText=""):
     initialImage = f'<img alt="{altText}" src="{path}" width="{width}" id="{identifier}" onclick="this.requestFullscreen()" style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #ccc;">'
     return initialImage
 
-def addPlotly(sourceHTML):
-	return f"""
+def addPlotly(sourceHTML, site="", identifier=""):
+	return f'''
             <iframe
                 src="resources/{sourceHTML}"
-                name="targetframe"
+                name="targetframe{site}{identifier}"
+                id="{site}{identifier}"
                 allowTransparency="true"
                 scrolling="no"
                 frameborder="0"
@@ -186,7 +187,7 @@ def addPlotly(sourceHTML):
                 height="900px"
             >
             </iframe>
-			"""
+			'''
 
 def addGirafe(site):
     return f"""
@@ -211,95 +212,8 @@ def embedMapViewer(srcLink):
     return f'<embed src="{srcLink}" style="width:900px; height: 800px;">'
     
 def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
-    buttons = ""
-    scripts = f"""
-                    <script>
-                    function toggle{identifier}() {{
-                        var imgElement = document.getElementById('{identifier}');
-                        if (!document.fullscreenElement) {{
-                            imgElement.requestFullscreen();
-                        }} else {{
-                            document.exitFullscreen();
-                        }}
-                    }}
-                    </script>
-    """
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
-    generalPath = f'{inputDir}/{generalFormat}'
-    htmlContents = {}
-    for i in range(len(sites)):
-    	path = generalPath.replace("***", sites[i])
-    	with open(path, "r", encoding="utf-8") as file:
-    		html_content = file.read()
-    		flattened = "".join(html_content.splitlines())
-    		flattened = flattened.replace("/", "\\/")
-    		flattened = flattened.replace("'", '"')
-    		htmlContents[sites[i]] = flattened
-    path = generalPath.replace("***", sites[0])
-    initialImage = f"""
-            <iframe
-            	src = '{path}'
-                alt='{altText}'
-                allowTransparency='true'
-                scrolling='no'
-                frameborder='0'
-                width='100%'
-                height='900px'
-                id='{identifier}'
-            >
-            </iframe>
-			"""
-    
-    for site in sites:
-        path = f'{inputDir}/{generalFormat}'
-        path = path.replace("***", site)
-        
-        othersToLight = ""
-        for s in sites:
-            if s != site:
-                othersToLight += f"""const otherButton{s} = document.getElementById('{s}{identifier}button');
-                        otherButton{s}.style.backgroundColor = '#008CBA';"""
-        
-        initialColor = "#008CBA"
-        if site == sites[0]:
-            initialColor = "#BA2F00"
-            
-        buttons += f'<button id="{site}{identifier}button" onclick="{site}{identifier}()" style="padding: 10px; color: white; margin: 4px 0; background-color: {initialColor}; text-transform: uppercase; width: 100px; display: block;">{site}</button>'
-
-        scripts += f"""
-                    <script>
-                    function {site}{identifier}() {{
-                        var imgElement = document.getElementById('{identifier}');
-                        imgElement.srcdoc = '{htmlContents[site]}';
-                        const thisButton = document.getElementById('{site}{identifier}button');
-                        thisButton.style.backgroundColor = '#BA2F00';
-                        {othersToLight}
-                    }}
-                    </script>
-        """
-
-    # Update the return statement like this:
-    container_start = f'<div style="display: flex; flex-direction: row; align-items: flex-start; gap: 20px;">'
-
-    # Wrap the buttons in their own vertical column
-    button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
-
-    # The image stays as it is
-    path = generalPath.replace("***", sites[0])
-    image_html = f"""
-            <iframe
-            	src = '{path}'
-                alt='{altText}'
-                allowTransparency='true'
-                scrolling='no'
-                frameborder='0'
-                width='100%'
-                height='900px'
-                id='{identifier}'
-            >
-            </iframe>
-			"""
-
-    container_end = '</div>'
-
-    return container_start + button_column + image_html + container_end + scripts
+	outputString = ""
+    for s in sites:
+    	path = generalFormat.replace("***", s)
+    	outputString += addPlotly(path, s, identifier)
+	return outputString
