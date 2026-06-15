@@ -1,4 +1,5 @@
 import os
+import requests
 
 def makeButtonsFit(sites, generalFormat, identifier, altText=""):
     buttons = ""
@@ -175,11 +176,19 @@ def makeImage(imageName, identifier, width=700, altText=""):
     return initialImage
 
 def addPlotly(sourceHTML, site="", identifier=""):
-	repoRoot = os.getenv("GITHUB_WORKSPACE")
+	inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
+    path = f'{inputDir}/{imageName}'
+    response = requests.get(path)
+    
+    if response.status_code == 200:
+        with open(sourceHTML, "wb") as file:
+            file.write(response.content)
+    else:
+        print(f"Failed to download. Status code: {response.status_code}")
 	
 	return f'''
             <iframe
-                src="{repoRoot}/content/resources/{sourceHTML}"
+                src="{sourceHTML}"
                 name="targetframe{site}{identifier}"
                 id="{site}{identifier}"
                 allowTransparency="true"
