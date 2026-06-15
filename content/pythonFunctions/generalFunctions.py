@@ -212,8 +212,8 @@ def embedMapViewer(srcLink):
     return f'<embed src="{srcLink}" style="width:900px; height: 800px;">'
     
 def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
-	outputString = ""
+    outputString = ""
     for s in sites:
-    	path = generalFormat.replace("***", s)
-    	outputString += addPlotly(path, s, identifier)
-	return outputString
+        path = generalFormat.replace("***", s)
+        outputString += addPlotly(path, s, identifier)
+    return outputString
