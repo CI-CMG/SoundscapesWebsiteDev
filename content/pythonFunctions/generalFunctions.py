@@ -176,7 +176,7 @@ def makeImage(imageName, identifier, width=700, altText=""):
     return initialImage
 
 def addPlotly(sourceHTML, site="", identifier=""):
-	inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
+    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     path = f'{inputDir}/{imageName}'
     response = requests.get(path)
     
@@ -186,7 +186,7 @@ def addPlotly(sourceHTML, site="", identifier=""):
     else:
         print(f"Failed to download. Status code: {response.status_code}")
 	
-	return f'''
+    return f'''
             <iframe
                 src="{sourceHTML}"
                 name="targetframe{site}{identifier}"
