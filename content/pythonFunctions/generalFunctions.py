@@ -177,7 +177,7 @@ def makeImage(imageName, identifier, width=700, altText=""):
 
 def addPlotly(sourceHTML, site="", identifier=""):
     inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
-    path = f'{inputDir}/{imageName}'
+    path = f'{inputDir}/{sourceHTML}'
     response = requests.get(path)
     
     if response.status_code == 200:
