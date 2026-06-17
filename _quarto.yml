@@ -65,7 +65,7 @@ website:
       - href: content/fk.qmd
         text: Florida Keys
       - href: content/ne.qmd
-        text: Gulf of Maine
+        text: New England
       - text: <br>
       - text: <b>West Coast Region</b>
       - href: content/oc.qmd
