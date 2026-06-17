@@ -522,7 +522,7 @@ pl = ggplot() +
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   geom_ribbon(data = ribbonData %>% 
-                filter(Year == oldest_year & segment == 0)%>%
+                filter(Year == oldest_year & segment == 1)%>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               #%>%
                 #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -532,7 +532,7 @@ pl = ggplot() +
  
   #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
   geom_ribbon(data = ribbonData %>%
-                filter(Year != oldest_year & segment == 0) %>%
+                filter(Year != oldest_year & segment == 1) %>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               # %>%
                 #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -545,7 +545,7 @@ pl = ggplot() +
  
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   pl <- pl + geom_ribbon(data = ribbonData %>% 
-                filter(Year == oldest_year & segment == 2)%>%
+                filter(Year == oldest_year & segment == 3)%>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               #%>%
               #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -555,7 +555,7 @@ pl = ggplot() +
   
   #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
   geom_ribbon(data = ribbonData %>%
-                filter(Year != oldest_year & segment == 2) %>%
+                filter(Year != oldest_year & segment == 3) %>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               # %>%
               #filter(!is.na(`25%`) & !is.na(`75%`)),
@@ -674,7 +674,8 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%
       orientation    = "v",        # Keeps items stacked as a vertical column
       x              = 1.02,       # Leaves it just past the right axis line
       y              = 0.5,        # <--- Position coordinate set precisely at 50% height
-      # xanchor        = "left",     
+      # font.weight = 
+       # xanchor        = "left",     
       yanchor        = "middle"   # <--- Locks the center of the legend block to that 50% mark
       # entrywidth     = 100,       
       # entrywidthmode = "pixels"   
@@ -703,7 +704,6 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%
 
 # Display the interactive plot
 pl_interactive
-
 
 
 
@@ -754,8 +754,19 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
 
 p1
 
+
+if (length(years_to_keep) > 3){
+
+    height_int = 280
+  
+} else if (length(years_to_keep) <= 3){
+  
+    height_int = 260
+  
+}
+
 # change height based on how many years are in this sites dataset
-p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = 260, width = 800) %>% 
+p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int, width = 800) %>% 
   layout(
     autosize = TRUE,
     
@@ -764,9 +775,10 @@ p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = 260, width
                   l = 50,          # Aligns perfectly with the top plot's left axis
                   r = 50), # Ensure room for your caption at the bottom
     
-    legend = list(
-      font = list(size = 13) # to make legend slightly shorter, less spacing between years didnt work
-    ),
+    # legend = list(
+    #   font = list(size = 13) # to make legend slightly shorter, less spacing between years didnt work
+    #   #, groupclick = "toggleitem"
+    #   ),
     
     annotations = list(
       x = 0, y = -0.3, 

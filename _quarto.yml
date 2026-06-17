@@ -16,6 +16,7 @@ project:
     - content/pm.qmd
     - content/as.qmd
     - content/hi.qmd
+    - content/ne.qmd
 
 website: 
   page-navigation: true
@@ -63,6 +64,8 @@ website:
         text: Gray's Reef
       - href: content/fk.qmd
         text: Florida Keys
+      - href: content/ne.qmd
+        text: Gulf of Maine
       - text: <br>
       - text: <b>West Coast Region</b>
       - href: content/oc.qmd

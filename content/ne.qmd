@@ -10,11 +10,7 @@ from pythonFunctions import generalFunctions as gf
 import plotly.io as pio
 pio.renderers.default = "notebook_connected"
 
-sites = ["FK01","FK05","FK06", "FK08"]
-GGrouperGraphs = ["Daily_Activity", "Diel_Patterns"]
-GGrouperGraphsLabels = ["Daily Activity", "Diel Patterns"]
-altTexts = ["GGrouper daily activity", "GGrouper diel patterns"]
-sitesInt = ["FK01","FK05"]
+sites = []
 
 # input table for standard text
 inputDir = os.path.normpath(os.path.join(os.getcwd(), "resources"))
@@ -46,7 +42,7 @@ for i in range(len(headerLocations)):
 ```
 
 ---
-title: "Florida Keys National Marine Sanctuary Soundscape Report"
+title: "Gulf of Maine Fisheries Soundscape Report"
 date: "today"
 output: 
   html_document: 
@@ -61,14 +57,14 @@ editor_options:
 
 ```{python}
 #| echo: false
-display(HTML(standardTextDict["FKNMS"]))
+display(HTML(standardTextDict["Northeast"]))
 ```
 
 ### Summary of monitoring sites
 
 ```{python}
 #| echo: false
-display(HTML(gf.makeImage("FKNMSSiteMap.jpg", "FK Site Map", 850)))
+display(HTML(gf.makeImage("______SiteMap.jpg", "NE Site Map", 850)))
 
 display(HTML(htmlTable))
 ```
@@ -112,11 +108,6 @@ display(HTML(standardTextDict["Annual condition fc"]))
 
 ```
 
-```{python}
-#| echo: false
-display(HTML(gf.makeButtonsPlotly(sitesInt, "plot_***_interactveAnnualSPL.html", "IYearSPL")))
-```
-
 <!-- ### How often are sources of interest likely present? -->
 
 <!-- ```{python} -->
@@ -157,18 +148,11 @@ display(HTML(standardTextDict["Indicator description"]))
 ```{python}
 #| echo: false
 
-display(HTML(standardTextDict["goliath grouper"]))
+display(HTML(standardTextDict["_________"]))
 
-display(HTML(gf.makeImage("FK01_Daily_Activity.png", "g_grouper", altText= "Plot of total goliath grouper calls detected per day between July and October of 2023 and 2024 in the Florida Keys National Marine Sanctuary, with most calls recorded between August and September.")))
+display(HTML(gf.makeImage("__________.png", "NEIndicator", altText= "Plot of total goliath grouper calls detected per day between July and October of 2023 and 2024 in the Florida Keys National Marine Sanctuary, with most calls recorded between August and September.")))
 display(HTML(standardTextDict["grouper daily activity fc"]))
-display(HTML(standardTextDict["spacer"]))
 
-display(HTML(gf.makeImage("FK01_Diel_Patterns.png", "g_grouper2", altText= "Aggregated bar plot of goliath grouper calls detected per hour of the day in 2023 and 2024 in the Florida Keys National Marine Sanctuary, with the majority of calls happening at night.")))
-display(HTML(standardTextDict["grouper diel pattern fc"]))
-
-
-#display(HTML(gf.makeButtonsWithLabels(GGrouperGraphs, GGrouperGraphsLabels, "FK01_***.png", "g_grouper", altTexts)))
-#gf.makeImage("FK01_diel_patterns.png", "diel patterns")
 ```
 
 ### When do whales contribute to the soundscape, indicating their presence nearby?
