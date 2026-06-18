@@ -42,7 +42,7 @@ for i in range(len(headerLocations)):
 ```
 
 ---
-title: "Gulf of Maine Fisheries Soundscape Report"
+title: "New England Fisheries Soundscape Report"
 date: "today"
 output: 
   html_document: 
