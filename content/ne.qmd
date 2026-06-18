@@ -143,23 +143,46 @@ display(HTML(standardTextDict["FOI condition fc"]))
 display(HTML(standardTextDict["Indicator description"]))
 ```
 
-### When are goliath grouper calling on their spawning aggregation site?
+<!-- ### How much noise from large vessels may be interfering with whale communication? -->
+<!-- ```{python} -->
+<!-- #| echo: false -->
+<!-- display(HTML(standardTextDict["large vessels interfer"])) -->
+<!-- display(HTML(gf.makeButtons(["SB01", "SBO3"], "plot_***_AISMonthAbove.jpg", "SoundLevelVariance"))) -->
+<!-- infoHtml3 = f''' -->
+<!--         <button style="background-color: #FFFFFF;" onclick="document.getElementById(&#39;infoModal3&#39;).showModal()">Table of Results</button> -->
+<!--             <dialog id="infoModal3"> -->
+<!--                 {gf.makeButtons(["SB01", "SBO3"], "table_***_AISMonthAbove.jpg", "AISMonthlyTables")} -->
+<!--                 <button style="background-color: #FFFFFF;" onclick="document.getElementById(&#39;infoModal3&#39;).close()"> -->
+<!--                     Close -->
+<!--                 </button> -->
+<!--             </dialog> -->
+<!-- ''' -->
+<!-- display(HTML(infoHtml3)) -->
+<!-- # NEED TO ADD BUTTON: "See Table Results" table_***_AISMonthAbove.jpg -->
+<!-- ``` -->
+<!-- ### How does the level of traffic change conditions? -->
+<!-- ```{python} -->
+<!-- #| echo: false -->
+<!-- display(HTML(standardTextDict["level of traffic"])) -->
+<!-- display(HTML(gf.makeButtons(["SB01", "SBO3"], "plot_***_AIShist.jpg", "Histogram"))) -->
+<!-- infoHtml4 = f''' -->
+<!--         <button style="background-color: #FFFFFF;" onclick="document.getElementById(&#39;infoModal4&#39;).showModal()">Table of Results</button> -->
+<!--             <dialog id="infoModal4"> -->
+<!--                 {gf.makeButtons(["SB01", "SBO3"], "table_***_AIShist.jpg", "AISHistTables")} -->
+<!--                 <button style="background-color: #FFFFFF;" onclick="document.getElementById(&#39;infoModal4&#39;).close()"> -->
+<!--                     Close -->
+<!--                 </button> -->
+<!--             </dialog> -->
+<!-- ''' -->
+<!-- display(HTML(infoHtml4)) -->
+<!-- # NEED TO ADD BUTTON: "See Table Results" table_***_AIShist.jpg -->
+<!-- ``` -->
 
+### When do right whales contribute to the soundscape, indicating their presence nearby?
 ```{python}
 #| echo: false
-
-#display(HTML(standardTextDict["_________"]))
-
-#display(HTML(gf.makeImage("__________.png", "NEIndicator", altText= "Plot of total goliath grouper calls detected per day between July and October of 2023 and 2024 in the Florida Keys National Marine Sanctuary, with most calls recorded between August and September.")))
-#display(HTML(standardTextDict["grouper daily activity fc"]))
-
-```
-
-### When do whales contribute to the soundscape, indicating their presence nearby?
-
-```{python}
-#| echo: false
-display(HTML(standardTextDict["whales"]))
+display(HTML(standardTextDict["North Atlantic Right whales"]))
 #display(HTML(gf.embedMapViewer("https://apps-nefsc.fisheries.noaa.gov/pacm/#/narw")))
 ```
 :::
+
