@@ -395,7 +395,7 @@ combined_layout <- browsable(
     div(style = "height: 800px; width: 800px;", pl_interactive),
     
     # Top Chart Caption
-    p(HTML(caption_text), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+    p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
     
     # Elegant Divider Line
     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
@@ -431,25 +431,87 @@ htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "
 #SEASONAL GRAPH
 
 
-ribbonData <- mallData %>% mutate(is_na = is.na(`SoundLevel`) ,
+ribbonDataS <- mallDataS %>% mutate(is_na = is.na(`SoundLevel`) ,
                                   # 2. Detect a change: did we just transition into or out of an NA block?
                                   gap = is_na != lag(is_na, default = first(is_na)),
                                   # 3. Create a unique segment ID every time a change happens
                                   segment = cumsum(gap)) %>%
-  ungroup()
+                                  ungroup()
 
 
-if (site == 'fk08'){
-  segment1 = 0
-  segment2 = 2
-} else {
-  segment1 = 1
-  segment2 = 3
-}
+# 
+# p = ggplot() +
+#   
+#   # Wind model values
+#   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windUpp,], aes(x = variable, y = value), color = "black",  linewidth = 1) +
+#   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windLow,], aes(x = variable, y = value), color = "black",  linewidth = 1) +
+#   scale_x_log10(labels = label_number(),limits = (c(10,fqupper)), guide = "axis_logticks") +  # Log scale for x-axis
+#   
+#   # Add vertical lines at FOIs, label on right side
+#   geom_vline(data = FOIs, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "black",linewidth = .5) +
+#   geom_text(data = FOIs, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 1, hjust = 0.45, size = 4) +
+#   
+#   # Add vertical lines at FOIs, label on left side, not common
+#   geom_vline(data = FOIsL, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "black",linewidth = .5) +
+#   geom_text(data = FOIsL, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 0, hjust = 0.5, size = 4) +
+#   
+#   # Add vertical set dash lines and grey shaded region at FOI ranges
+#   #  geom_vline(data = FOIsRange, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "grey50",linewidth = .5) +
+#   #  geom_vline(data = FOIsRange, aes(xintercept = FQend, color = Label), linetype = "dashed", color = "grey50",linewidth = .5) +
+#   geom_rect(data = FOIsRange, aes(xmin = FQstart, xmax = FQend, ymin = -Inf, ymax = Inf), 
+#             fill = "gray", alpha = 0.2)+  # Adjust alpha for transparency
+#   geom_text(data = FOIsRange, aes(x = FQstart, y = label_height, label = Label), color = "black", angle = 90, vjust = 1, hjust = 0.45, size = 4) +
+#   
+#   # Add vertical set dash lines and grey shaded region at FOI ranges, label on left
+#   # geom_vline(data = FOIsRangeL, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "grey50",linewidth = .5) +
+#   #  geom_vline(data = FOIsRangeL, aes(xintercept = FQend, color = Label), linetype = "dashed", color = "grey50",linewidth = .5) +
+#   geom_rect(data = FOIsRangeL, aes(xmin = FQstart, xmax = FQend, ymin = -Inf, ymax = Inf), 
+#             fill = "gray", alpha = 0.2)+  # Adjust alpha for transparency
+#   geom_text(data = FOIsRangeL, aes(x = FQstart, y = label_height, label = Label), color = "black", angle = 90, vjust = 0, hjust = 0.5, size = 4) +
+#   
+#   #shading (25-75%) HMD values
+#   geom_ribbon(data = mallDataS %>%
+#                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
+#               aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season),
+#               alpha = 0.2) +  # Use alpha for transparency
+#   
+#   # Median (50%) HMD values
+#   geom_line(data = mallDataS[mallDataS$Quantile == "50%",], 
+#             aes(x = Frequency, y = SoundLevel, color = Season), linewidth = 2) +
+#   
+#   geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel), color = "black", linewidth = 1,
+#             linetype = "dotted")+ 
+#   
+#   # Set color and fill to match season
+#   scale_color_manual(values  = seasont$values ) +
+#   scale_fill_manual (values  = seasont$values ) +
+#   
+#   labs(
+#     subtitle = seasonLabel,
+#     caption  = caption_text,
+#     x = "Frequency (Hz)",
+#     y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ) #dB re 1 uPa^2/Hz
+#   ) +
+#   # Additional aesthetics
+#   scale_y_continuous(limits = c(30, NA)) +  # use to manually scale y minimum so vert line labels are visible
+#   theme_minimal()+
+#   theme(legend.position = "right",
+#         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+#         axis.title.x = element_text(size = 14),           
+#         axis.title.y = element_text(size = 14), 
+#         legend.text = element_text(size = 12),
+#         axis.text = element_text(size = 14),
+#         axis.ticks.length.x = unit(0.25, "cm"), 
+#         axis.ticks.x = element_line(color = "grey", linewidth = 0.3)
+#         , axis.line.x = element_line(color = "grey", linewidth = 0.3)           
+#   )
+# 
+# p
+# 
 
 
 
-pl = ggplot() +
+p = ggplot() +
   #wind model
   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windUpp,], 
             aes(x = variable, y = value, 
@@ -479,69 +541,56 @@ pl = ggplot() +
   #scale_x_continuous(limits = c(10, fqupper)) +
   
   
-  scale_color_manual(name = "Year", values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
-  scale_fill_manual(name = "Year", values =  rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
   
-  
-  #median HMD values- each year
-  geom_line(data = mallData[mallData$Quantile == "50%",],
-            aes(x = Frequency, y = SoundLevel, color = Year, fill = Year, group = Year,
-                text = paste0("Year: ", Year, "<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2)) ),
-            linewidth = 2) +
-  
-  #median HMD values- all data
-  geom_line(data = mALL[mALL$Quantile == "50%",],
-            aes(x = Frequency, y = SoundLevel, group = Quantile,
-                text = paste0("Median across all years<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2) ) ),
-            color = "black", linewidth = 1,
-            linetype = "dotted") +
+  # geom_ribbon(data = mallDataS %>%
+  #               pivot_wider(names_from = Quantile, values_from = SoundLevel),
+  #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season),
+  #             alpha = 0.2) + 
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
-  geom_ribbon(data = ribbonData %>% 
-                filter(Year == oldest_year & segment == segment1)%>%
+  geom_ribbon(data = ribbonDataS %>% 
+                filter(segment == segment1)%>%
                 pivot_wider(names_from = Quantile, values_from = SoundLevel),
               #%>%
               #filter(!is.na(`25%`) & !is.na(`75%`)),
-              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
+              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season), 
               alpha = 0.3, 
-              show.legend = FALSE) + # High alpha for visibility
-  
-  #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
-  geom_ribbon(data = ribbonData %>%
-                filter(Year != oldest_year & segment == segment1) %>%
-                pivot_wider(names_from = Quantile, values_from = SoundLevel),
-              # %>%
-              #filter(!is.na(`25%`) & !is.na(`75%`)),
-              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year),
-              alpha = 0.1, 
-              show.legend = FALSE) 
+              show.legend = TRUE) 
 
 #only sites with a data gap need the following ribbons
 if (segment2 %in% ribbonData$segment){
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
-  pl <- pl + geom_ribbon(data = ribbonData %>% 
-                           filter(Year == oldest_year & segment == segment2)%>%
+  p <- p + geom_ribbon(data = ribbonDataS %>% 
+                           filter( segment == segment2)%>%
                            pivot_wider(names_from = Quantile, values_from = SoundLevel),
                          #%>%
                          #filter(!is.na(`25%`) & !is.na(`75%`)),
-                         aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
+                         aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season), 
                          alpha = 0.3, 
-                         show.legend = FALSE) + 
-    
-    #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
-    geom_ribbon(data = ribbonData %>%
-                  filter(Year != oldest_year & segment == segment2) %>%
-                  pivot_wider(names_from = Quantile, values_from = SoundLevel),
-                # %>%
-                #filter(!is.na(`25%`) & !is.na(`75%`)),
-                aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year),
-                alpha = 0.1, 
-                show.legend = FALSE) 
+                         show.legend = FALSE) 
   
 }
 
-pl <- pl +
+p <- p +
+  
+  #median HMD values- each season
+  geom_line(data = mallDataS[mallDataS$Quantile == "50%",], 
+            aes(x = Frequency, y = SoundLevel, color = Season, group = Season,
+                text = paste0("Season: ", Season, "<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), 
+            linewidth = 2,
+            key_glyph = draw_key_rect) +
+  
+  
+  #median HMD all seasons
+  geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel, group = Quantile,
+                                                      text = paste0("Median across all years<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), color = "black", linewidth = 1,
+            linetype = "dotted")+ 
+  
+  
+  # Set color and fill to match season
+  scale_color_manual(name = "Season", values = seasont$values) +
+  scale_fill_manual(name = "Season", values = seasont$values) +
   
   scale_y_continuous(limits = c(27, NA),          
                      breaks = seq(30, 80, by = 10)) + 
@@ -549,13 +598,11 @@ pl <- pl +
   # Additional aesthetics
   theme_minimal() +
   labs(
-    #title = paste0(toupper(site), "(",siteInfo$`Oceanographic category`, ")"), 
+    subtitle = seasonLabel,
     caption  = caption_text,
-    color = legend_label,        #IF biological then change to Year*
-    fill = legend_label,        #IF biological then change to Year*
     x = "Frequency (Hz)",
-    y = "Sound Levels (dB re 1 &#956; Pa<sup>2</sup>/Hz)",
-    subtitle = subtitle_text) +
+    y = "Sound Levels (dB re 1 &#956; Pa<sup>2</sup>/Hz)" #dB re 1 uPa^2/Hz
+  )  +
   theme(legend.position = "right",
         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
         axis.title.x = element_text(size = 14),           # X-axis label size
@@ -567,40 +614,14 @@ pl <- pl +
         axis.line.x = element_line(color = "grey", linewidth = 0.3)    
   ) 
 
-pl
+
+p
 
 
 
 
 
-foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
-  list(
-    # Find the horizontal midpoint in log-space for the text to sit perfectly center
-    x = (log10(FOIsRange$FQstart[i]) + log10(FOIsRange$FQend[i])) / 2,
-    
-    y = label_height, 
-    
-    xref = "x",
-    yref = "y",
-    
-    text = FOIsRange$Label[i], # Pulls your text label string dynamically
-    
-    textangle = -90,           # -90 reads cleanly from bottom-to-top (or use 90)
-    
-    showarrow = FALSE,
-    xanchor = "center",        # Centers the text horizontal anchor point
-    yanchor = "middle",        # Centers the text vertical anchor point
-    
-    font = list(
-      size = 13, 
-      color = "black",         # Match your layout aesthetic
-      family = "sans-serif"
-    )
-  )
-})
-
-
-p_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%  
+p_interactive <- ggplotly(p, tooltip = "text", height = 800, width = 800) %>%  
   
   #style(hoverinfo = "none", traces = c(1, 2, 3))  %>%
   
@@ -628,20 +649,44 @@ p_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%
     ),
     
     # shapes = foi_shapes,
-    annotations = foi_labels,
+    annotations = c(
+      foi_labels, # Keeps your existing frequency annotations intact
+      
+      # If you still prefer your season label as an annotation instead of a title subtitle:
+      list(list(
+        x = 0, y = 1.02, # Positioned slightly above the plotting grid
+        text = seasonLabel, 
+        showarrow = FALSE, 
+        xref = 'paper', yref = 'paper', 
+        xanchor = 'left', yanchor = 'bottom',
+        font = list(size = 13)
+      ))),
     
     # Increase the bottom margin (b) to ensure there is room for the caption text
     margin = list(b = 50, l = 50, r = 50, t = 50)
     
     
+  )%>%
+  
+  # CLEAN UP THE PLOTLY LEGEND TEXT LABELS
+  style(
+    # This searches the layout strings for "(SeasonName,1)" patterns and strips them to just "SeasonName"
+    style = list(), 
+    # Use a loop over all generated traces to clean up the names dynamically
+    traces = seq_along(.$x$data)
   )
+
+# Explicitly map cleanly across the list of labels using a map function
+for (i in seq_along(p_interactive$x$data)) {
+  # Clean up formatting like "(Winter,1)" to "Winter"
+  if (!is.null(p_interactive$x$data[[i]]$name)) {
+    p_interactive$x$data[[i]]$name <- gsub("\\(([^,]+),[^)]+\\)", "\\1", p_interactive$x$data[[i]]$name)
+  }
+}
 
 # Display the interactive plot
 p_interactive
 
-
-
-#c("colour", "x", "y")
 
 
 
@@ -722,10 +767,10 @@ combined_layout <- browsable(
     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
     
     # Top Plot (Spectrum) - Grand and tall
-    div(style = "height: 800px; width: 800px;", pl_interactive),
+    div(style = "height: 800px; width: 800px;", p_interactive),
     
     # Top Chart Caption
-    p(HTML(caption_text), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+    p(HTML(caption_text1), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
     
     # Elegant Divider Line
     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
