@@ -935,12 +935,12 @@ p2_interactive
 #combine effort and line
 
 
-combined_layout2 <- browsable(
+combined_layoutv2 <- browsable(
   div(
     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
     
     # Top Plot (Spectrum) - Grand and tall
-    div(style = "height: 800px; width: 800px;", p_interactive),
+    div(style = "height: 800px; width: 800px;", pv2_interactive),
     
     # Top Chart Caption
     p(HTML(caption_text1), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
@@ -954,7 +954,7 @@ combined_layout2 <- browsable(
 )
 
 # View the perfectly balanced application layout
-combined_layout2
+combined_layoutv2
 
 
 #save html file to Dev contents folder
@@ -968,5 +968,5 @@ outDirC  =  paste0(outDir,"context/") #where to get context
 
 
 # Save the entire HTML layout bundle natively
-htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPLv2.html"))
+htmltools::save_html(combined_layoutv2, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPLv2.html"))
 
