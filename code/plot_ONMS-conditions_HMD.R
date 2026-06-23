@@ -1851,7 +1851,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       }  else if (num_years == 8) {
         plot_height <- 14
       } else {
-        # This covers three or more years
+        # This covers nine or more years
         plot_height <- 16
       }
       
