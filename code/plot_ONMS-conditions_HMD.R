@@ -896,7 +896,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   
   #(3) SEASONAL CONDITION PLOT ####
-  caption_text = paste0(
+  caption_text1 = paste0(
     "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
     "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
     "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
@@ -1097,7 +1097,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     
     labs(
        subtitle = seasonLabel,
-       caption  = caption_text,
+       caption  = caption_text1,
        x = "Frequency (Hz)",
        y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ) #dB re 1 uPa^2/Hz
     ) +
@@ -1212,7 +1212,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   
   if (my_subtitle == "(humpback season)"){
-    caption_text = paste0(
+    caption_text2 = paste0(
       "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
       "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
@@ -1220,7 +1220,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       "<b>Solid sound level curves and blue shaded areas</b> are the annual medians and 25th-75th percentiles for humpback season") # for ", my_subtitle)
     
   } else {
-    caption_text = paste0(
+    caption_text2 = paste0(
       "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
       "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
@@ -1362,7 +1362,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     theme_minimal() +
     labs(
       #title = paste0(toupper(site), "(",siteInfo$`Oceanographic category`, ")"), 
-      caption  = caption_text,
+      caption  = caption_text2,
       color = legend_label,        #IF biological then change to Year*
       fill = legend_label,        #IF biological then change to Year*
       x = "Frequency (Hz)",
