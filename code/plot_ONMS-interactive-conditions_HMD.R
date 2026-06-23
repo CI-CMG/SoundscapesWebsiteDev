@@ -150,7 +150,7 @@ pl = ggplot() +
   theme_minimal() +
   labs(
     #title = paste0(toupper(site), "(",siteInfo$`Oceanographic category`, ")"), 
-    caption  = caption_text,
+    #caption  = caption_text1,
     color = legend_label,        #IF biological then change to Year*
     fill = legend_label,        #IF biological then change to Year*
     x = "Frequency (Hz)",
@@ -599,7 +599,7 @@ p <- p +
   theme_minimal() +
   labs(
     subtitle = seasonLabel,
-    caption  = caption_text,
+    #caption  = caption_text,
     x = "Frequency (Hz)",
     y = "Sound Levels (dB re 1 &#956; Pa<sup>2</sup>/Hz)" #dB re 1 uPa^2/Hz
   )  +
@@ -762,7 +762,7 @@ p2_interactive
 #combine effort and line
 
 
-combined_layout <- browsable(
+combined_layout2 <- browsable(
   div(
     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
     
@@ -781,7 +781,7 @@ combined_layout <- browsable(
 )
 
 # View the perfectly balanced application layout
-combined_layout
+combined_layout2
 
 
 #save html file to Dev contents folder
