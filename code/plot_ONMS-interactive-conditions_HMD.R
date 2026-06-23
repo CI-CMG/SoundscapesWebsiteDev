@@ -690,6 +690,179 @@ p_interactive
 
 
 
+
+
+
+#shading on top of lines
+
+
+
+
+pv2 = ggplot() +
+  #wind model
+  geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windUpp,], 
+            aes(x = variable, y = value, 
+                text = "Modeled Max Wind Noise"), color = "black", linewidth = 1) +
+  
+  geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windLow,], 
+            aes(x = variable, y = value, 
+                text = "Modeled Min Wind Noise"), color = "black", linewidth = 1) +
+  
+  geom_polygon(data = polygon_data,
+               aes(x = x, y = y, group = id,  
+                   text = paste0("Min Freq: ", round(FQstart, 2) , " Hz<br>Max Freq: ", round(FQend, 2), " Hz")), # 
+               fill = "gray",
+               alpha = 0.2,
+               inherit.aes = FALSE) +
+  
+  # geom_line(data = polygon_data,
+  #           aes(x = x, 
+  #               y = label_height,    # <-- Hard-coded to your precise label text elevation
+  #               group = id,
+  #               text = paste0("Start FQ: ", round(FQstart, 2) , " Hz<br>End FQ: ", round(FQend, 2), " Hz")),   # <-- Plotly maps the tooltip directly here!
+  #           color = "transparent",   # <-- Makes the tracking line invisible
+  #           linewidth = 5,           # <-- Generates a wide invisible target area for the mouse
+  #           inherit.aes = FALSE) +
+  # 
+  scale_x_log10(labels = label_number(),limits = (c(10,fqupper)), guide = "axis_logticks") +  # Log scale for x-axis
+  
+  
+  #median HMD values- each season
+  geom_line(data = mallDataS[mallDataS$Quantile == "50%",], 
+            aes(x = Frequency, y = SoundLevel, color = Season, group = Season, fill = Season,
+                text = paste0("Season: ", Season, "<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), 
+            linewidth = 2,
+            key_glyph = draw_key_rect) +
+  
+  
+  #scale_x_continuous(limits = c(10, fqupper)) +
+  
+  # geom_ribbon(data = mallDataS %>%
+  #               pivot_wider(names_from = Quantile, values_from = SoundLevel),
+  #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season),
+  #             alpha = 0.2) + 
+  
+  #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
+  geom_ribbon(data = ribbonDataS %>% 
+                filter(segment == segment1)%>%
+                pivot_wider(names_from = Quantile, values_from = SoundLevel),
+              #%>%
+              #filter(!is.na(`25%`) & !is.na(`75%`)),
+              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season, color = Season), 
+              alpha = 0.3, 
+              show.legend = TRUE) 
+
+#only sites with a data gap need the following ribbons
+if (segment2 %in% ribbonData$segment){
+  
+  #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
+  pv2 <- pv2 + geom_ribbon(data = ribbonDataS %>% 
+                         filter( segment == segment2)%>%
+                         pivot_wider(names_from = Quantile, values_from = SoundLevel),
+                       #%>%
+                       #filter(!is.na(`25%`) & !is.na(`75%`)),
+                       aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season, color = Season), 
+                       alpha = 0.3, 
+                       show.legend = FALSE) 
+  
+}
+
+pv2 <- pv2 +
+  
+  
+  #median HMD all seasons
+  geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel, group = Quantile,
+                                                      text = paste0("Median across all years<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), color = "black", linewidth = 1,
+            linetype = "dotted")+ 
+  
+  
+  # Set color and fill to match season
+  scale_color_manual(name = "Season", values = seasont$values) +
+  scale_fill_manual(name = "Season", values = seasont$values) +
+  
+  scale_y_continuous(limits = c(27, NA),          
+                     breaks = seq(30, 80, by = 10)) + 
+  
+  # Additional aesthetics
+  theme_minimal() +
+  labs(
+    subtitle = seasonLabel,
+    #caption  = caption_text,
+    x = "Frequency (Hz)",
+    y = "Sound Levels (dB re 1 &#956; Pa<sup>2</sup>/Hz)" #dB re 1 uPa^2/Hz
+  )  +
+  theme(legend.position = "right",
+        plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+        axis.title.x = element_text(size = 14),           # X-axis label size
+        axis.title.y = element_text(size = 14),           # Y-axis label size
+        axis.text = element_text(size = 14),
+        legend.text = element_text(size = 12),
+        axis.ticks.length.x = unit(0.25, "cm"), 
+        axis.ticks.x = element_line(color = "grey", linewidth = 0.3), 
+        axis.line.x = element_line(color = "grey", linewidth = 0.3)    
+  ) 
+
+
+pv2
+
+
+
+
+
+pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 800, width = 800) %>%  
+  
+  #style(hoverinfo = "none", traces = c(1, 2, 3))  %>%
+  
+  layout(
+    
+    
+    autosize = TRUE,
+    
+    yaxis = list(
+      autorange = FALSE,       # Prevents Plotly from adding its own padding
+      range     = c(27, 85),   # Hard-locks the frame exactly to your polygon edges
+      ticks     = "outside",
+      tickvals = c(30, 40, 50, 60, 70, 80)
+    ),
+    
+    legend = list(
+      orientation    = "v",        # Keeps items stacked as a vertical column
+      x              = 1.02,       # Leaves it just past the right axis line
+      y              = 0.5,        # <--- Position coordinate set precisely at 50% height
+      # font.weight = 
+      # xanchor        = "left",     
+      yanchor        = "middle"   # <--- Locks the center of the legend block to that 50% mark
+      # entrywidth     = 100,       
+      # entrywidthmode = "pixels"   
+    ),
+    
+    # shapes = foi_shapes,
+    annotations = c(
+      foi_labels, # Keeps your existing frequency annotations intact
+      
+      # If you still prefer your season label as an annotation instead of a title subtitle:
+      list(list(
+        x = 0, y = 1.02, # Positioned slightly above the plotting grid
+        text = seasonLabel, 
+        showarrow = FALSE, 
+        xref = 'paper', yref = 'paper', 
+        xanchor = 'left', yanchor = 'bottom',
+        font = list(size = 13)
+      ))),
+    
+    # Increase the bottom margin (b) to ensure there is room for the caption text
+    margin = list(b = 50, l = 50, r = 50, t = 50)
+    
+    
+  ) 
+
+# Display the interactive plot
+pv2_interactive
+
+
+
+
+
 #effort graph interactive
 # 
 # summary <- gpsAG %>%
@@ -795,5 +968,5 @@ outDirC  =  paste0(outDir,"context/") #where to get context
 
 
 # Save the entire HTML layout bundle natively
-htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPL.html"))
+htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPLv2.html"))
 
