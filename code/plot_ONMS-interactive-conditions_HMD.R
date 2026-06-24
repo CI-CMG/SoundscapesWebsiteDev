@@ -61,7 +61,7 @@ pl = ggplot() +
  
   geom_polygon(data = polygon_data,
                aes(x = x, y = y, group = id,  
-                   text = paste0("Min Freq: ", round(FQstart, 2) , " Hz<br>Max Freq: ", round(FQend, 2), " Hz")), # 
+                   text = paste0("Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
                fill = "gray",
                alpha = 0.2,
                inherit.aes = FALSE) +
@@ -86,13 +86,13 @@ pl = ggplot() +
   #median HMD values- each year
   geom_line(data = mallData[mallData$Quantile == "50%",],
             aes(x = Frequency, y = SoundLevel, color = Year, fill = Year, group = Year,
-                text = paste0("Year: ", Year, "<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2)) ),
+                text = paste0("Year: ", Year, "<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB") ),
             linewidth = 2) +
 
   #median HMD values- all data
   geom_line(data = mALL[mALL$Quantile == "50%",],
             aes(x = Frequency, y = SoundLevel, group = Quantile,
-                text = paste0("Median across all years<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2) ) ),
+                text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB") ),
             color = "black", linewidth = 1,
             linetype = "dotted") +
   
@@ -523,7 +523,7 @@ p = ggplot() +
   
   geom_polygon(data = polygon_data,
                aes(x = x, y = y, group = id,  
-                   text = paste0("Min Freq: ", round(FQstart, 2) , " Hz<br>Max Freq: ", round(FQend, 2), " Hz")), # 
+                   text = paste0("Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
                fill = "gray",
                alpha = 0.2,
                inherit.aes = FALSE) +
@@ -577,14 +577,14 @@ p <- p +
   #median HMD values- each season
   geom_line(data = mallDataS[mallDataS$Quantile == "50%",], 
             aes(x = Frequency, y = SoundLevel, color = Season, group = Season,
-                text = paste0("Season: ", Season, "<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), 
+                text = paste0("Season: ", Season, "<br>Freq: ", trimws(format(Frequency, big.mark = ","))," Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), 
             linewidth = 2,
             key_glyph = draw_key_rect) +
   
   
   #median HMD all seasons
   geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel, group = Quantile,
-                                                      text = paste0("Median across all years<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), color = "black", linewidth = 1,
+                                                      text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), color = "black", linewidth = 1,
             linetype = "dotted")+ 
   
   
@@ -710,7 +710,7 @@ pv2 = ggplot() +
   
   geom_polygon(data = polygon_data,
                aes(x = x, y = y, group = id,  
-                   text = paste0("Min Freq: ", round(FQstart, 2) , " Hz<br>Max Freq: ", round(FQend, 2), " Hz")), # 
+                   text = paste0("Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
                fill = "gray",
                alpha = 0.2,
                inherit.aes = FALSE) +
@@ -730,7 +730,7 @@ pv2 = ggplot() +
   #median HMD values- each season
   geom_line(data = mallDataS[mallDataS$Quantile == "50%",], 
             aes(x = Frequency, y = SoundLevel, color = Season, group = Season, fill = Season,
-                text = paste0("Season: ", Season, "<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), 
+                text = paste0("Season: ", Season, "<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), 
             linewidth = 2,
             key_glyph = draw_key_rect) +
   
@@ -772,7 +772,7 @@ pv2 <- pv2 +
   
   #median HMD all seasons
   geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel, group = Quantile,
-                                                      text = paste0("Median across all years<br>Freq: ", Frequency, "<br>Sound Level: ", round(SoundLevel,2))), color = "black", linewidth = 1,
+                                                      text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), color = "black", linewidth = 1,
             linetype = "dotted")+ 
   
   
@@ -934,7 +934,6 @@ p2_interactive
 
 #combine effort and line
 
-
 combined_layoutv2 <- browsable(
   div(
     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
@@ -969,4 +968,45 @@ outDirC  =  paste0(outDir,"context/") #where to get context
 
 # Save the entire HTML layout bundle natively
 htmltools::save_html(combined_layoutv2, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPLv2.html"))
+
+
+
+
+
+#combine effort and line
+
+combined_layout2 <- browsable(
+  div(
+    style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
+    
+    # Top Plot (Spectrum) - Grand and tall
+    div(style = "height: 800px; width: 800px;", p_interactive),
+    
+    # Top Chart Caption
+    p(HTML(caption_text1), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+    
+    # Elegant Divider Line
+    tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
+    
+    # Bottom Plot (Monthly Effort Bars) - Clean, short, and compact!
+    div(style = "height: 275px; width: 800px;", p2_interactive) 
+  )
+)
+
+# View the perfectly balanced application layout
+combined_layout2
+
+
+#save html file to Dev contents folder
+#outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
+outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
+
+
+outDirG  =  paste0(outDir,"content/resources/") #where save graphics
+outDirGe =  paste0(outDir,"content/resources/extra") #where extra save graphics
+outDirC  =  paste0(outDir,"context/") #where to get context
+
+
+# Save the entire HTML layout bundle natively
+htmltools::save_html(combined_layout2, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPL.html"))
 
