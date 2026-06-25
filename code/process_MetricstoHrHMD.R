@@ -34,12 +34,18 @@ site = tolower(site)
  # gcpF = "PMEL_NEOFFSHORE"
  # prodName = "NE" 
 
+#add for NMFS
+# prodName = "NE"
+# gcpF = "NEFSC_MA-RI"
+
+
 # LOCAL DATA DIRECTORIES ####
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
 #dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
 dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
-#dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #nmfs GCP HMD netCDFs
+#dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
+#dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
 
 
 #SANCTSOUND DATA DIRECTORIES
@@ -64,7 +70,7 @@ outDirP = paste0( outDir,"products/", substr(tolower(site),start = 1, stop =2),"
 outDirG = paste0( outDir,"report/" ) #graphics
 
 
-#Only for NRS
+#Only for NRS and NMFS
 #outDirP = paste0( "Y:/soundscape_website_products/", substr(tolower(prodName),start = 1, stop =2),"/" ) #onms gcp folder #old NRS path paste0( outDir,"products/", substr(tolower(prodName),start = 1, stop =2),"/" )#NRS products
 
 
@@ -95,7 +101,6 @@ cat("CHECK: Read in data for: ",
   #     "with", sum( duplicated(dysPy)), "duplicated days\n (if NA for date range fix line 59)\n")
   # }
 
-  
 
 ## ONMS Sound FILES- NCEI-GCP ####
 # e.g. ONMS_HI01_20231201_8021.1.48000_20231201_DAILY_MILLIDEC_MinRes.nc
@@ -139,6 +144,9 @@ cat("CHECK: Read in data for: ",
 #PMEL_CINMS_201410_NRS05_20141018.nc
 if ( substr(site,start = 1, stop =3) == "nrs"){
 inFilesPY = list.files(dirGCP, pattern = "_[0-9]{8}\\.nc$", recursive = T, full.names = T)
+
+
+inFilesPY = list.files(dirGCP, pattern = "_[0-9]{8}\\.nc$", recursive = T, full.names = T)
 tmp = sapply( strsplit(basename(inFilesPY), "[.]"), "[[", 1)
 if (length(tmp) != 0){
   dysPy = as.Date(sapply( strsplit(tmp, "_"), "[", 5),format = "%Y%m%d")
@@ -147,6 +155,20 @@ if (length(tmp) != 0){
 }
 inFiles = inFilesPY
 }
+  
+## NMFS-GCP NEFSC sound files  
+  if ( substr(gcpF,start = 1, stop =5) == "NEFSC"){
+    inFilesPY_a = list.files(dirGCP, pattern = c(site,"_[0-9]{8}\\.nc$"), recursive = T, full.names = T)
+    inFilesPY = grep(pattern = "_[0-9]{8}\\.nc$", x = inFilesPY_a, value = TRUE)
+    tmp = sapply( strsplit(basename(inFilesPY), "[.]"), "[[", 1)
+    if (length(tmp) != 0){
+      dysPy = as.Date(sapply( strsplit(tmp, "_"), "[", 5),format = "%Y%m%d")
+      cat("Found ", length(inFilesPY), "PyPAM files for ", site, "(", as.character( min(dysPy , na.rm = T) ), " to ", as.character(max(dysPy , na.rm = T)),
+          "with", sum( duplicated(dysPy)), "duplicated days\n (if NA for date range fix line 59)\n")
+    }
+    inFiles = inFilesPY
+  }
+  
 
 #For SB03 since new data has different naming convention
 # inFilesON = list.files(dirGCP, pattern = "MinRes.nc", recursive = T, full.names = T)

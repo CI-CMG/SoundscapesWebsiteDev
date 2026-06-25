@@ -53,15 +53,16 @@ editor_options:
     wrap: 72
 ---
 
-
 ::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
 ## Ocean Sound Monitoring
+
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["FKNMS"]))
 ```
 
 ### Summary of monitoring sites
+
 ```{python}
 #| echo: false
 display(HTML(gf.makeImage("FKNMSSiteMap.jpg", "FK Site Map", 850)))
@@ -72,12 +73,14 @@ display(HTML(htmlTable))
 
 ::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
 ## Ocean Sound Conditions
+
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["conditions overview"]))
 ```
 
 ### What are the seasonal patterns across frequencies?
+
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["Soundscape Overview"]))
@@ -97,6 +100,7 @@ display(HTML(infoHtml))
 ```
 
 ### How are ocean sound conditions changing across years?
+
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["What are the latest conditions in ocean sound?"]))
@@ -106,13 +110,19 @@ display(HTML(standardTextDict["Annual condition fc"]))
 ```
 
 <!-- ### How often are sources of interest likely present? -->
+
 <!-- ```{python} -->
+
 <!-- #| echo: false -->
+
 <!-- display(HTML(standardTextDict["sources of interest likely present"])) -->
+
 <!-- display(HTML(gf.makeButtons(sites, "plot_***_AboveWind.jpg", "SourcePresent"))) -->
+
 <!-- ``` -->
 
 ### Is the intensity (loudness) of sound sources of interest within typical range?
+
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["sources of interest typical"]))
@@ -128,12 +138,14 @@ display(HTML(standardTextDict["FOI condition fc"]))
 
 ::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
 ## Ocean Sound Indicators
+
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["Indicator description"]))
 ```
 
-### When are goliath grouper calling on their spawning aggregation site? 
+### When are goliath grouper calling on their spawning aggregation site?
+
 ```{python}
 #| echo: false
 
@@ -151,8 +163,8 @@ display(HTML(standardTextDict["grouper diel pattern fc"]))
 #gf.makeImage("FK01_diel_patterns.png", "diel patterns")
 ```
 
-
 ### When do whales contribute to the soundscape, indicating their presence nearby?
+
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["whales"]))
