@@ -25,6 +25,7 @@ library(viridis)
 library(ggpp)
 
 
+
 rm(list=ls()) 
 
 #SITES ####
@@ -32,15 +33,15 @@ rm(list=ls())
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
 
 
-ONMSsites = c("ne08")
+ONMSsites = c("hi04")
 
 
 ## directories ####
-outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
+#outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
 #outDir   =  "F:/CODE/GitHub/SoundscapesWebsite/" # your local git repo 
 #outDir   =  "/Users/quca3108/SoundscapesWebsite/" # Quincy local git repo
-#outDir = "X:/Emma_Beretta/SoundscapesWebsite/" #for GCP workstation remote desktop Emma
-#outDir   = "~/GitHub/SoundscapesWebsiteDev/" #GCP WW
+outDir = "X:/Emma_Beretta/SoundscapesWebsite/" #for GCP workstation remote desktop Emma
+#outDir   = "~/GitHub/SoundscapesWebsite/" #GCP WW
 
 
 outDirG  =  paste0(outDir,"content/resources/") #where save graphics
@@ -728,8 +729,6 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       x = "",
       y = "Days",
       fill = legend_label,
-      # Update your p1 labs call:
-        #caption = "Data&nbsp;from&nbsp;months&nbsp;with&nbsp;effort&nbsp;below&nbsp;the&nbsp;red&nbsp;horizontal&nbsp;line&nbsp;are&nbsp;excluded&nbsp;from&nbsp;annual&nbsp;sound&nbsp;levels&nbsp;figure&nbsp;above"
       caption = "Data from months with effort below the red horizontal line are excluded from annual sound levels figure above"
     ) +
     scale_x_discrete(labels = month.abb[month_nums]) +  # Show month names instead of numbers
@@ -1383,7 +1382,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   separator <- grid.rect(gp = gpar(fill = "black"), height = unit(2, "pt"), width = unit(1, "npc"))
   # arranged_plot = grid.arrange(p, separator, l, heights =c(4, 0.05, 0.8))
-  pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
+  pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1.3)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
   
   ### save figure ####
   ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPL.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
@@ -1850,9 +1849,13 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         plot_height <- 12
       }  else if (num_years == 8) {
         plot_height <- 14
+      } else if (num_years == 9) {
+        plot_height <- 16
+      } else if (num_years == 10) {
+        plot_height <- 18
       } else {
         # This covers three or more years
-        plot_height <- 16
+        plot_height <- 20
       }
       
       if (ft == "125 Hz" ){
