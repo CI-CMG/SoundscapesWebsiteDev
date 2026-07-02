@@ -27,7 +27,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "hi04" 
+site  = "NS02" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -157,8 +157,9 @@ inFiles = inFilesPY
 }
   
 ## NMFS-GCP NEFSC sound files  
-  if ( substr(gcpF,start = 1, stop =5) == "NEFSC"){
-    inFilesPY_a = list.files(dirGCP, pattern = c(site,"_[0-9]{8}\\.nc$"), recursive = T, full.names = T)
+if ( substr(gcpF,start = 1, stop =5) == "NEFSC"){
+   # inFilesPY_a = list.files(dirGCP, pattern = c(gcpF,"_[0-9]{6}_",toupper(site),"_[0-9]{8}\\.nc$"), recursive = T, full.names = T)
+    inFilesPY_a = list.files(dirGCP, pattern = c(toupper(site),"_[0-9]{8}\\.nc$"), recursive = T, full.names = T)
     inFilesPY = grep(pattern = "_[0-9]{8}\\.nc$", x = inFilesPY_a, value = TRUE)
     tmp = sapply( strsplit(basename(inFilesPY), "[.]"), "[[", 1)
     if (length(tmp) != 0){
