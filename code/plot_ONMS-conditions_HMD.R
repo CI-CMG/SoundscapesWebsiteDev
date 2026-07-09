@@ -42,7 +42,8 @@ ONMSsites = c("cox01")
 #outDir   =  "F:/CODE/GitHub/SoundscapesWebsite/" # your local git repo 
 #outDir   =  "/Users/quca3108/SoundscapesWebsite/" # Quincy local git repo
 #outDir = "X:/Emma_Beretta/SoundscapesWebsite/" #for GCP workstation remote desktop Emma
-outDir   = "~/GitHub/SoundscapesWebsite/" #GCP WW
+#outDir   = "~/GitHub/SoundscapesWebsite/" #GCP WW
+outDir   = "~/GitHub/SoundscapesWebsiteDev/" #GCP WW
 
 
 outDirG  =  paste0(outDir,"content/resources/") #where save graphics
@@ -189,11 +190,11 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     site3 = "fk08"
     site5 = site
     outDirP = paste0( outDir,"products/", substr(tolower(site), start = 1, stop =2),"/" )#products
-  }else if (site == "COX01" || site == "COX03" || site == "NS02" || site == "NS05" || site == "NS08" || site == "USTR06" || site == "USTR09") {
+  }else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09") {
     site1 = site
     site3 = site
     site5 = "ne"
-    outDirP = paste0( outDir,"products/", substr(tolower(NE), start = 1, stop =2),"/" )#products
+    outDirP = paste0("Y:/soundscape_website_products/ne/" )#products
   } else {
     site1 = site
     site3 = site
