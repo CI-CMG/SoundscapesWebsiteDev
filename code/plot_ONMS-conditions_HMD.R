@@ -34,7 +34,7 @@ rm(list=ls())
 #NMFS "ne01" #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09"
 
 
-ONMSsites = c("cox01","cox03","ns05","ns08","ustr06","ustr09")
+ONMSsites = c("cox01","cox03","ns02","ns05","ns08")
 
 
 ## directories ####
@@ -213,11 +213,20 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,3), ]
   } else if (substr(site, 1,5) == "NRS06"){
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,3), ]
-   } else {
+  } else {
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,2), ]
   }
   
-  FOIs <- FOIs [FOIs$Site == toupper(site5) | is.na(FOIs$Site), ]
+#  if (site == "cox01"){
+#    FOIs <- FOIs [FOI$Site == toupper(site) | is.na(FOIs$Site), ]  
+#  } else {
+#  FOIs <- FOIs [FOIs$Site == toupper(site5) | is.na(FOIs$Site), ]
+#  }
+  
+
+    FOIs <- FOIs [FOIs$Site == toupper(site5) | is.na(FOIs$Site), ]
+  
+  
   
   ##frequency(s) to track
   #any rows with blank site column apply to all sites in NMS, any rows with just on site apply only to that site
@@ -507,12 +516,15 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     gps <- gps %>%
       mutate(across(num_range("HMD_", 2100:3900), ~ NA))
     
-  } else if (site == "sb01" | site == "sb03"){
+  } else if (site == "sb01" | site == "sb03" ){
     
     #make those columns na
     gps <- gps %>%
       mutate(across(num_range("HMD_", 2900:4300), ~ NA))
-    
+  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
+    #make those columns na
+    gps <- gps %>%
+      mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
   } 
     
   
