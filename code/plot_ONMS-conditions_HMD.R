@@ -31,10 +31,10 @@ rm(list=ls())
 #SITES ####
 # ONMSsites = c("sb01", "sb03", "hi01", "hi03", "hi04", "hi08", "pm01", "pm02", "fgb01", "fk01", "fk05", "fk06", "fk08", "as01", "mb01", "mb02", "oc02")
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
-#NMFS "ne01" #site names: COX01, COX03, NS02, NS05, NS08, USTR06, USTR09
+#NMFS "ne01" #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09"
 
 
-ONMSsites = c("ns08")
+ONMSsites = c("cox01","cox03","ns05","ns08","ustr06","ustr09")
 
 
 ## directories ####

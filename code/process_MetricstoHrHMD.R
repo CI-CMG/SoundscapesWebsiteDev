@@ -27,7 +27,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "NS08" 
+site  = "USTR09" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -36,7 +36,7 @@ site = tolower(site)
 
 #add for NMFS
  prodName = "NE"
- gcpF = "NEFSC_MA-RI"
+ gcpF = "NEFSC_GOM" #"NEFSC_MA-RI"
 
 
 # LOCAL DATA DIRECTORIES ####
