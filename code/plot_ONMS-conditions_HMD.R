@@ -521,10 +521,10 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     #make those columns na
     gps <- gps %>%
       mutate(across(num_range("HMD_", 2900:4300), ~ NA))
-#  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
+  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
     #make those columns na
-#     gps <- gps %>%
-#     mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
+     gps <- gps %>%
+     mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
   } 
     
   
@@ -1429,7 +1429,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # plot with error bars and median and hours above 75th percentile in title
   
   
-  if(site %in% c("mb01", "ci01", "NRS03", "NRS04", "NRS05","NRS06","NRS09","NRS10","NRS11","NRS13")){
+  if(site %in% c("mb01", "ci01", "NRS03", "NRS04", "NRS05","NRS06","NRS09","NRS10","NRS11","NRS13", "cox01")){
     gps = gpsAG
   }
   
