@@ -34,7 +34,7 @@ rm(list=ls())
 #NMFS "ne01" #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09"
 
 
-ONMSsites = c("cox01","cox03","ns02","ns05","ns08")
+ONMSsites = c("cox01","ns02")
 
 
 ## directories ####
@@ -521,10 +521,10 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     #make those columns na
     gps <- gps %>%
       mutate(across(num_range("HMD_", 2900:4300), ~ NA))
-  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
+#  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
     #make those columns na
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
+#     gps <- gps %>%
+#     mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
   } 
     
   

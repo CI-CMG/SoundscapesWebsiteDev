@@ -8,7 +8,7 @@
 #install.packages("rJava") make sure Java is installed for xlsx to work
 
 # RUN this to make sure latest updates for PAMscapes
-devtools::install_github('TaikiSan21/PAMscapes')
+#devtools::install_github('TaikiSan21/PAMscapes')
 
 
 library(PAMscapes)
@@ -27,7 +27,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "USTR09" 
+site  = "NS02" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -36,7 +36,7 @@ site = tolower(site)
 
 #add for NMFS
  prodName = "NE"
- gcpF = "NEFSC_GOM" #"NEFSC_MA-RI"
+ gcpF = "NEFSC_MA-RI" # "NEFSC_GOM" #"NEFSC_MA-RI"
 
 
 # LOCAL DATA DIRECTORIES ####
