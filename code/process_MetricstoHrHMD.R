@@ -8,7 +8,7 @@
 #install.packages("rJava") make sure Java is installed for xlsx to work
 
 # RUN this to make sure latest updates for PAMscapes
-devtools::install_github('TaikiSan21/PAMscapes')
+#devtools::install_github('TaikiSan21/PAMscapes')
 
 
 library(PAMscapes)
@@ -35,17 +35,17 @@ site = tolower(site)
  # prodName = "NE" 
 
 #add for NMFS
-# prodName = "NE"
-# gcpF = "NEFSC_MA-RI"
+ prodName = "NE"
+ gcpF = "NEFSC_MA-RI" # "NEFSC_GOM" #"NEFSC_MA-RI"
 
 
 # LOCAL DATA DIRECTORIES ####
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
 #dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
-dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
+#dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
 #dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
-#dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
+dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
 
 
 #SANCTSOUND DATA DIRECTORIES
@@ -62,8 +62,8 @@ dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP wo
 #outDir =  "F:/CODE/GitHub/SoundscapesWebsite/" 
 #outDir =  "C:/Users/emma.beretta/Documents/SoundscapesWebsite/" #for NOAA computer
 #outDir =  "C:/Users/embe5980/SoundscapesWebsite/" #for CIRES computer
-outDir =  "X:/Emma_Beretta/SoundscapesWebsite/" #for Emma GCP workstation
-#outDir =  "C:/Users/pam_user/Documents/GitHub/SoundscapesWebsite/" #Samara GCP WW
+#outDir =  "X:/Emma_Beretta/SoundscapesWebsite/" #for Emma GCP workstation
+outDir =  "C:/Users/pam_user/Documents/GitHub/SoundscapesWebsite/" #Samara GCP WW
 
 outDirC = paste0( outDir,"content/resources/") #context
 outDirP = paste0( outDir,"products/", substr(tolower(site),start = 1, stop =2),"/" )#products
@@ -71,7 +71,7 @@ outDirG = paste0( outDir,"report/" ) #graphics
 
 
 #Only for NRS and NMFS
-#outDirP = paste0( "Y:/soundscape_website_products/", substr(tolower(prodName),start = 1, stop =2),"/" ) #onms gcp folder #old NRS path paste0( outDir,"products/", substr(tolower(prodName),start = 1, stop =2),"/" )#NRS products
+outDirP = paste0( "Y:/soundscape_website_products/", substr(tolower(prodName),start = 1, stop =2),"/" ) #onms gcp folder #old NRS path paste0( outDir,"products/", substr(tolower(prodName),start = 1, stop =2),"/" )#NRS products
 
 
 
@@ -157,8 +157,9 @@ inFiles = inFilesPY
 }
   
 ## NMFS-GCP NEFSC sound files  
-  if ( substr(gcpF,start = 1, stop =5) == "NEFSC"){
-    inFilesPY_a = list.files(dirGCP, pattern = c(site,"_[0-9]{8}\\.nc$"), recursive = T, full.names = T)
+if ( substr(gcpF,start = 1, stop =5) == "NEFSC"){
+   # inFilesPY_a = list.files(dirGCP, pattern = c(gcpF,"_[0-9]{6}_",toupper(site),"_[0-9]{8}\\.nc$"), recursive = T, full.names = T)
+    inFilesPY_a = list.files(dirGCP, pattern = c(toupper(site),"_[0-9]{8}\\.nc$"), recursive = T, full.names = T)
     inFilesPY = grep(pattern = "_[0-9]{8}\\.nc$", x = inFilesPY_a, value = TRUE)
     tmp = sapply( strsplit(basename(inFilesPY), "[.]"), "[[", 1)
     if (length(tmp) != 0){
