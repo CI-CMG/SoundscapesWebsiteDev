@@ -27,7 +27,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "hi04" 
+site  = "hi01" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -216,7 +216,7 @@ if (length(tmp) != 0){
 
 ## CHECK FOR PROCESSED FILES ####
 #updates list of files to process
-pFile = list.files(path = (outDirP), pattern = paste0("HMDfilesProcesedv1_", site), full.names = T, recursive = T)
+pFile = list.files(path = (outDirP), pattern = paste0("HMDfilesProcesed_", site), full.names = T, recursive = T)
 
 if ( length(pFile) > 0 ) {
   load(pFile)
@@ -236,7 +236,7 @@ if ( length(pFile) > 0 ) {
 
     # read in processed data to append results
     inFileP = list.files((outDirP),
-                         pattern = paste0("HMDdatav1_", site, "_HourlySPL-gfs_\\d{4}-\\d{2}-\\d{2}\\.Rda$"),
+                         pattern = paste0("HMDdata_", site, "_HourlySPL-gfs_\\d{4}-\\d{2}-\\d{2}\\.Rda$"),
                          full.names = T, recursive = T)
     file_info = file.info(inFileP)
     load( inFileP[which.max(file_info$ctime)] )
@@ -360,6 +360,13 @@ cDatah = setDF(cDatah)
 #THIS?
 #cDatah = as.data.frame(cDatah)
 
+if (site %in% c("hi01", "hi04", "hi03", "hi08", "as01", "pm01")){
+cDatah$Latitude1 = cDatah$Latitude
+cDatah$Latitude = cDatah$Longitude
+cDatah$Longitude = cDatah$Latitude1
+cDataht = cDatah[,1:2164]
+cDatah = cDataht
+}
 
 # old way to process with rbind, will crash if >2000 days of data to process
 # # PROCESS ONMS Sound FILES ####
@@ -468,6 +475,18 @@ cat("Processing matchGFS for chunk", i, "of", length(data_chunks), "\n")
 gps_chunks[[i]] <- matchGFS(data_chunks[[i]])
 }
 
+ 
+# # Test just the first 2 rows to see the underlying error if matchGFS chunk gets stuck
+# test_chunk <- head(data_chunks[[1]], 2)
+# 
+# # Try running it with verbose downloading if your version supports it, 
+# # or just wrap it in a try-catch to see if it times out.
+# tryCatch({
+#   test_res <- matchGFS(test_chunk)
+#   print("Success! Server is up.")
+# }, error = function(e) {
+#   message("Network/Server Error caught: ", e$message)
+# })
 
 
 #add/remove lines for the number of chunks data was broken into
