@@ -31,18 +31,19 @@ rm(list=ls())
 #SITES ####
 # ONMSsites = c("sb01", "sb03", "hi01", "hi03", "hi04", "hi08", "pm01", "pm02", "fgb01", "fk01", "fk05", "fk06", "fk08", "as01", "mb01", "mb02", "oc02")
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
-#NMFS "ne01
+#NMFS "ne01" #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09"
 
 
-ONMSsites = c("hi04")
+ONMSsites = c("cox01")
 
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
 #outDir   =  "F:/CODE/GitHub/SoundscapesWebsite/" # your local git repo 
 #outDir   =  "/Users/quca3108/SoundscapesWebsite/" # Quincy local git repo
-outDir = "X:/Emma_Beretta/SoundscapesWebsite/" #for GCP workstation remote desktop Emma
+outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
 #outDir   = "~/GitHub/SoundscapesWebsite/" #GCP WW
+#outDir   = "~/GitHub/SoundscapesWebsiteDev/" #GCP WW
 
 
 outDirG  =  paste0(outDir,"content/resources/") #where save graphics
@@ -189,6 +190,11 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     site3 = "fk08"
     site5 = site
     outDirP = paste0( outDir,"products/", substr(tolower(site), start = 1, stop =2),"/" )#products
+  }else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09") {
+    site1 = site
+    site3 = site
+    site5 = "ne"
+    outDirP = paste0("Y:/soundscape_website_products/ne/" )#products
   } else {
     site1 = site
     site3 = site
@@ -207,11 +213,22 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,3), ]
   } else if (substr(site, 1,5) == "NRS06"){
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,3), ]
-   } else {
+  } else {
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,2), ]
   }
   
-  FOIs <- FOIs [FOIs$Site == toupper(site5) | is.na(FOIs$Site), ]
+#  if (site == "cox01"){
+#    FOIs <- FOIs [FOI$Site == toupper(site) | is.na(FOIs$Site), ]  
+#  } else {
+#  FOIs <- FOIs [FOIs$Site == toupper(site5) | is.na(FOIs$Site), ]
+#  }
+  
+  
+  if (site5 == "ne") {
+    FOIs <- FOIs[FOIs$Site == toupper(site3) | is.na(FOIs$Site), ]
+  } else {
+    FOIs <- FOIs[FOIs$Site == toupper(site5) | is.na(FOIs$Site), ]
+  }
   
   ##frequency(s) to track
   #any rows with blank site column apply to all sites in NMS, any rows with just on site apply only to that site
@@ -501,12 +518,15 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     gps <- gps %>%
       mutate(across(num_range("HMD_", 2100:3900), ~ NA))
     
-  } else if (site == "sb01" | site == "sb03"){
+  } else if (site == "sb01" | site == "sb03" ){
     
     #make those columns na
     gps <- gps %>%
       mutate(across(num_range("HMD_", 2900:4300), ~ NA))
-    
+  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
+    #make those columns na
+     gps <- gps %>%
+     mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
   } 
     
   
@@ -1411,7 +1431,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # plot with error bars and median and hours above 75th percentile in title
   
   
-  if(site %in% c("mb01", "ci01", "NRS03", "NRS04", "NRS05","NRS06","NRS09","NRS10","NRS11","NRS13")){
+  if(site %in% c("mb01", "ci01", "NRS03", "NRS04", "NRS05","NRS06","NRS09","NRS10","NRS11","NRS13", "cox01")){
     gps = gpsAG
   }
   
