@@ -34,7 +34,7 @@ rm(list=ls())
 #NMFS "ne01" #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09"
 
 
-ONMSsites = c("ustr06", "ustr09")
+ONMSsites = c("cox01")
 
 
 ## directories ####
@@ -363,6 +363,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # 
   # }
   
+
   
   #removing HMD_20 from SS data so that it lines up with ONMS data
   # if(site == "sb03"){
