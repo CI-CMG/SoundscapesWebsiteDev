@@ -64,7 +64,7 @@ display(HTML(standardTextDict["Northeast"]))
 
 ```{python}
 #| echo: false
-#display(HTML(gf.makeImage("______SiteMap.jpg", "NE Site Map", 850)))
+display(HTML(gf.makeImage("NEFisheriesSiteMap.jpg", "NE Site Map", 850)))
 
 display(HTML(htmlTable))
 ```
