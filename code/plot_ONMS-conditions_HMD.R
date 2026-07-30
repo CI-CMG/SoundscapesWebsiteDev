@@ -31,10 +31,10 @@ rm(list=ls())
 #SITES ####
 # ONMSsites = c("sb01", "sb03", "hi01", "hi03", "hi04", "hi08", "pm01", "pm02", "fgb01", "fk01", "fk05", "fk06", "fk08", "as01", "mb01", "mb02", "oc02")
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
-#NMFS "ne01" #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09"
+#NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
 
-ONMSsites = c("cox03","ns02","ns05","ns08","ustr06","ustr09","ne08")
+ONMSsites = c("cox01") #"cox03","ns02","ns05","ns08","ustr06","ustr09")
 
 
 ## directories ####
@@ -1432,7 +1432,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # plot with error bars and median and hours above 75th percentile in title
   
   
-  if(site %in% c("mb01", "ci01", "NRS03", "NRS04", "NRS05","NRS06","NRS09","NRS10","NRS11","NRS13", "cox01")){
+  if(site %in% c("mb01", "ci01", "NRS03", "NRS04", "NRS05","NRS06","NRS09","NRS10","NRS11","NRS13")){
     gps = gpsAG
   }
   
