@@ -8,9 +8,15 @@
 #install.packages("rJava") make sure Java is installed for xlsx to work
 
 # RUN this to make sure latest updates for PAMscapes
-#devtools::install_github('TaikiSan21/PAMscapes')
+devtools::install_github('TaikiSan21/PAMscapes')
+
+# make sure you have Rtools installed
+if(!require('devtools')) install.packages('devtools')
+# install from GitHub
+devtools::install_github('TaikiSan21/PAMmisc')
 
 
+library(PAMmisc)
 library(PAMscapes)
 library(lubridate)
 library(dplyr)
@@ -27,7 +33,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fk08" 
+site  = "b" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -35,18 +41,18 @@ site = tolower(site)
  # prodName = "NE" 
 
 #add for NMFS
- prodName = "NE"
- gcpF = "NEFSC_MA-RI" # "NEFSC_GOM" #"NEFSC_MA-RI"
+ #prodName = "NE"
+ #gcpF = "NEFSC_MA-RI" # "NEFSC_GOM" #"NEFSC_MA-RI"
 
 
 # LOCAL DATA DIRECTORIES ####
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
-dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
 #dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
 #dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
+dirGCP = paste0( "E:/mbarc/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
 #dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
-dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
+#dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
 
 
 #SANCTSOUND DATA DIRECTORIES
@@ -62,8 +68,8 @@ dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NE
 #outDir =  "/Users/quca3108/SoundscapesWebsite/"
 #outDir =  "F:/CODE/GitHub/SoundscapesWebsite/" 
 #outDir =  "C:/Users/emma.beretta/Documents/SoundscapesWebsite/" #for NOAA computer
-outDir =  "C:/Users/embe5980/SoundscapesWebsite/" #for CIRES computer
-#outDir =  "X:/Emma_Beretta/SoundscapesWebsite/" #for Emma GCP workstation
+#outDir =  "C:/Users/embe5980/SoundscapesWebsite/" #for CIRES computer
+outDir =  "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for Emma GCP workstation
 #outDir =  "C:/Users/pam_user/Documents/GitHub/SoundscapesWebsite/" #Samara GCP WW
 #outDir =  "C:/Users/embe5980/SoundscapesWebsite/" #for CIRES computer
 #outDir =  "X:/Emma_Beretta/SoundscapesWebsite/" #for Emma GCP workstation
@@ -75,7 +81,7 @@ outDirG = paste0( outDir,"report/" ) #graphics
 
 
 #Only for NRS and NMFS
-outDirP = paste0( "Y:/soundscape_website_products/", substr(tolower(prodName),start = 1, stop =2),"/" ) #onms gcp folder #old NRS path paste0( outDir,"products/", substr(tolower(prodName),start = 1, stop =2),"/" )#NRS products
+#outDirP = paste0( "Y:/soundscape_website_products/", substr(tolower(prodName),start = 1, stop =2),"/" ) #onms gcp folder #old NRS path paste0( outDir,"products/", substr(tolower(prodName),start = 1, stop =2),"/" )#NRS products
 
 
 
@@ -129,14 +135,22 @@ cat("CHECK: Read in data for: ",
   dysON1 = as.Date(sapply( strsplit(basename(mantaFiles), "_"), "[[", 5), format = "%Y%m%d")
   #dysON1 = character()
   #you may need to change the number of the segment where the date is getting taken from he file name below
-  dysON2 = as.Date(sapply( strsplit(basename(pypamFiles), "_"), "[[", 3), format = "%Y%m%d")
+  dysON2 = as.Date(sapply( strsplit(basename(pypamFiles), "_"), "[[", 4), format = "%Y%m%d")
+  
+  #For the SIO formatted netcdf files
+  # dysON1 <- as.Date(
+  #      sub("\\.nc$", "", sapply(strsplit(basename(mantaFiles), "_"), "[[", 8)),
+  #     format = "%y%m%d")
+  # dysON2 <- as.Date(
+  #   sub("\\.nc$", "", sapply(strsplit(basename(pypamFiles), "_"), "[[", 8)),
+  #   format = "%y%m%d")
   
   dysON = c(dysON1, dysON2)
   
   #for newer sites without manta data:
   #dysON =  dysON2
   
-  #for newer sites without pypam data:
+  #for older sites without pypam data:
   #dysON =  dysON1
   
   # Output summary
@@ -252,6 +266,7 @@ if ( length(pFile) > 0 ) {
       #rm(gps) #fix for hi03,8, and 4 AND pm01
     }
     
+    
     #remove v1 files from HI04 so that v2 can be added
     # v1_targets <- v1_targets[1:180]
     # 
@@ -365,11 +380,44 @@ cDatah = setDF(cDatah)
 #THIS?
 #cDatah = as.data.frame(cDatah)
 
-if (site %in% c("hi01", "hi04", "hi03", "hi08", "as01", "pm01")){
+if (site == "hi04"){
+#processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+cDatah2 = outData[8419:16488, 1:2164]
+cDatah = cDatah2[4303:8070,]
+}
+
+if (site == "hi01"){
+  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+  cDatah2 = outData[19579:23394, 1:2163]
+  cDatah = cDatah2
+}
+
+if (site == "pm01"){
+  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+  cDatah2 = outData[12992:19783, 1:2164]
+  cDatah = cDatah2
+}
+
+if (site == "pm01"){
+  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+  cDatah2 = outData[1704:5279, 1:2164]
+  cDatah = cDatah2
+}
+
+# so far only necessary for certain pypam deplyments for site %in% c("hi01", "hi04", "hi03", "hi08", "as01", "pm01")
+if (site != "as01" & (cDatah$Latitude[1] < 0 | cDatah$Longitude[1] > 0)){
 cDatah$Latitude1 = cDatah$Latitude
 cDatah$Latitude = cDatah$Longitude
 cDatah$Longitude = cDatah$Latitude1
 cDataht = cDatah[,1:2164]
+#cDataht = cDatah[,1:1397]
+cDatah = cDataht
+}
+
+if (site == "hi04"){
+cDatah1 = cDatah2[1:4302,]
+
+cDataht = rbind(cDatah1, cDatah)
 cDatah = cDataht
 }
 
@@ -477,10 +525,12 @@ gps_chunks <- list()  # store wind-matched results
 #loop through chunks!
 for (i in seq_along(data_chunks)) {
 cat("Processing matchGFS for chunk", i, "of", length(data_chunks), "\n")
-gps_chunks[[i]] <- matchGFS(data_chunks[[i]])
+gps_chunks[[i]] <- matchGFS(data_chunks[[i]]
+                        #    , opendap=TRUE
+                            )
 }
 
- 
+#i = i +1
 # # Test just the first 2 rows to see the underlying error if matchGFS chunk gets stuck
 # test_chunk <- head(data_chunks[[1]], 2)
 # 
@@ -508,6 +558,18 @@ gps_chunks[[i]] <- matchGFS(data_chunks[[i]])
 
 #put chunks back together
 gps <- dplyr::bind_rows(gps_chunks)
+
+
+
+#FOR HI04, recombine new data with old
+processedData = outData
+processedData = processedData[1:8418,]
+#processedData = processedData[1:19578,] HI01?
+
+#PM01
+processedData = outData
+processedData = processedData[1:12991,]
+
 
 
 
