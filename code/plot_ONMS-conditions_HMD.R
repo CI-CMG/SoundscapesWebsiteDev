@@ -225,7 +225,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   
   if (site5 == "ne") {
-    FOIs <- FOIs[FOIs$Site == toupper(site3) | is.na(FOIs$Site), ]
+    FOIs <- FOIs[FOIs$Site == toupper(site1) | is.na(FOIs$Site), ]
   } else {
     FOIs <- FOIs[FOIs$Site == toupper(site5) | is.na(FOIs$Site), ]
   }
