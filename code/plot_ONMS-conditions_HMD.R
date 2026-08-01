@@ -34,7 +34,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
 
-ONMSsites = c("cox01") #"cox03","ns02","ns05","ns08","ustr06","ustr09")
+ONMSsites = c("cox03","ns02","ns05","ns08","ustr06","ustr09")
 
 
 ## directories ####
@@ -192,7 +192,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     outDirP = paste0( outDir,"products/", substr(tolower(site), start = 1, stop =2),"/" )#products
   }else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09") {
     site1 = site
-    site3 = site
+    site3 = paste0("ne", site)
     site5 = "ne"
     outDirP = paste0("Y:/soundscape_website_products/ne/" )#products
   } else {

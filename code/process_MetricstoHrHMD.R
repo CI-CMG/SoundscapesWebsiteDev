@@ -27,13 +27,14 @@ library(reshape)
 library(openxlsx)
 library(data.table)
 library(devtools)
+library(PAMmisc)
 
 
 
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "b" 
+site  = "cox01" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -482,6 +483,7 @@ cDatah = cDataht
 
 
 # #(ALT GET WIND) 
+# cDatah <- outData[,-c(8:14)]
 # only if already ran previously but the SPL data were inaccurate!
 # inWind = "F:/ONMS/SS_Manta/data_hi01_HourlySPL-gfs_2025-07-01.Rda"
 # load( inWind[1] ) # names(outData)
