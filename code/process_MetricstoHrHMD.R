@@ -27,7 +27,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fk08" 
+site  = "fgb01" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -35,18 +35,17 @@ site = tolower(site)
  # prodName = "NE" 
 
 #add for NMFS
- prodName = "NE"
- gcpF = "NEFSC_MA-RI" # "NEFSC_GOM" #"NEFSC_MA-RI"
+ # prodName = "NE"
+ # gcpF = "NEFSC_MA-RI" # "NEFSC_GOM" #"NEFSC_MA-RI"
 
 
 # LOCAL DATA DIRECTORIES ####
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
 dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
-#dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
 #dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
 #dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
-dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
+#dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
 
 
 #SANCTSOUND DATA DIRECTORIES
@@ -75,7 +74,7 @@ outDirG = paste0( outDir,"report/" ) #graphics
 
 
 #Only for NRS and NMFS
-outDirP = paste0( "Y:/soundscape_website_products/", substr(tolower(prodName),start = 1, stop =2),"/" ) #onms gcp folder #old NRS path paste0( outDir,"products/", substr(tolower(prodName),start = 1, stop =2),"/" )#NRS products
+#outDirP = paste0( "Y:/soundscape_website_products/", substr(tolower(prodName),start = 1, stop =2),"/" ) #onms gcp folder #old NRS path paste0( outDir,"products/", substr(tolower(prodName),start = 1, stop =2),"/" )#NRS products
 
 
 
@@ -365,13 +364,15 @@ cDatah = setDF(cDatah)
 #THIS?
 #cDatah = as.data.frame(cDatah)
 
-if (site %in% c("hi01", "hi04", "hi03", "hi08", "as01", "pm01")){
-cDatah$Latitude1 = cDatah$Latitude
-cDatah$Latitude = cDatah$Longitude
-cDatah$Longitude = cDatah$Latitude1
-cDataht = cDatah[,1:2164]
-cDatah = cDataht
-}
+#newest PyPAM datasets have swapped lat long inputs (they were long lat), so this bit of code changes them back to the correct order 
+#otherwise the wind data will have the wrong coordinates 
+# if (site %in% c("hi01", "hi04", "as01", "pm01")){
+# cDatah$Latitude1 = cDatah$Latitude
+# cDatah$Latitude = cDatah$Longitude
+# cDatah$Longitude = cDatah$Latitude1
+# cDataht = cDatah[,1:2164]
+# cDatah = cDataht
+# }
 
 # old way to process with rbind, will crash if >2000 days of data to process
 # # PROCESS ONMS Sound FILES ####
