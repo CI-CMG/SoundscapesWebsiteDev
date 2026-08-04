@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fgb01" 
+site  = "fk05" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -51,8 +51,8 @@ site = tolower(site)
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
 #dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
-#dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
-dirGCP = paste0( "E:/mbarc/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
+dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
+#dirGCP = paste0( "E:/mbarc/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
 #dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
 #dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
 
@@ -402,9 +402,21 @@ if (site == "pm01"){
   cDatah = cDatah2
 }
 
-if (site == "pm01"){
+if (site == "fgb01"){
   #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
   cDatah2 = outData[1704:5279, 1:2164]
+  cDatah = cDatah2
+}
+
+if (site == "sb03"){
+  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+  cDatah2 = outData[43064:50527, 1:2163]
+  cDatah = cDatah2
+}
+
+if (site == "fk05"){
+  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+  cDatah2 = outData[15187:19098, 1:2164]
   cDatah = cDatah2
 }
 
@@ -517,7 +529,7 @@ day_chunks <- split(unique_days, ceiling(seq_along(unique_days) / chunk_size_day
 
 # Split the full dataset by matching on those date chunks
 data_chunks <- lapply(day_chunks, function(days) {
-  filter(cDatah, as.Date(UTC) %in% days)
+  dplyr::filter(cDatah, as.Date(UTC) %in% days)
 })
 
 # Check result
@@ -535,7 +547,7 @@ gps_chunks[[i]] <- matchGFS(data_chunks[[i]]
                             )
 }
 
-#i = i +1
+i = i +1
 # # Test just the first 2 rows to see the underlying error if matchGFS chunk gets stuck
 # test_chunk <- head(data_chunks[[1]], 2)
 # 
@@ -575,7 +587,13 @@ processedData = processedData[1:8418,]
 processedData = outData
 processedData = processedData[1:12991,]
 
+#FGB01
+processedData = outData
+processedData = processedData[1:5593,]
 
+#SB03
+processedData = outData
+processedData = processedData[1:43063,]
 
 
 #SKIP IF YOU ALREADY GOT WIND USING CHUNKS
