@@ -34,7 +34,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
 
-ONMSsites = c("b")
+ONMSsites = c("hi04")
 
 
 ## directories ####
@@ -213,6 +213,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,3), ]
   } else if (substr(site, 1,5) == "NRS06"){
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,3), ]
+  } else if (site == "b"){
+    FOIs = FOI [ FOI$Sanctuary == "ci", ]
   } else {
     FOIs = FOI [ FOI$Sanctuary == substr(site5, 1,2), ]
   }
@@ -302,7 +304,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   st = as.Date( min(gps$UTC) )
   ed = as.Date( max(gps$UTC) )
   udays = length( unique(as.Date(gps$UTC)) )
-  #cat("Input Data - ", site, " has ", udays, " unique days (", as.character(st), " to ",as.character(ed), ")\n")
+  cat("Input Data - ", site, " has ", udays, " unique days (", as.character(st), " to ",as.character(ed), ")\n")
  
   
   # FOR NEW OC02 DATA!!!
@@ -1223,7 +1225,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     ## re-save effort figure ####
     ggsave(filename = paste0(outDirGe, "/plot_", toupper(site), "_HMDEffort.jpg"), plot = p1, width = 10, height = 4, dpi = 300)
   
-    gpsAG = gpsAGAll
+    #gpsAG = gpsAGAll
   } else {
     gpsAGAll = gpsAG
     my_subtitle = "all data" 

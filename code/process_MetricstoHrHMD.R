@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fk05" 
+site  = "fk06" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -420,6 +420,12 @@ if (site == "fk05"){
   cDatah = cDatah2
 }
 
+if (site == "fk06"){
+  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+  cDatah2 = outData[3022:12141, 1:2164]
+  cDatah = cDatah2
+}
+
 # so far only necessary for certain pypam deplyments for site %in% c("hi01", "hi04", "hi03", "hi08", "as01", "pm01")
 if (site != "as01" & (cDatah$Latitude[1] < 0 | cDatah$Longitude[1] > 0)){
 cDatah$Latitude1 = cDatah$Latitude
@@ -594,6 +600,14 @@ processedData = processedData[1:5593,]
 #SB03
 processedData = outData
 processedData = processedData[1:43063,]
+
+#FK01
+processedData = outData
+processedData = processedData[1:14041,]
+
+#FK05
+processedData = outData
+processedData = processedData[1:15186,]
 
 
 #SKIP IF YOU ALREADY GOT WIND USING CHUNKS
