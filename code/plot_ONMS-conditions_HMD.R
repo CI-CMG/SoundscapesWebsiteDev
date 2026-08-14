@@ -34,7 +34,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
 
-ONMSsites = c("cox01","cox03","ns02","ns05","ns08")
+ONMSsites = c("cox01","cox03","ns02","ns08")
 
 
 ## directories ####
