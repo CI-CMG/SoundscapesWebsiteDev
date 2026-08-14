@@ -34,7 +34,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
 
-ONMSsites = c("hi04")
+ONMSsites = c("b")
 
 
 ## directories ####
@@ -876,6 +876,11 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     count(wind_category) %>%
     mutate(label = paste(wind_category, ":", n))
   subtitle_text <- paste(category_counts$label, collapse = ", ")
+  
+  if (site3 == 'b'){
+    site3 = 'cisiob'
+  }
+  
   windInfo = windModel[tolower(windModel$si) == site3,]
   colnums = suppressWarnings(as.numeric(colnames(windInfo)))
  # widx = which(!is.na(colnums) & colnums == max(Fq))
