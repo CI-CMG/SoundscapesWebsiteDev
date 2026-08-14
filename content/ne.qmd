@@ -11,6 +11,8 @@ import plotly.io as pio
 pio.renderers.default = "notebook_connected"
 
 sites = ["NRS08", "COX01", "COX03", "NS02", "NS05", "NS08", "USTR06", "USTR09"]
+sitesFOI = ["COX01", "COX03", "NS02", "NS08"]
+sitesFOI2 = ["NRS08","USTR06", "USTR09"]
 
 # input table for standard text
 inputDir = os.path.normpath(os.path.join(os.getcwd(), "resources"))
@@ -125,11 +127,11 @@ display(HTML(standardTextDict["Annual condition fc"]))
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["sources of interest typical"]))
-display(HTML(gf.makeButtons(sites, "plot_***-63_HMDstatus.jpg", "FOI", altText= "Time series plot of daily median sound levels (sound intensity measured by mean-square pressure in microPascal per Hertz) for a specific frequency band(s) of interest at this site, separated by year. Background color shading (blue, purple, gold) indicates low (<25th percentile), typical (25-75th percentile), and high sound levels (>75th percentile) across the entire dataset at this frequency band(s) for comparability with annual medians, marked with horizontal black dashed lines. Pie charts on the right hand side of the graphic show the proportion of daily median sound levels that fell within each category for each year, following the same color-coding and percentile bins.")))
+display(HTML(gf.makeButtons(sitesFOI, "plot_***-125 OL_HMDstatus.jpg", "FOI", altText= "Time series plot of daily median sound levels (sound intensity measured by mean-square pressure in microPascal per Hertz) for a specific frequency band(s) of interest at this site, separated by year. Background color shading (blue, purple, gold) indicates low (<25th percentile), typical (25-75th percentile), and high sound levels (>75th percentile) across the entire dataset at this frequency band(s) for comparability with annual medians, marked with horizontal black dashed lines. Pie charts on the right hand side of the graphic show the proportion of daily median sound levels that fell within each category for each year, following the same color-coding and percentile bins.")))
 
 display(HTML(standardTextDict["spacer"]))
 
-display(HTML(gf.makeButtons(sites, "plot_***-125_HMDstatus.jpg", "FOI2", altText= "Time series plot of daily median sound levels (sound intensity measured by mean-square pressure in microPascal per Hertz) for a specific frequency band(s) of interest at this site, separated by year. Background color shading (blue, purple, gold) indicates low (<25th percentile), typical (25-75th percentile), and high sound levels (>75th percentile) across the entire dataset at this frequency band(s) for comparability with annual medians, marked with horizontal black dashed lines. Pie charts on the right hand side of the graphic show the proportion of daily median sound levels that fell within each category for each year, following the same color-coding and percentile bins.")))
+display(HTML(gf.makeButtons(sitesFOI2, "plot_***-125_HMDstatus.jpg", "FOI2", altText= "Time series plot of daily median sound levels (sound intensity measured by mean-square pressure in microPascal per Hertz) for a specific frequency band(s) of interest at this site, separated by year. Background color shading (blue, purple, gold) indicates low (<25th percentile), typical (25-75th percentile), and high sound levels (>75th percentile) across the entire dataset at this frequency band(s) for comparability with annual medians, marked with horizontal black dashed lines. Pie charts on the right hand side of the graphic show the proportion of daily median sound levels that fell within each category for each year, following the same color-coding and percentile bins.")))
 
 display(HTML(standardTextDict["FOI condition fc"]))
 ```
