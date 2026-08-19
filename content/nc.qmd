@@ -10,7 +10,7 @@ from pythonFunctions import generalFunctions as gf
 import plotly.io as pio
 pio.renderers.default = "notebook_connected"
 
-sites = [""]
+sites = ["HUA_WEA"]
 sitesFOI = [""]
 sitesFOI2 = [""]
 
