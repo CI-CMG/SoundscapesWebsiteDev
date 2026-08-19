@@ -34,12 +34,12 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fk06" 
+site  = "nrs02" 
 site = tolower(site) 
 # 
 # #add for NRS
- # gcpF = "PMEL_NEOFFSHORE"
- # prodName = "NE" 
+ # gcpF = "PMEL_OSP" #"PMEL_NEOFFSHORE"
+ # prodName = "NP" #"NE" 
 
 #add for NMFS
  # prodName = "NE"
