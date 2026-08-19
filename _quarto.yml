@@ -92,6 +92,7 @@ website:
         text: American Samoa
       - href: content/hi.qmd
         text: Hawaiian Islands Humpback Whale
+      - text: <br>
       - text: <b>Alaska Region</b>
       - href: content/np.qmd
         text: Gulf of Alaska
