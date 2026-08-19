@@ -17,6 +17,7 @@ project:
     - content/as.qmd
     - content/hi.qmd
     - content/ne.qmd
+    - content/np.qmd
 
 website: 
   page-navigation: true
@@ -54,6 +55,9 @@ website:
       - href: https://www.pmel.noaa.gov/acoustics/noaanps-ocean-noise-reference-station-network
         target: _blank
         text: NOAA Noise Reference Station Network
+      - href: https://sanctsound.ioos.us/sounds.html
+        target: _blank
+        text: IOOS Sound Library
       - text: <br>
       - text: <b>Eastern Region</b>
       - href: content/sb.qmd
@@ -86,6 +90,10 @@ website:
         text: American Samoa
       - href: content/hi.qmd
         text: Hawaiian Islands Humpback Whale
+      - text: <br>
+      - text: <b>Alaska Region</b>
+      - href: content/np.qmd
+        text: Gulf of Alaska
 
 format:
   html:
