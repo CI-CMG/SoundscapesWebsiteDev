@@ -175,7 +175,7 @@ def makeImage(imageName, identifier, width=700, altText=""):
     return initialImage
 
 def addPlotly(sourceHTML, site="", identifier=""):
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
+    inputDir = "content/resources"
     path = f'{inputDir}/{sourceHTML}'
     return f'<iframe src="{path}" width="100%" height="900px" style="border:none id="{site}{identifier}";"></iframe>'
 #     return f'''

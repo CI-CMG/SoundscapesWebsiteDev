@@ -2,6 +2,7 @@ project:
   type: website
   resources:
     - CNAME
+    - "content/resources/"
   render:
     - content/index.qmd
     - content/sb.qmd
