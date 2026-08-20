@@ -58,7 +58,7 @@ website:
         text: NOAA Noise Reference Station Network
       - href: https://sanctsound.ioos.us/sounds.html
         target: _blank
-        text: IOOS Sound Library
+        text: Sanctuary Sound Library
       - text: <br>
       - text: <b>Eastern Region</b>
       - href: content/sb.qmd
