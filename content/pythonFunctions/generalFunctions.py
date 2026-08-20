@@ -220,7 +220,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     inputDir = "resources" 
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", uniqueIDs[0])
-    initialIframe = f'<iframe id="{identifier}" src="{path}" width="100%" height="600px" style="border:none;"></iframe>'
+    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="100%" height="600px" style="border:none;"></iframe></div>'
     
     for i in range(len(uniqueIDs)):
         path = f'{inputDir}/{generalFormat}'
@@ -236,7 +236,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
         if i == 0:
             initialColor = "#BA2F00"
             
-        buttons += f'<button id="{uniqueIDs[i]}{identifier}button" onclick="{uniqueIDs[i]}{identifier}()" style="padding: 10px; color: white; margin: 4px 4px; background-color: {initialColor};">{buttonLabels[i]}</button>'
+        buttons += f'<button id="{uniqueIDs[i]}{identifier}button" onclick="{uniqueIDs[i]}{identifier}()" style="padding: 10px; color: white; margin: 4px 0; background-color: {initialColor}; text-transform: uppercase; width: 100px; display: block;">{buttonLabels[i]}</button>'
         
         scripts += f"""
                     <script>
@@ -251,4 +251,8 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
                     </script>
         """
         
-    return buttons + initialIframe + scripts
+    container_start = '<div style="display: flex; flex-direction: row; align-items: flex-start; gap: 20px;">'
+    button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
+    container_end = '</div>'
+    
+    return container_start + button_column + initialIframe + container_end + scripts
