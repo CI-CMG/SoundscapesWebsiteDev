@@ -1078,7 +1078,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   if(tolower(substr(site3, 1, 2)) == 'ci'){
     y_max = 110
   }else if(tolower(substr(site3, 1, 2)) == 'hi'){
-    y_max = 100
+    y_max = 101
   }else if(tolower(substr(site3, 1, 2)) == 'sb'){
     y_max = 150
   }else if(tolower(substr(site3, 1, 3)) == 'fgb'){
@@ -1097,6 +1097,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     y_max = 90
   }else if(tolower(substr(site3, 1, 2)) == 'as'){
     y_max = 102
+  }else if(tolower(substr(site3, 1, 2)) == 'ne'){
+    y_max = 105
   }else{
     y_max = NA
   }
