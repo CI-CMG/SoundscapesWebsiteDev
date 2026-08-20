@@ -169,6 +169,6 @@ display(HTML(standardTextDict["grouper diel pattern fc"]))
 #| echo: false
 display(HTML(standardTextDict["whales"]))
 #display(HTML(gf.embedMapViewer("https://apps-nefsc.fisheries.noaa.gov/pacm/#/narw")))
-display(HTML(gf.addPlotly("plot_FK08_interactiveSeasonalSPLv2.html","FK08","InteractiveSeasonalSPLv2")))
+display(HTML(makePlotlyButtonsWithLabels(["FK06", "FK08"],["FK06", "FK08"],"plot_***_interactiveAnnualSPL.html","InteractiveAnnualSPL")))
 ```
 :::
