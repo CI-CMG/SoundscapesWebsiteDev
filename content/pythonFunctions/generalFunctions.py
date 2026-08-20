@@ -214,9 +214,41 @@ def addGirafe(site):
 def embedMapViewer(srcLink):
     return f'<embed src="{srcLink}" style="width:900px; height: 800px;">'
     
-def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
-    outputString = ""
-    for s in sites:
-        path = generalFormat.replace("***", s)
-        outputString += addPlotly(path, s, identifier)
-    return outputString
+def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifier):
+    buttons = ""
+    scripts = ""
+    inputDir = "resources" 
+    path = f'{inputDir}/{generalFormat}'
+    path = path.replace("***", uniqueIDs[0])
+    initialIframe = f'<iframe id="{identifier}" src="{path}" width="100%" height="600px" style="border:none;"></iframe>'
+    
+    for i in range(len(uniqueIDs)):
+        path = f'{inputDir}/{generalFormat}'
+        path = path.replace("***", uniqueIDs[i])
+        
+        othersToLight = ""
+        for j in range(len(uniqueIDs)):
+            if i != j:
+                othersToLight += f"""const otherButton{uniqueIDs[j]} = document.getElementById('{uniqueIDs[j]}{identifier}button');
+                        otherButton{uniqueIDs[j]}.style.backgroundColor = '#008CBA';\n"""
+        
+        initialColor = "#008CBA"
+        if i == 0:
+            initialColor = "#BA2F00"
+            
+        buttons += f'<button id="{uniqueIDs[i]}{identifier}button" onclick="{uniqueIDs[i]}{identifier}()" style="padding: 10px; color: white; margin: 4px 4px; background-color: {initialColor}; border:none; border-radius: 4px; cursor: pointer;">{buttonLabels[i]}</button>'
+        
+        scripts += f"""
+                    <script>
+                    function {uniqueIDs[i]}{identifier}() {{
+                        var frameElement = document.getElementById('{identifier}');
+                        frameElement.src = "{path}"; // Swap the iframe source
+                        
+                        const thisButton = document.getElementById('{uniqueIDs[i]}{identifier}button');
+                        thisButton.style.backgroundColor = '#BA2F00';
+                        {othersToLight}
+                    }}
+                    </script>
+        """
+        
+    return buttons + initialIframe + scripts
