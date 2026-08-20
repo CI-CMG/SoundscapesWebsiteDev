@@ -1074,6 +1074,33 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     label_height = 35
   }
   
+  #standardizing the y axis for all sites within one sanctuary page
+  if(tolower(substr(site3, 1, 2)) == 'ci'){
+    y_max = 110
+  }else if(tolower(substr(site3, 1, 2)) == 'hi'){
+    y_max = 100
+  }else if(tolower(substr(site3, 1, 2)) == 'sb'){
+    y_max = 150
+  }else if(tolower(substr(site3, 1, 3)) == 'fgb'){
+    y_max = 115
+  }else if(tolower(substr(site3, 1, 2)) == 'gr'){
+    y_max = 85
+  }else if(tolower(substr(site3, 1, 2)) == 'fk'){
+    y_max = 85
+  }else if(tolower(substr(site3, 1, 2)) == 'oc'){
+    y_max = 105
+  }else if(tolower(substr(site3, 1, 2)) == 'mb'){
+    y_max = 85
+  }else if(tolower(substr(site3, 1, 2)) == 'ch'){
+    y_max = 105
+  }else if(tolower(substr(site3, 1, 2)) == 'pm'){
+    y_max = 90
+  }else if(tolower(substr(site3, 1, 2)) == 'as'){
+    y_max = 102
+  }else{
+    y_max = NA
+  }
+  
   
 #plot  
   p = ggplot() +
@@ -1128,7 +1155,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
        y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ) #dB re 1 uPa^2/Hz
     ) +
     # Additional aesthetics
-    scale_y_continuous(limits = c(30, NA)) +  # use to manually scale y minimum so vert line labels are visible
+    scale_y_continuous(limits = c(30, y_max)) +  # use to manually scale y minimum so vert line labels are visible
     theme_minimal()+
     theme(legend.position = "right",
           plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
@@ -1382,7 +1409,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     #median HMD values- all data
     geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel), color = "black", linewidth = 1,
               linetype = "dotted") +
-    scale_y_continuous(limits = c(30, NA)) +  # use to manually scale y minimum so vert line labels are visible
+    scale_y_continuous(limits = c(30, y_max)) +  # use to manually scale y minimum so vert line labels are visible
     
     # Additional aesthetics
     theme_minimal() +
