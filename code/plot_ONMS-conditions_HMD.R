@@ -33,7 +33,7 @@ rm(list=ls())
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
-ONMSsites = c("np02")
+ONMSsites = c("hi08")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -832,6 +832,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     seasont <- season[order(seasont$Season), ]
   }
   
+  
   p2 = ggplot(summary2, aes(x = as.character(year), y = dy, fill = as.factor(Season))) +
     geom_col(position = "dodge", width = .3) +  # Use dodge to separate bars for each year within the same month
     #coord_flip()+ 
@@ -922,13 +923,25 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   
   #(3) SEASONAL CONDITION PLOT ####
+  
+  if (substr(site3, 1, 2) == "hi" |substr(site3, 1, 2) == "pm"){
+    seasonType = "Humpback Seasons:"
+  } else NULL
+  
   caption_text1 = paste0(
-    "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
+    "<b>", seasonType, "</b> ",seasonLabel, "<br>",
     "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
     "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
     "<b>Dotted sound level curve</b> is the median for all data<br>",
     "<b>Solid sound level curves and colored shaded areas</b> are the seasonal medians and 25th-75th percentiles for all data")
   
+  header_text1 = paste0(
+    "<b>", toupper(site) , "</b>, ", siteInfo$`Oceanographic category`)
+  
+  header_text1 = paste0(
+    "<span style='font-size: 20px;'><b>Recording Site ", toupper(site), "</b></span>, ", 
+    "<span style='font-size: 12px;'>", siteInfo$`Oceanographic category`, " depth</span>"
+  )
   
   # PERCENTILES for all the data ####
   # all data - NOTE recalculated below if only plotting peak
@@ -1151,7 +1164,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     scale_fill_manual (values  = seasont$values ) +
     
     labs(
-       subtitle = seasonLabel,
+       title = header_text1,
        caption  = caption_text1,
        x = "Frequency (Hz)",
        y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ) #dB re 1 uPa^2/Hz
@@ -1161,6 +1174,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     theme_minimal()+
     theme(legend.position = "right",
           plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+          plot.title = ggtext::element_markdown(hjust = 0),
           axis.title.x = element_text(size = 14),           
           axis.title.y = element_text(size = 14), 
           legend.text = element_text(size = 12),
