@@ -1,5 +1,4 @@
 import os
-import requests
 
 def makeButtonsFit(sites, generalFormat, identifier, altText=""):
     buttons = ""
@@ -178,27 +177,20 @@ def makeImage(imageName, identifier, width=700, altText=""):
 def addPlotly(sourceHTML, site="", identifier=""):
     inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
     path = f'{inputDir}/{sourceHTML}'
-    response = requests.get(path)
-    
-    if response.status_code == 200:
-        with open(sourceHTML, "wb") as file:
-            file.write(response.content)
-    else:
-        print(f"Failed to download. Status code: {response.status_code}")
-	
-    return f'''
-            <iframe
-                src="{sourceHTML}"
-                name="targetframe{site}{identifier}"
-                id="{site}{identifier}"
-                allowTransparency="true"
-                scrolling="no"
-                frameborder="0"
-                width="100%"
-                height="900px"
-            >
-            </iframe>
-			'''
+    return f'<iframe src="{path}" width="100%" height="900px" style="border:none id="{site}{identifier}";"></iframe>'
+#     return f'''
+#             <iframe
+#                 src="{sourceHTML}"
+#                 name="targetframe{site}{identifier}"
+#                 id="{site}{identifier}"
+#                 allowTransparency="true"
+#                 scrolling="no"
+#                 frameborder="0"
+#                 width="100%"
+#                 height="900px"
+#             >
+#             </iframe>
+# 			'''
 
 def addGirafe(site):
     return f"""
