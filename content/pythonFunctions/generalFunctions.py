@@ -236,7 +236,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
         if i == 0:
             initialColor = "#BA2F00"
             
-        buttons += f'<button id="{uniqueIDs[i]}{identifier}button" onclick="{uniqueIDs[i]}{identifier}()" style="padding: 10px; color: white; margin: 4px 4px; background-color: {initialColor}; border:none; border-radius: 4px; cursor: pointer;">{buttonLabels[i]}</button>'
+        buttons += f'<button id="{uniqueIDs[i]}{identifier}button" onclick="{uniqueIDs[i]}{identifier}()" style="padding: 10px; color: white; margin: 4px 4px; background-color: {initialColor};">{buttonLabels[i]}</button>'
         
         scripts += f"""
                     <script>
