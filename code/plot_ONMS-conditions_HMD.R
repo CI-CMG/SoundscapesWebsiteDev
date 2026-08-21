@@ -932,7 +932,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   if (substr(site3, 1, 2) == "hi" |substr(site3, 1, 2) == "pm"){
     seasonType = "Humpback Seasons:"
-  } else NULL
+  } else {
+    seasonType = "Seasons:"}
   
   caption_text1 = paste0(
     "<b>", seasonType, "</b> ",seasonLabel, "<br>",
@@ -1189,7 +1190,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     theme_minimal()+
     theme(legend.position = "right",
           plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
-          plot.title = ggtext::element_markdown(hjust = 0),
+          plot.title = ggtext::element_markdown(hjust = 0, size = 14),
           axis.title.x = element_text(size = 14),           
           axis.title.y = element_text(size = 14), 
           legend.text = element_text(size = 12),
@@ -1204,7 +1205,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # arranged_plot = grid.arrange(p, separator, l, heights =c(4, 0.05, 0.8))
   arranged_plot = grid.arrange(p, separator, p2, heights =c(4, 0.1, 1))
   ## save figure ####
-  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPL.jpg"), plot = arranged_plot, width = 10, height = 12, dpi = 300)
+  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPLv2.jpg"), plot = arranged_plot, width = 10, height = 12, dpi = 300)
   
   
   
@@ -1297,7 +1298,6 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   if (my_subtitle == "(humpback season)"){
     caption_text2 = paste0(
-      "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
       "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
       "<b>Dotted sound level curve</b> is the median for humpback season<br>",
@@ -1305,7 +1305,6 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     
   } else {
     caption_text2 = paste0(
-      "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
       "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
       "<b>Dotted sound level curve</b> is the median for ",my_subtitle, "<br>",
@@ -1451,9 +1450,11 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       fill = legend_label,        #IF biological then change to Year*
       x = "Frequency (Hz)",
       y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ),
-      subtitle = subtitle_text) +
+      subtitle = subtitle_text,
+      title = header_text1) +
     theme(legend.position = "right",
           plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+          plot.title = ggtext::element_markdown(hjust = 0, size = 14),
           axis.title.x = element_text(size = 14),           # X-axis label size
           axis.title.y = element_text(size = 14),           # Y-axis label size
           axis.text = element_text(size = 14),
@@ -1470,7 +1471,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1.3)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
   
   ### save figure ####
-  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPL.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
+  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPLv2.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
   
   
   
