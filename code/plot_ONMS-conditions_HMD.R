@@ -833,6 +833,12 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   }
   
   
+  if(substr(site, 1, 2) == "pm" | substr(site, 1, 2) == "hi"){
+    legend_label2 = "Humpback\nSeason"
+  } else {
+    legend_label2 = "Season"
+  }
+  
   p2 = ggplot(summary2, aes(x = as.character(year), y = dy, fill = as.factor(Season))) +
     geom_col(position = "dodge", width = .3) +  # Use dodge to separate bars for each year within the same month
     #coord_flip()+ 
@@ -842,7 +848,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
                          " unique days: ", as.character(st), " to ", as.character(ed)), #, "\n", seasonLabel),
       x = "",      
       y = "Days",      
-      fill = "Season") +
+      fill = legend_label2) +
     scale_fill_manual(values = seasont$values) +
     theme_minimal() +
     theme(
@@ -935,13 +941,20 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     "<b>Dotted sound level curve</b> is the median for all data<br>",
     "<b>Solid sound level curves and colored shaded areas</b> are the seasonal medians and 25th-75th percentiles for all data")
   
-  header_text1 = paste0(
-    "<b>", toupper(site) , "</b>, ", siteInfo$`Oceanographic category`)
+  
+  if ( siteInfo$`Oceanographic category` == 'coastal-shallow'){
+    e_type = "shallow coastal"
+  } else if( siteInfo$`Oceanographic category` == 'coastal-deep'){
+    e_type = "deep coastal"
+  } else if( siteInfo$`Oceanographic category` == 'offshore-deep'){
+    e_type = "deep offshore"
+  } else if( siteInfo$`Oceanographic category` == 'offshore-shallow'){
+    e_type = "shallow offshore"
+  } 
   
   header_text1 = paste0(
-    "<span style='font-size: 20px;'><b>Recording Site ", toupper(site), "</b></span>, ", 
-    "<span style='font-size: 12px;'>", siteInfo$`Oceanographic category`, " depth</span>"
-  )
+    "<b>Recording Site ", toupper(site) , "</b>, a ", e_type, " environment")
+  
   
   # PERCENTILES for all the data ####
   # all data - NOTE recalculated below if only plotting peak
@@ -1166,6 +1179,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     labs(
        title = header_text1,
        caption  = caption_text1,
+       fill = legend_label2,
+       color = legend_label2,
        x = "Frequency (Hz)",
        y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ) #dB re 1 uPa^2/Hz
     ) +
