@@ -1,5 +1,4 @@
 import os
-import requests
 
 def makeButtonsFit(sites, generalFormat, identifier, altText=""):
     buttons = ""
@@ -176,29 +175,22 @@ def makeImage(imageName, identifier, width=700, altText=""):
     return initialImage
 
 def addPlotly(sourceHTML, site="", identifier=""):
-    inputDir = "https://raw.githubusercontent.com/CI-CMG/SoundscapesWebsiteDev/refs/heads/main/content/resources"
+    inputDir = "resources"
     path = f'{inputDir}/{sourceHTML}'
-    response = requests.get(path)
-    
-    if response.status_code == 200:
-        with open(sourceHTML, "wb") as file:
-            file.write(response.content)
-    else:
-        print(f"Failed to download. Status code: {response.status_code}")
-	
-    return f'''
-            <iframe
-                src="{sourceHTML}"
-                name="targetframe{site}{identifier}"
-                id="{site}{identifier}"
-                allowTransparency="true"
-                scrolling="no"
-                frameborder="0"
-                width="100%"
-                height="900px"
-            >
-            </iframe>
-			'''
+    return f'<iframe src="{path}" width="100%" height="900px" style="border:none id="{site}{identifier}";"></iframe>'
+#     return f'''
+#             <iframe
+#                 src="{sourceHTML}"
+#                 name="targetframe{site}{identifier}"
+#                 id="{site}{identifier}"
+#                 allowTransparency="true"
+#                 scrolling="no"
+#                 frameborder="0"
+#                 width="100%"
+#                 height="900px"
+#             >
+#             </iframe>
+# 			'''
 
 def addGirafe(site):
     return f"""
@@ -222,9 +214,45 @@ def addGirafe(site):
 def embedMapViewer(srcLink):
     return f'<embed src="{srcLink}" style="width:900px; height: 800px;">'
     
-def makeButtonsPlotly(sites, generalFormat, identifier, altText=""):
-    outputString = ""
-    for s in sites:
-        path = generalFormat.replace("***", s)
-        outputString += addPlotly(path, s, identifier)
-    return outputString
+def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifier):
+    buttons = ""
+    scripts = ""
+    inputDir = "resources" 
+    path = f'{inputDir}/{generalFormat}'
+    path = path.replace("***", uniqueIDs[0])
+    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="100%" height="600px" style="border:none;"></iframe></div>'
+    
+    for i in range(len(uniqueIDs)):
+        path = f'{inputDir}/{generalFormat}'
+        path = path.replace("***", uniqueIDs[i])
+        
+        othersToLight = ""
+        for j in range(len(uniqueIDs)):
+            if i != j:
+                othersToLight += f"""const otherButton{uniqueIDs[j]} = document.getElementById('{uniqueIDs[j]}{identifier}button');
+                        otherButton{uniqueIDs[j]}.style.backgroundColor = '#008CBA';\n"""
+        
+        initialColor = "#008CBA"
+        if i == 0:
+            initialColor = "#BA2F00"
+            
+        buttons += f'<button id="{uniqueIDs[i]}{identifier}button" onclick="{uniqueIDs[i]}{identifier}()" style="padding: 10px; color: white; margin: 4px 0; background-color: {initialColor}; text-transform: uppercase; width: 100px; display: block;">{buttonLabels[i]}</button>'
+        
+        scripts += f"""
+                    <script>
+                    function {uniqueIDs[i]}{identifier}() {{
+                        var frameElement = document.getElementById('{identifier}');
+                        frameElement.src = "{path}"; // Swap the iframe source
+                        
+                        const thisButton = document.getElementById('{uniqueIDs[i]}{identifier}button');
+                        thisButton.style.backgroundColor = '#BA2F00';
+                        {othersToLight}
+                    }}
+                    </script>
+        """
+        
+    container_start = '<div style="display: flex; flex-direction: row; align-items: flex-start; gap: 20px;">'
+    button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
+    container_end = '</div>'
+    
+    return container_start + button_column + initialIframe + container_end + scripts

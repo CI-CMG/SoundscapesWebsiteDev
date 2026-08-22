@@ -33,7 +33,7 @@ rm(list=ls())
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
-ONMSsites = c("np02")
+ONMSsites = c("hi08")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -832,6 +832,13 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     seasont <- season[order(seasont$Season), ]
   }
   
+  
+  if(substr(site, 1, 2) == "pm" | substr(site, 1, 2) == "hi"){
+    legend_label2 = "Humpback\nSeason"
+  } else {
+    legend_label2 = "Season"
+  }
+  
   p2 = ggplot(summary2, aes(x = as.character(year), y = dy, fill = as.factor(Season))) +
     geom_col(position = "dodge", width = .3) +  # Use dodge to separate bars for each year within the same month
     #coord_flip()+ 
@@ -841,7 +848,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
                          " unique days: ", as.character(st), " to ", as.character(ed)), #, "\n", seasonLabel),
       x = "",      
       y = "Days",      
-      fill = "Season") +
+      fill = legend_label2) +
     scale_fill_manual(values = seasont$values) +
     theme_minimal() +
     theme(
@@ -922,12 +929,32 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   
   #(3) SEASONAL CONDITION PLOT ####
+  
+  if (substr(site3, 1, 2) == "hi" |substr(site3, 1, 2) == "pm"){
+    seasonType = "Humpback Seasons:"
+  } else {
+    seasonType = "Seasons:"}
+  
   caption_text1 = paste0(
-    "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
+    "<b>", seasonType, "</b> ",seasonLabel, "<br>",
     "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
     "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
     "<b>Dotted sound level curve</b> is the median for all data<br>",
     "<b>Solid sound level curves and colored shaded areas</b> are the seasonal medians and 25th-75th percentiles for all data")
+  
+  
+  if ( siteInfo$`Oceanographic category` == 'coastal-shallow'){
+    e_type = "shallow coastal"
+  } else if( siteInfo$`Oceanographic category` == 'coastal-deep'){
+    e_type = "deep coastal"
+  } else if( siteInfo$`Oceanographic category` == 'offshore-deep'){
+    e_type = "deep offshore"
+  } else if( siteInfo$`Oceanographic category` == 'offshore-shallow'){
+    e_type = "shallow offshore"
+  } 
+  
+  header_text1 = paste0(
+    "<b>Recording Site ", toupper(site) , "</b>, a ", e_type, " environment")
   
   
   # PERCENTILES for all the data ####
@@ -1074,6 +1101,35 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     label_height = 35
   }
   
+  #standardizing the y axis for all sites within one sanctuary page
+  if(tolower(substr(site3, 1, 2)) == 'ci'){
+    y_max = 110
+  }else if(tolower(substr(site3, 1, 2)) == 'hi'){
+    y_max = 101
+  }else if(tolower(substr(site3, 1, 2)) == 'sb'){
+    y_max = 150
+  }else if(tolower(substr(site3, 1, 3)) == 'fgb'){
+    y_max = 115
+  }else if(tolower(substr(site3, 1, 2)) == 'gr'){
+    y_max = 85
+  }else if(tolower(substr(site3, 1, 2)) == 'fk'){
+    y_max = 85
+  }else if(tolower(substr(site3, 1, 2)) == 'oc'){
+    y_max = 105
+  }else if(tolower(substr(site3, 1, 2)) == 'mb'){
+    y_max = 85
+  }else if(tolower(substr(site3, 1, 2)) == 'ch'){
+    y_max = 105
+  }else if(tolower(substr(site3, 1, 2)) == 'pm'){
+    y_max = 90
+  }else if(tolower(substr(site3, 1, 2)) == 'as'){
+    y_max = 102
+  }else if(tolower(substr(site3, 1, 2)) == 'ne'){
+    y_max = 105
+  }else{
+    y_max = NA
+  }
+  
   
 #plot  
   p = ggplot() +
@@ -1122,16 +1178,19 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     scale_fill_manual (values  = seasont$values ) +
     
     labs(
-       subtitle = seasonLabel,
+       title = header_text1,
        caption  = caption_text1,
+       fill = legend_label2,
+       color = legend_label2,
        x = "Frequency (Hz)",
        y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ) #dB re 1 uPa^2/Hz
     ) +
     # Additional aesthetics
-    scale_y_continuous(limits = c(30, NA)) +  # use to manually scale y minimum so vert line labels are visible
+    scale_y_continuous(limits = c(30, y_max)) +  # use to manually scale y minimum so vert line labels are visible
     theme_minimal()+
     theme(legend.position = "right",
           plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+          plot.title = ggtext::element_markdown(hjust = 0, size = 14),
           axis.title.x = element_text(size = 14),           
           axis.title.y = element_text(size = 14), 
           legend.text = element_text(size = 12),
@@ -1146,7 +1205,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # arranged_plot = grid.arrange(p, separator, l, heights =c(4, 0.05, 0.8))
   arranged_plot = grid.arrange(p, separator, p2, heights =c(4, 0.1, 1))
   ## save figure ####
-  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPL.jpg"), plot = arranged_plot, width = 10, height = 12, dpi = 300)
+  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPLv2.jpg"), plot = arranged_plot, width = 10, height = 12, dpi = 300)
   
   
   
@@ -1239,7 +1298,6 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   if (my_subtitle == "(humpback season)"){
     caption_text2 = paste0(
-      "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
       "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
       "<b>Dotted sound level curve</b> is the median for humpback season<br>",
@@ -1247,7 +1305,6 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     
   } else {
     caption_text2 = paste0(
-      "<b>",toupper(site) , " </b> (", siteInfo$`Oceanographic category`, ")<br>",
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
       "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
       "<b>Dotted sound level curve</b> is the median for ",my_subtitle, "<br>",
@@ -1382,7 +1439,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     #median HMD values- all data
     geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel), color = "black", linewidth = 1,
               linetype = "dotted") +
-    scale_y_continuous(limits = c(30, NA)) +  # use to manually scale y minimum so vert line labels are visible
+    scale_y_continuous(limits = c(30, y_max)) +  # use to manually scale y minimum so vert line labels are visible
     
     # Additional aesthetics
     theme_minimal() +
@@ -1393,9 +1450,11 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       fill = legend_label,        #IF biological then change to Year*
       x = "Frequency (Hz)",
       y = expression(paste("Sound Levels (dB re 1 ", mu, " Pa"^2, "/Hz)" ) ),
-      subtitle = subtitle_text) +
+      subtitle = subtitle_text,
+      title = header_text1) +
     theme(legend.position = "right",
           plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+          plot.title = ggtext::element_markdown(hjust = 0, size = 14),
           axis.title.x = element_text(size = 14),           # X-axis label size
           axis.title.y = element_text(size = 14),           # Y-axis label size
           axis.text = element_text(size = 14),
@@ -1412,7 +1471,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1.3)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
   
   ### save figure ####
-  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPL.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
+  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPLv2.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
   
   
   
