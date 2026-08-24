@@ -21,8 +21,8 @@ polygon_data <- FOIsRange %>%
     ),
     y = case_when(
       corner == 1 ~ 27,         # Bottom boundaries matching your scale min
-      corner == 2 ~ 85,         # Top boundaries matching your scale max
-      corner == 3 ~ 85,         
+      corner == 2 ~ y_max,         # Top boundaries matching your scale max
+      corner == 3 ~ y_max,         
       corner == 4 ~ 27          
     )
   ) %>%
@@ -79,8 +79,8 @@ pl = ggplot() +
   #scale_x_continuous(limits = c(10, fqupper)) +
   
   
-  scale_color_manual(name = "Year", values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
-  scale_fill_manual(name = "Year", values =  rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
+  scale_color_manual(values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
+  scale_fill_manual(values =  rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
   
   
   #median HMD values- each year
@@ -144,12 +144,12 @@ pl = ggplot() +
   pl <- pl +
     
   scale_y_continuous(limits = c(27, NA),          
-                     breaks = seq(30, 80, by = 10)) + 
+                     breaks = seq(30, y_max, by = 10)) + 
   
   # Additional aesthetics
   theme_minimal() +
   labs(
-    #title = paste0(toupper(site), "(",siteInfo$`Oceanographic category`, ")"), 
+    title = header_text1, 
     #caption  = caption_text1,
     color = legend_label,        #IF biological then change to Year*
     fill = legend_label,        #IF biological then change to Year*
@@ -158,6 +158,8 @@ pl = ggplot() +
     subtitle = subtitle_text) +
   theme(legend.position = "right",
         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+        plot.title = ggtext::element_markdown(hjust = 0, size = 14),
+        plot.subtitle = ggtext::element_markdown(hjust = 0, size = 12),
         axis.title.x = element_text(size = 14),           # X-axis label size
         axis.title.y = element_text(size = 14),           # Y-axis label size
         axis.text = element_text(size = 14),
@@ -219,12 +221,27 @@ foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
 })
 
 
+
+if (substr(site3, 1, 2) == "hi"){
+  t = 90
+}else {
+  t = 60
+}
+
+
 pl_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%  
   
   #style(hoverinfo = "none", traces = c(1, 2, 3))  %>%
   
   layout(
 
+    title = list(
+      text = paste0( header_text1, "<br>", "<span style='font-size:12px'>", subtitle_text, "</span>"),
+      x = 0,          # left-align, matches hjust = 0 in your ggplot theme
+      xanchor = "left",
+      font = list(size = 16)
+    ),
+    
     # xaxis = list(
     #   type      = "linear",
     #   autorange = FALSE,
@@ -241,9 +258,9 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%
     
     yaxis = list(
       autorange = FALSE,       # Prevents Plotly from adding its own padding
-      range     = c(27, 85),   # Hard-locks the frame exactly to your polygon edges
+      range     = c(27, y_max),   # Hard-locks the frame exactly to your polygon edges
       ticks     = "outside",
-      tickvals = c(30, 40, 50, 60, 70, 80)
+      tickvals = c(30, 40, 50, 60, 70, 80, 90, 100)
     ),
     
     legend = list(
@@ -261,7 +278,7 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%
     annotations = foi_labels,
     
     # Increase the bottom margin (b) to ensure there is room for the caption text
-    margin = list(b = 50, l = 50, r = 50, t = 50)
+    margin = list(b = 50, l = 50, r = 50, t = t)
     
     #graph caption
     # annotations = list(
@@ -397,7 +414,7 @@ combined_layout <- browsable(
     # Top Chart Caption
     p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
     
-    # Elegant Divider Line
+    # Divider Line
     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # Bottom Plot (Monthly Effort Bars) - Clean, short, and compact!
@@ -410,8 +427,8 @@ combined_layout
 
 
 #save html file to Dev contents folder
-#outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
-outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
+outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
+#outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
 
 
 outDirG  =  paste0(outDir,"content/resources/") #where save graphics
