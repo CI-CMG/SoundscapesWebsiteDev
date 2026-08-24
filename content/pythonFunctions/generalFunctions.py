@@ -220,7 +220,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     inputDir = "resources" 
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", uniqueIDs[0])
-    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="100%" height="600px" style="border:none;"></iframe></div>'
+    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="100%" height="1300px" style="border:none;"></iframe></div>'
     
     for i in range(len(uniqueIDs)):
         path = f'{inputDir}/{generalFormat}'
