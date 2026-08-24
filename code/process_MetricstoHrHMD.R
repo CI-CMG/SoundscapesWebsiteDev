@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "nrs02" 
+site  = "cinms_b" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -51,8 +51,8 @@ site = tolower(site)
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
 #dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
-dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
-#dirGCP = paste0( "E:/mbarc/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
+#dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
+dirGCP = paste0( "E:/mbarc/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
 #dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
 #dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
 

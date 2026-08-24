@@ -1205,7 +1205,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # arranged_plot = grid.arrange(p, separator, l, heights =c(4, 0.05, 0.8))
   arranged_plot = grid.arrange(p, separator, p2, heights =c(4, 0.1, 1))
   ## save figure ####
-  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPLv2.jpg"), plot = arranged_plot, width = 10, height = 12, dpi = 300)
+  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPL.jpg"), plot = arranged_plot, width = 10, height = 12, dpi = 300)
   
   
   
@@ -1471,7 +1471,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1.3)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
   
   ### save figure ####
-  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPLv2.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
+  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPL.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
   
   
   
