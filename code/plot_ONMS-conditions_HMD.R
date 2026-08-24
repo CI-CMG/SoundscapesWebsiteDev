@@ -1216,7 +1216,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # truncates data to peak season for biological sites (Pacific Island Region Sanctuaries) - all plots after this are peak season (early, peak, late) only!!!
   subtitle_text <- if (sidx == "biological" & substr(site, 1, 2) == "hi"){
     #"*Each line represents that year's humpback season which includes Early (Dec of previous year-Jan), Peak (Feb-Mar), \nand Late (Apr-May) seasons." 
-    "*Humpback Year includes data from Dec of previous year through May of the given year. Humpback season excludes data from\n the Non season (Jun-Nov)."
+    "*Humpback Year includes data from Dec of previous year through May of the given year. Humpback season excludes\n data from the Non season (Jun-Nov)."
   } else if (sidx == "biological" & substr(site, 1, 2) == "pm"){
     "*Humpback Year includes data from Oct - Dec of previous year through Jul of the given year."
   } else NULL
