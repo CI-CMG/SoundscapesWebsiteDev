@@ -193,28 +193,56 @@ pl
 #   "10000", "", ""
 # )
 
+# for label text in the middle of the shading box
+# foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
+#   list(
+#     # Find the horizontal midpoint in log-space for the text to sit perfectly center
+#     x = (log10(FOIsRange$FQstart[i]) + log10(FOIsRange$FQend[i])) / 2,
+#     
+#     y = label_height, 
+#     
+#     xref = "x",
+#     yref = "y",
+#     
+#     text = FOIsRange$Label[i], # Pulls your text label string dynamically
+#     
+#     textangle = -90,           # -90 reads cleanly from bottom-to-top (or use 90)
+#     
+#     showarrow = FALSE,
+#     xanchor = "center",        # Centers the text horizontal anchor point
+#     yanchor = "middle",        # Centers the text vertical anchor point
+#     
+#     font = list(
+#       size = 13, 
+#       color = "black",         # Match your layout aesthetic
+#       family = "sans-serif"
+#     )
+#   )
+# })
 
+
+# for label text on the left side of the shading box
 foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
   list(
-    # Find the horizontal midpoint in log-space for the text to sit perfectly center
-    x = (log10(FOIsRange$FQstart[i]) + log10(FOIsRange$FQend[i])) / 2,
+    # Anchor to the left edge of the shaded region instead of the midpoint
+    x = log10(FOIsRange$FQstart[i]),
     
     y = label_height, 
     
     xref = "x",
     yref = "y",
     
-    text = FOIsRange$Label[i], # Pulls your text label string dynamically
+    text = FOIsRange$Label[i],
     
-    textangle = -90,           # -90 reads cleanly from bottom-to-top (or use 90)
+    textangle = -90,
     
     showarrow = FALSE,
-    xanchor = "center",        # Centers the text horizontal anchor point
-    yanchor = "middle",        # Centers the text vertical anchor point
+    xanchor = "left",          
+    yanchor = "middle",
     
     font = list(
       size = 13, 
-      color = "black",         # Match your layout aesthetic
+      color = "black",
       family = "sans-serif"
     )
   )
@@ -222,7 +250,7 @@ foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
 
 
 
-if (substr(site3, 1, 2) == "hi"){
+if (substr(site3, 1, 2) == "hi" | substr(site3, 1, 2) == "pm"){
   t = 90
 }else {
   t = 60
@@ -606,22 +634,24 @@ p <- p +
   
   
   # Set color and fill to match season
-  scale_color_manual(name = "Season", values = seasont$values) +
-  scale_fill_manual(name = "Season", values = seasont$values) +
+  scale_color_manual(name = legend_label2, values = seasont$values) +
+  scale_fill_manual(name = legend_label2, values = seasont$values) +
   
   scale_y_continuous(limits = c(27, NA),          
-                     breaks = seq(30, 80, by = 10)) + 
+                     breaks = seq(30, y_max, by = 10)) + 
   
   # Additional aesthetics
   theme_minimal() +
   labs(
-    subtitle = seasonLabel,
+    #subtitle = seasonLabel,
+    title = header_text1,
     #caption  = caption_text,
     x = "Frequency (Hz)",
     y = "Sound Levels (dB re 1 &#956; Pa<sup>2</sup>/Hz)" #dB re 1 uPa^2/Hz
   )  +
   theme(legend.position = "right",
         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+        plot.title = ggtext::element_markdown(hjust = 0, size = 14),
         axis.title.x = element_text(size = 14),           # X-axis label size
         axis.title.y = element_text(size = 14),           # Y-axis label size
         axis.text = element_text(size = 14),
@@ -637,7 +667,6 @@ p
 
 
 
-
 p_interactive <- ggplotly(p, tooltip = "text", height = 800, width = 800) %>%  
   
   #style(hoverinfo = "none", traces = c(1, 2, 3))  %>%
@@ -649,9 +678,9 @@ p_interactive <- ggplotly(p, tooltip = "text", height = 800, width = 800) %>%
     
     yaxis = list(
       autorange = FALSE,       # Prevents Plotly from adding its own padding
-      range     = c(27, 85),   # Hard-locks the frame exactly to your polygon edges
+      range     = c(27, y_max),   # Hard-locks the frame exactly to your polygon edges
       ticks     = "outside",
-      tickvals = c(30, 40, 50, 60, 70, 80)
+      tickvals = c(30, 40, 50, 60, 70, 80, 90, 100)
     ),
     
     legend = list(
@@ -666,18 +695,7 @@ p_interactive <- ggplotly(p, tooltip = "text", height = 800, width = 800) %>%
     ),
     
     # shapes = foi_shapes,
-    annotations = c(
-      foi_labels, # Keeps your existing frequency annotations intact
-      
-      # If you still prefer your season label as an annotation instead of a title subtitle:
-      list(list(
-        x = 0, y = 1.02, # Positioned slightly above the plotting grid
-        text = seasonLabel, 
-        showarrow = FALSE, 
-        xref = 'paper', yref = 'paper', 
-        xanchor = 'left', yanchor = 'bottom',
-        font = list(size = 13)
-      ))),
+    annotations = foi_labels,
     
     # Increase the bottom margin (b) to ensure there is room for the caption text
     margin = list(b = 50, l = 50, r = 50, t = 50)
@@ -710,9 +728,7 @@ p_interactive
 
 
 
-#shading on top of lines
-
-
+#shading on top of lines but matching legend
 
 
 pv2 = ggplot() +
@@ -794,22 +810,23 @@ pv2 <- pv2 +
   
   
   # Set color and fill to match season
-  scale_color_manual(name = "Season", values = seasont$values) +
-  scale_fill_manual(name = "Season", values = seasont$values) +
+  scale_color_manual(name = legend_label2, values = seasont$values) +
+  scale_fill_manual(name = legend_label2, values = seasont$values) +
   
   scale_y_continuous(limits = c(27, NA),          
-                     breaks = seq(30, 80, by = 10)) + 
+                     breaks = seq(30, y_max, by = 10)) + 
   
   # Additional aesthetics
   theme_minimal() +
   labs(
-    subtitle = seasonLabel,
+    title = header_text1,
     #caption  = caption_text,
     x = "Frequency (Hz)",
     y = "Sound Levels (dB re 1 &#956; Pa<sup>2</sup>/Hz)" #dB re 1 uPa^2/Hz
   )  +
   theme(legend.position = "right",
         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
+        plot.title = ggtext::element_markdown(hjust = 0, size = 12),
         axis.title.x = element_text(size = 14),           # X-axis label size
         axis.title.y = element_text(size = 14),           # Y-axis label size
         axis.text = element_text(size = 14),
@@ -837,9 +854,9 @@ pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 800, width = 800) %>
     
     yaxis = list(
       autorange = FALSE,       # Prevents Plotly from adding its own padding
-      range     = c(27, 85),   # Hard-locks the frame exactly to your polygon edges
+      range     = c(27, y_max),   # Hard-locks the frame exactly to your polygon edges
       ticks     = "outside",
-      tickvals = c(30, 40, 50, 60, 70, 80)
+      tickvals = c(30, 40, 50, 60, 70, 80, 90, 100)
     ),
     
     legend = list(
@@ -854,18 +871,7 @@ pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 800, width = 800) %>
     ),
     
     # shapes = foi_shapes,
-    annotations = c(
-      foi_labels, # Keeps your existing frequency annotations intact
-      
-      # If you still prefer your season label as an annotation instead of a title subtitle:
-      list(list(
-        x = 0, y = 1.02, # Positioned slightly above the plotting grid
-        text = seasonLabel, 
-        showarrow = FALSE, 
-        xref = 'paper', yref = 'paper', 
-        xanchor = 'left', yanchor = 'bottom',
-        font = list(size = 13)
-      ))),
+    annotations = foi_labels,
     
     # Increase the bottom margin (b) to ensure there is room for the caption text
     margin = list(b = 50, l = 50, r = 50, t = 50)
@@ -892,8 +898,6 @@ pv2_interactive
 
 
 
-# 1. Rebuild the plot with the HTML title trick and custom hover text
-
 p2 = ggplot(summary2, aes(x = as.character(year), y = dy, fill = as.factor(Season),
                           # Define your custom hover layout here:
                           text = paste0("Season: ", Season, "<br>Days: ", dy))) +
@@ -906,7 +910,7 @@ p2 = ggplot(summary2, aes(x = as.character(year), y = dy, fill = as.factor(Seaso
                    " unique days: ", as.character(st), " to ", as.character(ed), "</span>"),
     x = "",      
     y = "Days",      
-    fill = "Season") +
+    fill = legend_label2) +
   scale_fill_manual(values = seasont$values) +
   theme_minimal() +
   theme(
@@ -924,8 +928,8 @@ p2
 
 
 
-# change height based on how many years are in this sites dataset
-p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 280, width = 800) %>% 
+# change height based on how many seasons are in this sites dataset
+p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 300, width = 800) %>% 
   layout(
     autosize = TRUE,
     
@@ -941,7 +945,6 @@ p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 280, width
     
   )
 
-# View the final result
 p2_interactive
 
 
@@ -949,7 +952,7 @@ p2_interactive
 
 
 
-#combine effort and line
+#shading over line but better legend
 
 combined_layoutv2 <- browsable(
   div(
@@ -974,8 +977,8 @@ combined_layoutv2
 
 
 #save html file to Dev contents folder
-#outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
-outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
+outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
+#outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
 
 
 outDirG  =  paste0(outDir,"content/resources/") #where save graphics
@@ -986,11 +989,11 @@ outDirC  =  paste0(outDir,"context/") #where to get context
 # Save the entire HTML layout bundle natively
 htmltools::save_html(combined_layoutv2, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPLv2.html"))
 
+#test
 
 
 
-
-#combine effort and line
+#this is graph with lines above shading but not a matching legend
 
 combined_layout2 <- browsable(
   div(
