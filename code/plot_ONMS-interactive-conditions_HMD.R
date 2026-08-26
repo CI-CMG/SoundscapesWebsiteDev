@@ -346,15 +346,24 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
     legend.text = element_text(size = 12),
     legend.position = "right" 
   ) +
+  # geom_line(data = data.frame(
+  #   x = c(0.5, length(month_nums) + 0.5), 
+  #   y = rep(siteInfo$MThreshold, length(month_nums))),
+  #   aes(x = x, y = y, 
+  #       text = paste0("Min # of Days Threshold = ", siteInfo$MThreshold, " Days")), 
+  #   color = "red", 
+  #   linetype = "dashed", 
+  #   linewidth = 0.5,
+  #   inherit.aes = FALSE)
   geom_line(data = data.frame(
-    x = seq_along(month_nums), 
-    y = rep(siteInfo$MThreshold, length(month_nums))),
-  aes(x = x, y = y, 
-      text = paste0("Min # of Days Threshold = ", siteInfo$MThreshold, " Days")), 
-  color = "red", 
-  linetype = "dashed", 
-  linewidth = 0.5,
-  inherit.aes = FALSE)
+    x = seq(0.5, length(month_nums) + 0.5, length.out = 100),
+    y = siteInfo$MThreshold),
+    aes(x = x, y = y, 
+        text = paste0("Min # of Days Threshold = ", siteInfo$MThreshold, " Days")), 
+    color = "red", 
+    linetype = "dashed", 
+    linewidth = 0.5,
+    inherit.aes = FALSE)
 
 
 p1
@@ -364,7 +373,7 @@ p1
 if (length(years_to_keep) > 3){
     height_int = 280
   
-} else if (length(years_to_keep) <= 3)
+} else if (length(years_to_keep) <= 3){
     height_int = 260
   
 }
@@ -396,6 +405,7 @@ p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int
 
 # View the final result
 p1_interactive
+
 
 
 

@@ -383,65 +383,65 @@ cDatah = setDF(cDatah)
 #cDatah = as.data.frame(cDatah)
 
 
-
-if (site == "hi04"){
-#processed/outdata for hi04 was missing wind data and new deployment had flipped coords
-cDatah2 = outData[8419:16488, 1:2164]
-cDatah = cDatah2[4303:8070,]
-}
-
-if (site == "hi01"){
-  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
-  cDatah2 = outData[19579:23394, 1:2163]
-  cDatah = cDatah2
-}
-
-if (site == "pm01"){
-  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
-  cDatah2 = outData[12992:19783, 1:2164]
-  cDatah = cDatah2
-}
-
-if (site == "fgb01"){
-  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
-  cDatah2 = outData[1704:5279, 1:2164]
-  cDatah = cDatah2
-}
-
-if (site == "sb03"){
-  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
-  cDatah2 = outData[43064:50527, 1:2163]
-  cDatah = cDatah2
-}
-
-if (site == "fk05"){
-  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
-  cDatah2 = outData[15187:19098, 1:2164]
-  cDatah = cDatah2
-}
-
-if (site == "fk06"){
-  #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
-  cDatah2 = outData[3022:12141, 1:2164]
-  cDatah = cDatah2
-}
-
-# so far only necessary for certain pypam deplyments for site %in% c("hi01", "hi04", "hi03", "hi08", "as01", "pm01")
-if (site != "as01" & (cDatah$Latitude[1] < 0 | cDatah$Longitude[1] > 0)){
-cDatah$Latitude1 = cDatah$Latitude
-cDatah$Latitude = cDatah$Longitude
-cDatah$Longitude = cDatah$Latitude1
-cDataht = cDatah[,1:2164]
-#cDataht = cDatah[,1:1397]
-cDatah = cDataht
-}
-
-if (site == "hi04"){
-cDatah1 = cDatah2[1:4302,]
-
-cDataht = rbind(cDatah1, cDatah)
-cDatah = cDataht
-}
+# 
+# if (site == "hi04"){
+# #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+# cDatah2 = outData[8419:16488, 1:2164]
+# cDatah = cDatah2[4303:8070,]
+# }
+# 
+# if (site == "hi01"){
+#   #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+#   cDatah2 = outData[19579:23394, 1:2163]
+#   cDatah = cDatah2
+# }
+# 
+# if (site == "pm01"){
+#   #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+#   cDatah2 = outData[12992:19783, 1:2164]
+#   cDatah = cDatah2
+# }
+# 
+# if (site == "fgb01"){
+#   #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+#   cDatah2 = outData[1704:5279, 1:2164]
+#   cDatah = cDatah2
+# }
+# 
+# if (site == "sb03"){
+#   #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+#   cDatah2 = outData[43064:50527, 1:2163]
+#   cDatah = cDatah2
+# }
+# 
+# if (site == "fk05"){
+#   #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+#   cDatah2 = outData[15187:19098, 1:2164]
+#   cDatah = cDatah2
+# }
+# 
+# if (site == "fk06"){
+#   #processed/outdata for hi04 was missing wind data and new deployment had flipped coords
+#   cDatah2 = outData[3022:12141, 1:2164]
+#   cDatah = cDatah2
+# }
+# 
+# # so far only necessary for certain pypam deplyments for site %in% c("hi01", "hi04", "hi03", "hi08", "as01", "pm01")
+# if (site != "as01" & (cDatah$Latitude[1] < 0 | cDatah$Longitude[1] > 0)){
+# cDatah$Latitude1 = cDatah$Latitude
+# cDatah$Latitude = cDatah$Longitude
+# cDatah$Longitude = cDatah$Latitude1
+# cDataht = cDatah[,1:2164]
+# #cDataht = cDatah[,1:1397]
+# cDatah = cDataht
+# }
+# 
+# if (site == "hi04"){
+# cDatah1 = cDatah2[1:4302,]
+# 
+# cDataht = rbind(cDatah1, cDatah)
+# cDatah = cDataht
+# }
 
 # old way to process with rbind, will crash if >2000 days of data to process
 # # PROCESS ONMS Sound FILES ####
