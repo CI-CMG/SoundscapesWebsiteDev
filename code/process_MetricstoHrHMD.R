@@ -583,31 +583,31 @@ i = i +1
 gps <- dplyr::bind_rows(gps_chunks)
 
 
-
-#FOR HI04, recombine new data with old
-processedData = outData
-processedData = processedData[1:8418,]
-#processedData = processedData[1:19578,] HI01?
-
-#PM01
-processedData = outData
-processedData = processedData[1:12991,]
-
-#FGB01
-processedData = outData
-processedData = processedData[1:5593,]
-
-#SB03
-processedData = outData
-processedData = processedData[1:43063,]
-
-#FK01
-processedData = outData
-processedData = processedData[1:14041,]
-
-#FK05
-processedData = outData
-processedData = processedData[1:15186,]
+# 
+# #FOR HI04, recombine new data with old
+# processedData = outData
+# processedData = processedData[1:8418,]
+# #processedData = processedData[1:19578,] HI01?
+# 
+# #PM01
+# processedData = outData
+# processedData = processedData[1:12991,]
+# 
+# #FGB01
+# processedData = outData
+# processedData = processedData[1:5593,]
+# 
+# #SB03
+# processedData = outData
+# processedData = processedData[1:43063,]
+# 
+# #FK01
+# processedData = outData
+# processedData = processedData[1:14041,]
+# 
+# #FK05
+# processedData = outData
+# processedData = processedData[1:15186,]
 
 
 #SKIP IF YOU ALREADY GOT WIND USING CHUNKS
