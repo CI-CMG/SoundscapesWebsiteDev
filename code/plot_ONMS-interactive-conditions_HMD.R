@@ -42,7 +42,9 @@ ribbonData <- mallData %>% mutate(is_na = is.na(`SoundLevel`) ,
 if (site == 'fk08'){
   segment1 = 0
   segment2 = 2
-} else {
+} else if (site == 'cinms_b'){
+  segment1 = 0
+  }else {
   segment1 = 1
   segment2 = 3
 }
@@ -184,58 +186,58 @@ pl
 # )
 
 # for label text in the middle of the shading box
+foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
+  list(
+    # Find the horizontal midpoint in log-space for the text to sit perfectly center
+    x = (log10(FOIsRange$FQstart[i]) + log10(FOIsRange$FQend[i])) / 2,
+
+    y = label_height,
+
+    xref = "x",
+    yref = "y",
+
+    text = FOIsRange$Label[i], # Pulls your text label string dynamically
+
+    textangle = -90,           # -90 reads cleanly from bottom-to-top (or use 90)
+
+    showarrow = FALSE,
+    xanchor = "center",        # Centers the text horizontal anchor point
+    yanchor = "middle",        # Centers the text vertical anchor point
+
+    font = list(
+      size = 13,
+      color = "black",         # Match your layout aesthetic
+      family = "sans-serif"
+    )
+  )
+})
+
+
+# for label text on the left side of the shading box
 # foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
 #   list(
-#     # Find the horizontal midpoint in log-space for the text to sit perfectly center
-#     x = (log10(FOIsRange$FQstart[i]) + log10(FOIsRange$FQend[i])) / 2,
+#     x = log10(FOIsRange$FQstart[i]),
 #     
 #     y = label_height, 
 #     
 #     xref = "x",
 #     yref = "y",
 #     
-#     text = FOIsRange$Label[i], # Pulls your text label string dynamically
+#     text = FOIsRange$Label[i],
 #     
-#     textangle = -90,           # -90 reads cleanly from bottom-to-top (or use 90)
+#     textangle = -90,
 #     
 #     showarrow = FALSE,
-#     xanchor = "center",        # Centers the text horizontal anchor point
-#     yanchor = "middle",        # Centers the text vertical anchor point
+#     xanchor = "left",          
+#     yanchor = "middle",
 #     
 #     font = list(
 #       size = 13, 
-#       color = "black",         # Match your layout aesthetic
+#       color = "black",
 #       family = "sans-serif"
 #     )
 #   )
 # })
-
-
-# for label text on the left side of the shading box
-foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
-  list(
-    x = log10(FOIsRange$FQstart[i]),
-    
-    y = label_height, 
-    
-    xref = "x",
-    yref = "y",
-    
-    text = FOIsRange$Label[i],
-    
-    textangle = -90,
-    
-    showarrow = FALSE,
-    xanchor = "left",          
-    yanchor = "middle",
-    
-    font = list(
-      size = 13, 
-      color = "black",
-      family = "sans-serif"
-    )
-  )
-})
 
 
 #giving extra room at top of graph for a subtitle at certain NMS
@@ -299,7 +301,8 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%
     # Increase the bottom margin (b) to ensure there is room for the caption text
     margin = list(b = 50, l = 50, r = 50, t = t)
     
-  )
+  )%>%
+  plotly::config(modeBarButtonsToRemove = list("toImage"))
 
 # Display the interactive plot
 pl_interactive
@@ -846,7 +849,7 @@ pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 800, width = 800) %>
     margin = list(b = 50, l = 50, r = 50, t = 50)
     
     
-  ) 
+  ) %>% config(modeBarButtonsToRemove = list('toImage'))
 
 # Display the interactive plot
 pv2_interactive

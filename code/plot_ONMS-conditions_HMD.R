@@ -33,7 +33,7 @@ rm(list=ls())
 # NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" 
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 
-ONMSsites = c("as10", "hi00", "hi04")
+ONMSsites = c("as01")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -57,7 +57,11 @@ project = "ONMS"
 # fqIn2 = "TOL_500" # wind model comparison- wind dominated frequency
 # fqIn2name = "500 Hz" # wind model comparison- wind dominated frequency
 ab2 = 0 #threshold for dB above a reference value
-windUpp = 22.6 #which wind model result to show on plot
+
+if (site == "cinms_b" |site == "ci01"){
+  windUpp = 15.5
+  } else {
+  windUpp = 22.6 }#which wind model result to show on plot
 windLow = 1 #which wind model result to show on plot
 windH = 10 #wind speeds categories
 windL = 5 #wind speeds categories
@@ -882,7 +886,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     mutate(label = paste(wind_category, ":", n))
   subtitle_text <- paste(category_counts$label, collapse = ", ")
   
-  if (site3 == 'b'){
+  if (site3 == 'cinms_b'){
     site3 = 'cisiob'
   }
   

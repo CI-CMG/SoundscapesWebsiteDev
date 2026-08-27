@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "cinms_b" 
+site  = "ci01" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -51,8 +51,8 @@ site = tolower(site)
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
 #dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
-#dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
-dirGCP = paste0( "E:/mbarc/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
+dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
+#dirGCP = paste0( "E:/mbarc/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
 #dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
 #dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
 
@@ -130,8 +130,8 @@ cat("CHECK: Read in data for: ",
   #wierd xls coming through into nc list for some reason
   inFilesON = inFilesON[!grepl(".xls", inFilesON)]
   
-  mantaFiles = inFilesON[grepl("MinRes\\.nc$", inFilesON)]  # Files ending with '_MinRes.nc'
-  pypamFiles = inFilesON[!grepl("MinRes\\.nc$", inFilesON)]  # All other .nc files
+  mantaFiles = inFilesON[grepl("MinRes_v2\\.nc$", inFilesON)]  # Files ending with '_MinRes.nc'
+  pypamFiles = inFilesON[!grepl("MinRes_v2\\.nc$", inFilesON)]  # All other .nc files
   
   #you may need to change the number of the segment where the date is getting taken from he file name below
   dysON1 = as.Date(sapply( strsplit(basename(mantaFiles), "_"), "[[", 5), format = "%Y%m%d")
@@ -351,18 +351,18 @@ if (length(inFiles) > 0) {
 # kaila <- data_list[[1]]
 # data_list[[1]] <- kaila
 # 
-# f =1 
-# 
-# for (f in 1:180 ){ 
-#   
-#   #bin to hourly median values
-#   cDatah_day = data_list[[f]]
-#   
-#   cDatah_day = cDatah_day[, -c(2:21)]
-#   
-#   data_list[[f]] = cDatah_day
-#   
-# } 
+ f =1 
+
+for (f in 1:72 ){
+
+  #bin to hourly median values
+  cDatah_day = data_list[[f]]
+
+  cDatah_day = cDatah_day[, -c(2:21)]
+
+  data_list[[f]] = cDatah_day
+
+}
 
 #combine list elements after processing each day seperately and saving into different list elements
 cDatah <- rbindlist(data_list)
