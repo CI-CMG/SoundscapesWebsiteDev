@@ -23,6 +23,7 @@ library(ggtext)
 library(plotly)
 library(viridis)
 library(ggpp)
+library(cowplot)
 
 
 
@@ -1526,6 +1527,20 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   }
   
   
+#adding watermark to credit our website
+  add_watermark <- function(plot_obj) {
+    ggdraw(plot_obj) +
+      draw_label(
+        "© 2026 soundscapemonitoring.us",
+        x = 0.995, y = 0.2,
+        angle = 270,
+        size = 8,
+        color = grey(0.5),
+        hjust = 0.5, vjust = 1
+      )
+  }
+  
+  
   if ( nrow(FOIst) > 0 ) {
     for (tt in 1: nrow(FOIst) ){ # tt = 1       tt = 2
       
@@ -2044,11 +2059,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       
         
         #with pies that show off effort, directly comparable across years. out of 365. na/off effort is blank part of pie
-        # plg2 = plg + pthrs + pie + plot_layout(ncol = 3, widths = c(2, .7, 1))  #plg = grid.arrange(plg, pthrs, nrow = 1, widths = c(2, 1))
-        # plg2
-        
-        #with pies that show off effort, directly comparable across years. out of 365. na/off effort is blank part of pie
         plg2 = plg + pie + plot_layout(ncol = 2, widths = c(2, 1))  #plg = grid.arrange(plg, pthrs, nrow = 1, widths = c(2, 1))
+        plg2 <- add_watermark(plg2)
         plg2
         
         ft = str_remove(ft, " Hz TOL| Hz")
@@ -2131,6 +2143,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         # plg2
         
         plg2 = plg + pie + plot_layout(ncol = 2, widths = c(2, 1)) #plg = grid.arrange(plg, pthrs, nrow = 1, widths = c(2, 1))
+        plg2 <- add_watermark(plg2)
         plg2
         
         ft = str_remove(ft, " Hz TOL| Hz")
@@ -2209,6 +2222,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         plg
         
         plg2 = plg + pie + plot_layout(ncol = 2, widths = c(2, 1)) #plg = grid.arrange(plg, pthrs, nrow = 1, widths = c(2, 1))
+        plg2 <- add_watermark(plg2)
         plg2
         
         ft = str_remove(ft, " Hz TOL| Hz")
