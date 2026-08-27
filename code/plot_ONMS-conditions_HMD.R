@@ -1156,7 +1156,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   #  geom_vline(data = FOIsRange, aes(xintercept = FQend, color = Label), linetype = "dashed", color = "grey50",linewidth = .5) +
     geom_rect(data = FOIsRange, aes(xmin = FQstart, xmax = FQend, ymin = -Inf, ymax = Inf), 
               fill = "gray", alpha = 0.2)+  # Adjust alpha for transparency
-    geom_text(data = FOIsRange, aes(x = FQstart, y = label_height, label = Label), color = "black", angle = 90, vjust = 1, hjust = 0.45, size = 4) +
+    geom_text(data = FOIsRange, aes(x = FQstart, y = label_height, label = Label), color = "black", angle = 90, vjust = 1, hjust = 0.35, size = 4) +
    
     # Add vertical set dash lines and grey shaded region at FOI ranges, label on left
    # geom_vline(data = FOIsRangeL, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "grey50",linewidth = .5) +
@@ -1205,14 +1205,26 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     )
   
   p
+  
   separator <- grid.rect(gp = gpar(fill = "black"), height = unit(2, "pt"), width = unit(1, "npc"))
-  # arranged_plot = grid.arrange(p, separator, l, heights =c(4, 0.05, 0.8))
-  arranged_plot = grid.arrange(p, separator, p2, heights =c(4, 0.1, 1))
-  ## save figure ####
-  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPL.jpg"), plot = arranged_plot, width = 10, height = 12, dpi = 300)
   
+  watermark <- textGrob(
+    "© 2026 soundscapemonitoring.us",
+    rot = 270,                     
+    gp = gpar(fontsize = 9, col = "grey50")
+  )
   
+  arranged_plot <- grid.arrange(
+    p, separator, p2, watermark,
+    layout_matrix = rbind(c(1, 4),
+                          c(2, 2),   
+                          c(3, 4)),
+    heights = c(4, 0.1, 1),
+    widths  = c(20, 1)
+  )
   
+  ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDSeasonalSPL.jpg"),
+         plot = arranged_plot, width = 10, height = 12, dpi = 300)
   
   
   
@@ -1411,7 +1423,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     #geom_vline(data = FOIsRange, aes(xintercept = FQend, color = Label), linetype = "dashed", color = "red",linewidth = .5) +
     geom_rect(data = FOIsRange, aes(xmin = FQstart, xmax = FQend, ymin = -Inf, ymax = Inf), 
               fill = "gray", alpha = 0.2)+  # Adjust alpha for transparency
-    geom_text(data = FOIsRange, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 1, hjust = 0.45, size = 4) +
+    geom_text(data = FOIsRange, aes(x = FQstart, y = label_height, label = Label), angle = 90, vjust = 1, hjust = 0.35, size = 4) +
     
     # Add vertical set dash lines and grey shaded region at FOI ranges, label on left
     #geom_vline(data = FOIsRangeL, aes(xintercept = FQstart, color = Label), linetype = "dashed", color = "red",linewidth = .5) +
@@ -1473,6 +1485,15 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   separator <- grid.rect(gp = gpar(fill = "black"), height = unit(2, "pt"), width = unit(1, "npc"))
   # arranged_plot = grid.arrange(p, separator, l, heights =c(4, 0.05, 0.8))
   pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1.3)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
+  
+  pYear <- grid.arrange(
+    p, separator, p1, watermark,
+    layout_matrix = rbind(c(1, 4),
+                          c(2, 2),   
+                          c(3, 4)),
+    heights = c(4, 0.1, 1),
+    widths  = c(20, 1)
+  )
   
   ### save figure ####
   ggsave(filename = paste0(outDirG, "/plot_", toupper(site), "_HMDYearSPL.jpg"), plot = pYear, width = 10, height = 12, dpi = 300)
