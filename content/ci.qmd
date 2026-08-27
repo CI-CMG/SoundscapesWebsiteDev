@@ -158,7 +158,7 @@ display(HTML(standardTextDict["CI humpback curve fc"]))
 
 ```
 
-### When are the seasonal biologically-important times for whales?
+### When are we hearing vessel presence?
 
 ```{python}
 #| echo: false
