@@ -8,7 +8,7 @@ import os
 import ipywidgets as widgets
 from pythonFunctions import generalFunctions as gf
 
-sites = ["CI01","CI04", "B", "NRS05"]# "SIOB"
+sites = ["CI01","CI04", "CINMS_B", "NRS05"]# "SIOB"
 sitesFOI = ["CI01"]
 sitesFOI2 = ["NRS05"]
 fishsites = ["CI01","CI04"]
