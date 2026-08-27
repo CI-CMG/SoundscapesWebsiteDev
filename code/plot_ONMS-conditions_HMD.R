@@ -1103,7 +1103,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   } else if (site == "pm01" |site == "pm02"){
     label_height = 32
   } else {
-    label_height = 35
+    label_height = 36
   }
   
   #standardizing the y axis for all sites within one sanctuary page

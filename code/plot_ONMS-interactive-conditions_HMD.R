@@ -50,6 +50,24 @@ if (site == 'fk08'){
 }
 
 
+
+# Compute gaps per-year on the pivoted data (so both 25% and 75% missing-ness count)
+ribbonData <- mallData %>%
+  filter(Quantile %in% c("25%", "75%")) %>%
+  pivot_wider(names_from = Quantile, values_from = SoundLevel) %>%
+  group_by(Year) %>%
+  arrange(Frequency, .by_group = TRUE) %>%
+  mutate(
+    is_na   = is.na(`25%`) | is.na(`75%`),
+    gap     = is_na != lag(is_na, default = first(is_na)),
+    segment = cumsum(gap)
+  ) %>%
+  ungroup() %>%
+  filter(!is_na)          # drop the NA runs entirely, keep only real data segments
+
+
+
+
 # create annual graph
 
 pl = ggplot() +
@@ -90,50 +108,63 @@ pl = ggplot() +
             color = "black", linewidth = 1,
             linetype = "dotted") +
   
+  geom_ribbon(
+    data = ribbonData %>% filter(Year == oldest_year),
+    aes(x = Frequency, ymin = `25%`, ymax = `75%`,
+        fill = Year, color = Year, group = interaction(Year, segment)),
+    alpha = 0.3, show.legend = FALSE
+  ) +
+  geom_ribbon(
+    data = ribbonData %>% filter(Year != oldest_year),
+    aes(x = Frequency, ymin = `25%`, ymax = `75%`,
+        fill = Year, color = Year, group = interaction(Year, segment)),
+    alpha = 0.1, show.legend = FALSE
+  )
+  
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
-  geom_ribbon(data = ribbonData %>% 
-                filter(Year == oldest_year & segment == segment1)%>%
-                pivot_wider(names_from = Quantile, values_from = SoundLevel),
-              #%>%
-                #filter(!is.na(`25%`) & !is.na(`75%`)),
-              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
-              alpha = 0.3, 
-              show.legend = FALSE) + # High alpha for visibility
- 
-  #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
-  geom_ribbon(data = ribbonData %>%
-                filter(Year != oldest_year & segment == segment1) %>%
-                pivot_wider(names_from = Quantile, values_from = SoundLevel),
-              # %>%
-                #filter(!is.na(`25%`) & !is.na(`75%`)),
-                aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year),
-                alpha = 0.1, 
-              show.legend = FALSE) 
+  # geom_ribbon(data = ribbonData %>% 
+  #               filter(Year == oldest_year & segment == segment1)%>%
+  #               pivot_wider(names_from = Quantile, values_from = SoundLevel),
+  #             #%>%
+  #               #filter(!is.na(`25%`) & !is.na(`75%`)),
+  #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
+  #             alpha = 0.3, 
+  #             show.legend = FALSE) + # High alpha for visibility
+  # 
+  # #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
+  # geom_ribbon(data = ribbonData %>%
+  #               filter(Year != oldest_year & segment == segment1) %>%
+  #               pivot_wider(names_from = Quantile, values_from = SoundLevel),
+  #             # %>%
+  #               #filter(!is.na(`25%`) & !is.na(`75%`)),
+  #               aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year),
+  #               alpha = 0.1, 
+  #             show.legend = FALSE) 
   
   #only sites with a data gap need the following ribbons
-  if (segment2 %in% ribbonData$segment){
- 
-  #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
-  pl <- pl + geom_ribbon(data = ribbonData %>% 
-                filter(Year == oldest_year & segment == segment2)%>%
-                pivot_wider(names_from = Quantile, values_from = SoundLevel),
-              #%>%
-              #filter(!is.na(`25%`) & !is.na(`75%`)),
-              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
-              alpha = 0.3, 
-              show.legend = FALSE) + 
-  
-  #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
-  geom_ribbon(data = ribbonData %>%
-                filter(Year != oldest_year & segment == segment2) %>%
-                pivot_wider(names_from = Quantile, values_from = SoundLevel),
-              # %>%
-              #filter(!is.na(`25%`) & !is.na(`75%`)),
-              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year),
-              alpha = 0.1, 
-              show.legend = FALSE) 
-  
-  }
+  # if (segment2 %in% ribbonData$segment){
+  # 
+  # #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
+  # pl <- pl + geom_ribbon(data = ribbonData %>% 
+  #               filter(Year == oldest_year & segment == segment2)%>%
+  #               pivot_wider(names_from = Quantile, values_from = SoundLevel),
+  #             #%>%
+  #             #filter(!is.na(`25%`) & !is.na(`75%`)),
+  #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year), 
+  #             alpha = 0.3, 
+  #             show.legend = FALSE) + 
+  # 
+  # #for the geom_ribbons below, if data only has one year (ch01 and fk08), comment out the first geom ribbon and change alpha of second from .3 to .1
+  # geom_ribbon(data = ribbonData %>%
+  #               filter(Year != oldest_year & segment == segment2) %>%
+  #               pivot_wider(names_from = Quantile, values_from = SoundLevel),
+  #             # %>%
+  #             #filter(!is.na(`25%`) & !is.na(`75%`)),
+  #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Year, color = Year),
+  #             alpha = 0.1, 
+  #             show.legend = FALSE) 
+  # 
+  # }
   
   pl <- pl +
     
@@ -415,10 +446,34 @@ p1_interactive
 
 #combine effort and line graphs
 
+# 
+# combined_layout <- browsable(
+#   div(
+#     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
+#     
+#     # top plot
+#     div(style = "height: 800px; width: 800px;", pl_interactive),
+#     
+#     # caption
+#     p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+#     
+#     # divider
+#     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
+#     
+#     # bottom plot
+#     div(style = "height: 275px; width: 800px;", p1_interactive) 
+#   )
+# )
+# 
+# 
+# combined_layout
 
+
+
+#with watermark
 combined_layout <- browsable(
   div(
-    style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
+    style = "position: relative; display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px; width: 800px;",
     
     # top plot
     div(style = "height: 800px; width: 800px;", pl_interactive),
@@ -430,10 +485,18 @@ combined_layout <- browsable(
     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 275px; width: 800px;", p1_interactive) 
+    div(style = "height: 275px; width: 800px;", p1_interactive),
+    
+    # watermark
+    div(
+      "© 2026 soundscapemonitoring.us",
+      style = "position: absolute; top: 50%; 5px; right: 5px; 
+               font-size: 11px; color: rgba(0,0,0,0.4); 
+               writing-mode: vertical-rl; 
+               pointer-events: none;"
+    )
   )
 )
-
 
 combined_layout
 
@@ -460,12 +523,31 @@ htmltools::save_html(combined_layout, paste0(outDirG, "/plot_", toupper(site), "
 #SEASONAL GRAPH
 
 
+
+
+
+# Compute gaps per-year on the pivoted data (so both 25% and 75% missing-ness count)
+ribbonDataS <- mallDataS %>%
+  filter(Quantile %in% c("25%", "75%")) %>%
+  pivot_wider(names_from = Quantile, values_from = SoundLevel) %>%
+  group_by(Season) %>%
+  arrange(Frequency, .by_group = TRUE) %>%
+  mutate(
+    is_na   = is.na(`25%`) | is.na(`75%`),
+    gap     = is_na != lag(is_na, default = first(is_na)),
+    segment = cumsum(gap)
+  ) %>%
+  ungroup() %>%
+  filter(!is_na)          # drop the NA runs entirely, keep only real data segments
+
+
+
 #adjusting ribbons to deal with gaps in data, plotly couldnt automatically handle them
-ribbonDataS <- mallDataS %>% mutate(is_na = is.na(`SoundLevel`) ,
-                                  gap = is_na != lag(is_na, default = first(is_na)),
-                                  # unique segment ID every time a change happens from data to no data or back
-                                  segment = cumsum(gap)) %>%
-                                  ungroup()
+# ribbonDataS <- mallDataS %>% mutate(is_na = is.na(`SoundLevel`) ,
+#                                   gap = is_na != lag(is_na, default = first(is_na)),
+#                                   # unique segment ID every time a change happens from data to no data or back
+#                                   segment = cumsum(gap)) %>%
+#                                   ungroup()
 
 
 # original code for seasonal graph
@@ -751,30 +833,39 @@ pv2 = ggplot() +
   #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season),
   #             alpha = 0.2) + 
   
+  
+  
+  # ribbons for each season, broken into contiguous non-NA segments automatically
+  geom_ribbon(data = ribbonDataS,
+              aes(x = Frequency, ymin = `25%`, ymax = `75%`,
+                  fill = Season, color = Season, group = interaction(Season, segment)),
+              alpha = 0.3,
+              show.legend = TRUE)
+  
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
-  geom_ribbon(data = ribbonDataS %>% 
-                filter(segment == segment1)%>%
-                pivot_wider(names_from = Quantile, values_from = SoundLevel),
-              #%>%
-              #filter(!is.na(`25%`) & !is.na(`75%`)),
-              aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season, color = Season), 
-              alpha = 0.3, 
-              show.legend = TRUE) 
+  # geom_ribbon(data = ribbonDataS %>% 
+  #               filter(segment == segment1)%>%
+  #               pivot_wider(names_from = Quantile, values_from = SoundLevel),
+  #             #%>%
+  #             #filter(!is.na(`25%`) & !is.na(`75%`)),
+  #             aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season, color = Season), 
+  #             alpha = 0.3, 
+  #             show.legend = TRUE) 
 
 #only sites with a data gap need the following ribbons
-if (segment2 %in% ribbonData$segment){
-  
-  #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
-  pv2 <- pv2 + geom_ribbon(data = ribbonDataS %>% 
-                         filter( segment == segment2)%>%
-                         pivot_wider(names_from = Quantile, values_from = SoundLevel),
-                       #%>%
-                       #filter(!is.na(`25%`) & !is.na(`75%`)),
-                       aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season, color = Season), 
-                       alpha = 0.3, 
-                       show.legend = FALSE) 
-  
-}
+# if (segment2 %in% ribbonData$segment){
+#   
+#   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
+#   pv2 <- pv2 + geom_ribbon(data = ribbonDataS %>% 
+#                          filter( segment == segment2)%>%
+#                          pivot_wider(names_from = Quantile, values_from = SoundLevel),
+#                        #%>%
+#                        #filter(!is.na(`25%`) & !is.na(`75%`)),
+#                        aes(x = Frequency, ymin = `25%`, ymax = `75%`, fill = Season, color = Season), 
+#                        alpha = 0.3, 
+#                        show.legend = FALSE) 
+#   
+# }
 
 pv2 <- pv2 +
   
@@ -936,7 +1027,16 @@ combined_layoutv2 <- browsable(
     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 275px; width: 800px;", p2_interactive) 
+    div(style = "height: 275px; width: 800px;", p2_interactive) ,
+    
+    # watermark
+    div(
+      "© 2026 soundscapemonitoring.us",
+      style = "position: absolute; top: 50%; 5px; right: 5px; 
+               font-size: 11px; color: rgba(0,0,0,0.4); 
+               writing-mode: vertical-rl; 
+               pointer-events: none;"
+    )
   )
 )
 
