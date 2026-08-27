@@ -1532,9 +1532,9 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     ggdraw(plot_obj) +
       draw_label(
         "© 2026 soundscapemonitoring.us",
-        x = 0.995, y = 0.2,
+        x = 0.99, y = 0.2,
         angle = 270,
-        size = 8,
+        size = 7,
         color = grey(0.5),
         hjust = 0.5, vjust = 1
       )
