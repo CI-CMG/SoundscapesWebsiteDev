@@ -280,7 +280,7 @@ if (substr(site3, 1, 2) == "hi" | substr(site3, 1, 2) == "pm"){
 
 
 #make annual graph interactive
-pl_interactive <- ggplotly(pl, tooltip = "text", height = 800, width = 800) %>%  
+pl_interactive <- ggplotly(pl, tooltip = "text", height = 700, width = 700) %>%  
   
   #style(hoverinfo = "none", traces = c(1, 2, 3))  %>%
   
@@ -373,10 +373,10 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
   scale_fill_manual(values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 16, face = "bold", hjust = 0),
-    axis.title.y = element_text(size = 14),
-    axis.text.y = element_text(size = 14),
-    axis.text.x = element_text(size = 14, hjust = 1, angle = 30),  
+    plot.title = element_text(size = 14, face = "bold", hjust = 0),
+    axis.title.y = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    axis.text.x = element_text(size = 12, hjust = 1, angle = 30),  
     legend.text = element_text(size = 12),
     legend.position = "right" 
   ) +
@@ -405,15 +405,15 @@ p1
 
 #adjusting heigh of graph based on number of years displayed
 if (length(years_to_keep) > 3){
-    height_int = 280
+    height_int = 260
   
 } else if (length(years_to_keep) <= 3){
-    height_int = 260
+    height_int = 220
   
 }
 
 
-p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int, width = 800) %>% 
+p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int, width = 700) %>% 
   layout(
     autosize = TRUE,
     
@@ -476,16 +476,16 @@ combined_layout <- browsable(
     style = "position: relative; display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px; width: 800px;",
     
     # top plot
-    div(style = "height: 800px; width: 800px;", pl_interactive),
+    div(style = "height: 700px; width: 700px;", pl_interactive),
     
     # caption
     p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
     
     # divider
-    tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
+    tags$hr(style = "width: 700px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 275px; width: 800px;", p1_interactive),
+    div(style = "height: 230px; width: 700px;", p1_interactive),
     
     # watermark
     div(
