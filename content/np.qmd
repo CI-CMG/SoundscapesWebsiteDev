@@ -143,6 +143,7 @@ display(HTML(standardTextDict["FOI condition fc"]))
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["Indicator description"]))
+display(HTML("Coming soon!"))
 ```
 
 <!-- ### How much noise from large vessels may be interfering with whale communication? -->
