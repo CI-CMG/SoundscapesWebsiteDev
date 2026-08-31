@@ -1099,7 +1099,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
  
   
   #height of FOI shading and vert lines label will change based on the length of the label
-  if (site %in% c("mb02", "cinms_b", "ch01") ){
+  if (site %in% c("mb02", "ch01") ){
     label_height = 38
   } else if (site == "fgb01"){
     label_height = 33

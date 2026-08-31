@@ -82,7 +82,7 @@ pl = ggplot() +
  
   geom_polygon(data = polygon_data,
                aes(x = x, y = y, group = id,  
-                   text = paste0("Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
+                   text = paste0(Label, "<br>Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
                fill = "gray",
                alpha = 0.2,
                inherit.aes = FALSE) +
@@ -185,10 +185,10 @@ pl = ggplot() +
         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
         plot.title = ggtext::element_markdown(hjust = 0, size = 14),
         plot.subtitle = ggtext::element_markdown(hjust = 0, size = 12),
-        axis.title.x = element_text(size = 14),           # X-axis label size
-        axis.title.y = element_text(size = 14),           # Y-axis label size
-        axis.text = element_text(size = 14),
-        legend.text = element_text(size = 12),
+        axis.title.x = element_text(size = 12),           # X-axis label size
+        axis.title.y = element_text(size = 12),           # Y-axis label size
+        axis.text = element_text(size = 12),
+        legend.text = element_text(size = 9),
         axis.ticks.length.x = unit(0.25, "cm"), 
         axis.ticks.x = element_line(color = "grey", linewidth = 0.3), 
         axis.line.x = element_line(color = "grey", linewidth = 0.3)    
@@ -215,6 +215,10 @@ pl
 #   "1000", "", "", "", "", "", "", "", "", 
 #   "10000", "", ""
 # )
+
+if (site == "cinms_b"){
+  label_height = 40
+}
 
 # for label text in the middle of the shading box
 foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
@@ -279,8 +283,10 @@ if (substr(site3, 1, 2) == "hi" | substr(site3, 1, 2) == "pm"){
 }
 
 
+
+
 #make annual graph interactive
-pl_interactive <- ggplotly(pl, tooltip = "text", height = 700, width = 700) %>%  
+pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%  
   
   #style(hoverinfo = "none", traces = c(1, 2, 3))  %>%
   
@@ -297,13 +303,13 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 700, width = 700) %>%
     # xaxis = list(
     #   type      = "linear",
     #   autorange = FALSE,
-    #   range     = c(log10(10), log10(fqupper)),  
-    #   tickvals  = log_tick_positions,  
-    #   ticktext  = my_custom_x_labels,     
-    #   ticks     = "outside",              
-    #   ticklen   = 6,                      
+    #   range     = c(log10(10), log10(fqupper)),
+    #   tickvals  = log_tick_positions,
+    #   ticktext  = my_custom_x_labels,
+    #   ticks     = "outside",
+    #   ticklen   = 6,
     #   tickcolor = "grey",
-    #   showgrid  = FALSE                 
+    #   showgrid  = FALSE
     # ),
     
     autosize = TRUE,
@@ -312,7 +318,7 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 700, width = 700) %>%
       autorange = FALSE,       # Prevents Plotly from adding its own padding
       range     = c(27, y_max),   # Hard-locks the frame exactly to polygon edges
       ticks     = "outside",
-      tickvals = c(30, 40, 50, 60, 70, 80, 90, 100)
+      tickvals = c(30, 40, 50, 60, 70, 80, 90, 100, 110)
     ),
     
     legend = list(
@@ -337,6 +343,11 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 700, width = 700) %>%
 
 # Display the interactive plot
 pl_interactive
+
+
+
+
+
 
 
 
@@ -373,11 +384,11 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
   scale_fill_manual(values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14, face = "bold", hjust = 0),
-    axis.title.y = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
-    axis.text.x = element_text(size = 12, hjust = 1, angle = 30),  
-    legend.text = element_text(size = 12),
+    plot.title = element_text(size = 13, face = "bold", hjust = 0),
+    axis.title.y = element_text(size = 11),
+    axis.text.y = element_text(size = 11),
+    axis.text.x = element_text(size = 11, hjust = 1, angle = 30),  
+    legend.text = element_text(size = 9),
     legend.position = "right" 
   ) +
   # geom_line(data = data.frame(
@@ -408,12 +419,12 @@ if (length(years_to_keep) > 3){
     height_int = 260
   
 } else if (length(years_to_keep) <= 3){
-    height_int = 210
+    height_int = 200
   
 }
 
 
-p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int, width = 700) %>% 
+p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int, width = 600) %>% 
   layout(
     autosize = TRUE,
     
@@ -428,14 +439,15 @@ p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int
     #   ),
     
     annotations = list(
-      x = 0, y = -0.3, 
+      x = 0, y = -0.4, 
       text = "Data from months with effort below the red horizontal line are excluded from annual sound levels figure above", 
       showarrow = FALSE, 
       xref = 'paper', yref = 'paper', 
       xanchor = 'left', yanchor = 'top',
-      font = list(size = 11)
+      font = list(size = 9.5)
     )
-  )
+  )%>%
+  plotly::config(modeBarButtonsToRemove = list("toImage"))
 
 # View the final result
 p1_interactive
@@ -469,30 +481,63 @@ p1_interactive
 # combined_layout
 
 
+# 
+# #with watermark
+# combined_layout <- browsable(
+#   div(
+#     style = "position: relative; display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px; width: 600px;",
+#     
+#     # top plot
+#     div(style = "height: 600px; width: 600px;", pl_interactive),
+#     
+#     # caption
+#     p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+#     
+#     # divider
+#     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
+#     
+#     # bottom plot
+#     div(style = "height: 200px; width: 600px;", p1_interactive),
+#     
+#     # watermark
+#     div(
+#       "© 2026 soundscapemonitoring.us",
+#       style = "position: absolute; top: 50%; 5px; right: 5px; 
+#                font-size: 11px; color: rgba(0,0,0,0.4); 
+#                writing-mode: vertical-rl; 
+#                pointer-events: none;"
+#     )
+#   )
+# )
 
-#with watermark
+
+
 combined_layout <- browsable(
   div(
-    style = "position: relative; display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px; width: 800px;",
+    style = "position: relative; display: flex; flex-direction: column; gap: 10px; 
+             font-family: sans-serif; padding: 10px 40px 10px 10px; width: 640px;
+             border: 1px solid #d3d3d3; border-radius: 4px; box-sizing: border-box;",
     
     # top plot
-    div(style = "height: 700px; width: 700px;", pl_interactive),
+    div(style = "height: 600px; width: 600px;", pl_interactive),
     
     # caption
-    p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+    p(HTML(caption_text2), style = "font-size: 11px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
     
     # divider
-    tags$hr(style = "width: 700px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
+    tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 230px; width: 700px;", p1_interactive),
+    div(style = "height: 230px; width: 600px;", p1_interactive),
     
     # watermark
     div(
       "© 2026 soundscapemonitoring.us",
-      style = "position: absolute; top: 50%; 5px; right: 5px; 
+      style = "position: absolute; top: 50%; right: 9px; transform: translateY(-50%);
+               padding: 6px 4px;
                font-size: 11px; color: rgba(0,0,0,0.4); 
                writing-mode: vertical-rl; 
+               text-orientation: sideways;
                pointer-events: none;"
     )
   )
