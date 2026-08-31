@@ -60,10 +60,6 @@ project = "ONMS"
 # fqIn2name = "500 Hz" # wind model comparison- wind dominated frequency
 ab2 = 0 #threshold for dB above a reference value
 
-if (site == "cinms_b" |site == "ci01"){
-  windUpp = 15.5
-  } else {
-  windUpp = 22.6 }#which wind model result to show on plot
 windLow = 1 #which wind model result to show on plot
 windH = 10 #wind speeds categories
 windL = 5 #wind speeds categories
@@ -109,6 +105,12 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   suppressWarnings ( rm(gps, outData) )
   cat("Processing... ", ONMSsites[uu],"\n" )
   site =  ONMSsites[uu]
+  
+  
+  if (site == "cinms_b" |site == "ci01"){
+    windUpp = 15.5
+  } else {
+    windUpp = 22.6 }
   
   #renaming for NRS sites
   if (site == "oc03") {
@@ -944,7 +946,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   caption_text1 = paste0(
     "<b>", seasonType, "</b> ",seasonLabel, "<br>",
     "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
-    "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
+    "<b>Black lines</b> are modeled wind noise at this site's depth, lower bound = ", windLow, " m/s & upper bound = ", windUpp, " m/s<br>",
     "<b>Dotted sound level curve</b> is the median for all data<br>",
     "<b>Solid sound level curves and colored shaded areas</b> are the seasonal medians and 25th-75th percentiles for all data")
   
@@ -1317,14 +1319,14 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   if (my_subtitle == "(humpback season)"){
     caption_text2 = paste0(
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
-      "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
+      "<b>Black lines</b> are modeled wind noise at this site's depth, lower bound = ", windLow, " m/s & upper bound = ", windUpp, " m/s<br>",
       "<b>Dotted sound level curve</b> is the median for humpback season<br>",
       "<b>Solid sound level curves and blue shaded areas</b> are the annual medians and 25th-75th percentiles for humpback season") # for ", my_subtitle)
     
   } else {
     caption_text2 = paste0(
       "<b>Vertical lines and grey shaded areas</b> indicate frequencies for sounds of interest in this soundscape<br>",
-      "<b>Black lines</b> are modeled wind noise at this depth [", windLow, " m/s & ", windUpp, " m/s]<br>",
+      "<b>Black lines</b> are modeled wind noise at this site's depth, lower bound = ", windLow, " m/s & upper bound = ", windUpp, " m/s<br>",
       "<b>Dotted sound level curve</b> is the median for ",my_subtitle, "<br>",
       "<b>Solid sound level curves and blue shaded areas</b> are the annual medians and 25th-75th percentiles for ", my_subtitle) # for ", my_subtitle)
     

@@ -408,7 +408,7 @@ if (length(years_to_keep) > 3){
     height_int = 260
   
 } else if (length(years_to_keep) <= 3){
-    height_int = 220
+    height_int = 210
   
 }
 
@@ -433,7 +433,7 @@ p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int
       showarrow = FALSE, 
       xref = 'paper', yref = 'paper', 
       xanchor = 'left', yanchor = 'top',
-      font = list(size = 13)
+      font = list(size = 11)
     )
   )
 
