@@ -44,7 +44,7 @@ for i in range(len(headerLocations)):
 ```
 
 ---
-title: "Humboldt ______ Soundscape Report"
+title: "Humboldt Coast Soundscape Report"
 date: "today"
 output: 
   html_document: 

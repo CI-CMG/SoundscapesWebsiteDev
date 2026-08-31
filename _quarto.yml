@@ -85,7 +85,7 @@ website:
       - href: content/ci.qmd
         text: Channel Islands
       - href: content/nc.qmd
-        text: Humboldt
+        text: Humboldt Coast
       - text: <br>
       - text: <b>Pacific Islands Region</b>
       - href: content/pm.qmd
