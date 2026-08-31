@@ -10,7 +10,7 @@ from pythonFunctions import generalFunctions as gf
 import plotly.io as pio
 pio.renderers.default = "notebook_connected"
 
-sites = ["HUA_WEA"]
+sites = ["WEA_HUA"]
 sitesFOI = [""]
 sitesFOI2 = [""]
 
@@ -59,7 +59,7 @@ editor_options:
 
 ```{python}
 #| echo: false
-#display(HTML(standardTextDict[""]))
+display(HTML(standardTextDict["NC"]))
 ```
 
 ### Summary of monitoring sites
@@ -143,6 +143,8 @@ display(HTML(standardTextDict["FOI condition fc"]))
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["Indicator description"]))
+display(HTML(standardTextDict["spacer"])))
+display(HTML("Coming soon!"))
 ```
 
 <!-- ### How much noise from large vessels may be interfering with whale communication? -->
