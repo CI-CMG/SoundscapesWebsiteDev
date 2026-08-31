@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "ci01" 
+site  = "ci04" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -351,18 +351,18 @@ if (length(inFiles) > 0) {
 # kaila <- data_list[[1]]
 # data_list[[1]] <- kaila
 # 
- f =1 
-
-for (f in 1:72 ){
-
-  #bin to hourly median values
-  cDatah_day = data_list[[f]]
-
-  cDatah_day = cDatah_day[, -c(2:21)]
-
-  data_list[[f]] = cDatah_day
-
-}
+#  f =1 
+# 
+# for (f in 1:72 ){
+# 
+#   #bin to hourly median values
+#   cDatah_day = data_list[[f]]
+# 
+#   cDatah_day = cDatah_day[, -c(2:21)]
+# 
+#   data_list[[f]] = cDatah_day
+# 
+# }
 
 #combine list elements after processing each day seperately and saving into different list elements
 cDatah <- rbindlist(data_list)
