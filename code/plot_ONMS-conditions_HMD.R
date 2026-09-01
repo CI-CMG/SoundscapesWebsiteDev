@@ -306,11 +306,6 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     gps = outData
     rm(outData)
   }
-  
-  st = as.Date( min(gps$UTC) )
-  ed = as.Date( max(gps$UTC) )
-  udays = length( unique(as.Date(gps$UTC)) )
-  cat("Input Data - ", site, " has ", udays, " unique days (", as.character(st), " to ",as.character(ed), ")\n")
  
   
   # FOR NEW OC02 DATA!!!
@@ -371,37 +366,17 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # 
   # }
   
-
+ if(site == 'as01'){
+  gps <- gps %>%
+    mutate(UTC = as.POSIXct(UTC, origin = "1970-01-01", tz = "UTC")) %>%
+    filter(!(as.Date(UTC) %in% as.Date(c("2023-05-27", "2024-07-21"))))
+ }
   
-  #removing HMD_20 from SS data so that it lines up with ONMS data
-  # if(site == "sb03"){
-  #   gps = gps[, -c(2:22)]
-  # }
-  # else if(siteInfo$`SanctSound Portal` != 'no'){
-  #   gps = gps[, -2]
-  # }
+  st = as.Date( min(gps$UTC) )
+  ed = as.Date( max(gps$UTC) )
+  udays = length( unique(as.Date(gps$UTC)) )
+  cat("Input Data - ", site, " has ", udays, " unique days (", as.character(st), " to ",as.character(ed), ")\n")
   
-  #for GR01! Removing HMD_20 until we can fix data quality matrix to have 20 Hz ONMS data
-  # if (site == "gr01"){
-  # gps = gps[, -2]
-  # }
-   
-  # #for SB03! forgot to remove HMD_0-19 during processing
-  # if (site == "sb03"){
-  # gps = gps[, -c(2:22)]
-  # }
-  
-  
-  #MB02: remove HMD_0-20
-  if (site == "mb02"){
-  gps = gps[, -c(2:22)]
-  }
-  
-  #remove 2018 from all data for hi01 b/c only 1 day of recording
-  # if(site == "hi01"){
-  #   gps = gps %>%
-  #     filter(yr != 2018)
-  # }
   
   Fq = as.numeric( as.character( gsub("HMD_", "",  colnames(gps)[grep("HMD", colnames(gps))] ) ))
 
@@ -479,64 +454,64 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   #Removing frequencies that have instrument issues that were not marked in data quality matrix
   #DIPS at ~3k Hz. They vary by site.
 
- if (site == "ch01"){
-    
-    #for seasonal 
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2627:4300), ~ NA))
-    
-    #for annual
-    # gpsAG <- gpsAG %>%
-    #   mutate(across(num_range("HMD_", 2627:4300), ~ NA))
-    
-  } else if (site == "mb05"){
-    
-    #make those columns na
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2701:4995), ~ NA))
-    
-    # gpsAG <- gpsAG %>%
-    #   mutate(across(num_range("HMD_", 2701:4995), ~ NA))
-    
-  } else if (site %in% c("NRS01","NRS02","NRS03", "NRS04", "NRS05","NRS06","NRS07","NRS08","NRS09","NRS10","NRS11","NRS12","NRS13")){
-      #(site == "NRS05"){
-      gps <- gps %>%
-       mutate(across(num_range("HMD_", 1249:1252), ~ NA))
-
-     # gpsAG <- gpsAG %>%
-      # mutate(across(num_range("HMD_", 1249:1252), ~ NA))
-
-      
-  } else if (site == "fgb01" | site == "fk08"){
-    
-    #make those columns na
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2500:3900), ~ NA))
-    
-    
-  } else if (site == "gr01" | site == "fk01"){
-    
-    #make those columns na
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2800:4200), ~ NA))
-    
-    
-  }else if (site == "fk05"){
-    
-    #make those columns na
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2100:3900), ~ NA))
-    
-  } else if (site == "sb01" | site == "sb03" ){
-    
-    #make those columns na
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2900:4300), ~ NA))
-  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
-    #make those columns na
-     gps <- gps %>%
-     mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
-  } 
+ # if (site == "ch01"){
+ #    
+ #    #for seasonal 
+ #    gps <- gps %>%
+ #      mutate(across(num_range("HMD_", 2627:4300), ~ NA))
+ #    
+ #    #for annual
+ #    # gpsAG <- gpsAG %>%
+ #    #   mutate(across(num_range("HMD_", 2627:4300), ~ NA))
+ #    
+ #  } else if (site == "mb05"){
+ #    
+ #    #make those columns na
+ #    gps <- gps %>%
+ #      mutate(across(num_range("HMD_", 2701:4995), ~ NA))
+ #    
+ #    # gpsAG <- gpsAG %>%
+ #    #   mutate(across(num_range("HMD_", 2701:4995), ~ NA))
+ #    
+ #  } else if (site %in% c("NRS01","NRS02","NRS03", "NRS04", "NRS05","NRS06","NRS07","NRS08","NRS09","NRS10","NRS11","NRS12","NRS13")){
+ #      #(site == "NRS05"){
+ #      gps <- gps %>%
+ #       mutate(across(num_range("HMD_", 1249:1252), ~ NA))
+ # 
+ #     # gpsAG <- gpsAG %>%
+ #      # mutate(across(num_range("HMD_", 1249:1252), ~ NA))
+ # 
+ #      
+ #  } else if (site == "fgb01" | site == "fk08"){
+ #    
+ #    #make those columns na
+ #    gps <- gps %>%
+ #      mutate(across(num_range("HMD_", 2500:3900), ~ NA))
+ #    
+ #    
+ #  } else if (site == "gr01" | site == "fk01"){
+ #    
+ #    #make those columns na
+ #    gps <- gps %>%
+ #      mutate(across(num_range("HMD_", 2800:4200), ~ NA))
+ #    
+ #    
+ #  }else if (site == "fk05"){
+ #    
+ #    #make those columns na
+ #    gps <- gps %>%
+ #      mutate(across(num_range("HMD_", 2100:3900), ~ NA))
+ #    
+ #  } else if (site == "sb01" | site == "sb03" ){
+ #    
+ #    #make those columns na
+ #    gps <- gps %>%
+ #      mutate(across(num_range("HMD_", 2900:4300), ~ NA))
+ #  } else if (site == "cox01" || site == "cox03" || site == "ns02" || site == "ns05" || site == "ns08" || site == "ustr06" || site == "ustr09"){
+ #    #make those columns na
+ #     gps <- gps %>%
+ #     mutate(across(num_range("HMD_", 2900:4000), ~ NA))    
+ #  } 
     
   
   
@@ -637,56 +612,56 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   gpsAG = gps %>%
     filter(yr %in% years_to_keep)
   
-  
-  #removing dips that are specific to certain seasons and years
-  if (site == "mb01"){
-    
-    #make those columns na
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 3115:4330), 
-                    ~ if_else(Season != "Post-Upwelling", NA_real_, .)))
-    
-    gpsAG <- gpsAG %>%
-      mutate(across(num_range("HMD_", 3115:4330), ~ NA))
-    
-  } else if (site == "mb02"){
-    
-    #for all seasons
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 3270:4330), ~ NA))
-    
-    #for 2023 and 2024 higher dip
-    gpsAG <- gpsAG %>%
-      mutate(across(num_range("HMD_", 3270:4330), 
-                    ~ if_else(yr != 2022, NA_real_, .)))
-    
-    #for 2022 lower dip
-    gpsAG <- gpsAG %>%
-      mutate(across(num_range("HMD_", 1912:2567), 
-                    ~ if_else(yr == 2022, NA_real_, .)))
-    
-  } else if (site == "ci04"){
-    
-    #for winter and post-upwelling lower dip
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 2175:2567), 
-                    ~ if_else(Season != "Upwelling", NA_real_, .)))
-    
-    #for upwelling higher dip
-    gps <- gps %>%
-      mutate(across(num_range("HMD_", 3115:4330), 
-                    ~ if_else(Season == "Upwelling", NA_real_, .)))
-    
-    #for 2023 and 2022 lower dip
-    gpsAG <- gpsAG %>%
-      mutate(across(num_range("HMD_", 2175:2567), 
-                    ~ if_else(yr != 2024, NA_real_, .)))
-    
-    #for 2024 higher dip
-    gpsAG <- gpsAG %>%
-      mutate(across(num_range("HMD_", 3115:4330), 
-                    ~ if_else(yr == 2024, NA_real_, .)))
-  } 
+  # 
+  # #removing dips that are specific to certain seasons and years
+  # if (site == "mb01"){
+  #   
+  #   #make those columns na
+  #   gps <- gps %>%
+  #     mutate(across(num_range("HMD_", 3115:4330), 
+  #                   ~ if_else(Season != "Post-Upwelling", NA_real_, .)))
+  #   
+  #   gpsAG <- gpsAG %>%
+  #     mutate(across(num_range("HMD_", 3115:4330), ~ NA))
+  #   
+  # } else if (site == "mb02"){
+  #   
+  #   #for all seasons
+  #   gps <- gps %>%
+  #     mutate(across(num_range("HMD_", 3270:4330), ~ NA))
+  #   
+  #   #for 2023 and 2024 higher dip
+  #   gpsAG <- gpsAG %>%
+  #     mutate(across(num_range("HMD_", 3270:4330), 
+  #                   ~ if_else(yr != 2022, NA_real_, .)))
+  #   
+  #   #for 2022 lower dip
+  #   gpsAG <- gpsAG %>%
+  #     mutate(across(num_range("HMD_", 1912:2567), 
+  #                   ~ if_else(yr == 2022, NA_real_, .)))
+  #   
+  # } else if (site == "ci04"){
+  #   
+  #   #for winter and post-upwelling lower dip
+  #   gps <- gps %>%
+  #     mutate(across(num_range("HMD_", 2175:2567), 
+  #                   ~ if_else(Season != "Upwelling", NA_real_, .)))
+  #   
+  #   #for upwelling higher dip
+  #   gps <- gps %>%
+  #     mutate(across(num_range("HMD_", 3115:4330), 
+  #                   ~ if_else(Season == "Upwelling", NA_real_, .)))
+  #   
+  #   #for 2023 and 2022 lower dip
+  #   gpsAG <- gpsAG %>%
+  #     mutate(across(num_range("HMD_", 2175:2567), 
+  #                   ~ if_else(yr != 2024, NA_real_, .)))
+  #   
+  #   #for 2024 higher dip
+  #   gpsAG <- gpsAG %>%
+  #     mutate(across(num_range("HMD_", 3115:4330), 
+  #                   ~ if_else(yr == 2024, NA_real_, .)))
+  # } 
   
   
   stAG = as.Date( min(gpsAG$UTC) )
