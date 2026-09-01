@@ -745,7 +745,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       axis.title.y = element_text(size = 14),
       axis.text.y = element_text(size = 14),
       axis.text.x = element_text(size = 14, hjust = 1, angle = 30),  
-      plot.subtitle = element_text(size = 14),
+      plot.subtitle = element_text(size = 12),
       legend.text = element_text(size = 12),
       plot.caption = ggtext::element_markdown(hjust = 0, size = 11),
       legend.position = "right" 
