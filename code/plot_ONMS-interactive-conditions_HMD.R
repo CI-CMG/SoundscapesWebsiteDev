@@ -216,7 +216,7 @@ pl
 #   "10000", "", ""
 # )
 
-if (site == "cinms_b"){
+if (site == "cinms_b" | site == "as01"){
   label_height = 40
 }
 
@@ -349,20 +349,29 @@ pl_interactive
 
 
 
+month_nums <- as.numeric(as.character(sort(unique(summary$month))))
 
+summary$month <- factor(summary$month,
+                        levels = month_nums,
+                        labels = month.abb[month_nums])
 
 
 
 #effort graph interactive
 
-summary <- gpsAG %>%
-  mutate(
-    year  = year(UTC),  # Extract Year
-    month = format(UTC, "%m")  
-  ) %>%
-  count(year, month) 
-summary$dy = round(summary$n/ 24)
-
+# summaryt <- gpsAG %>%
+#   mutate(
+#     year  = year(UTC),  # Extract Year
+#     month = format(UTC, "%m")  
+#   ) %>%
+#   count(year, month) 
+# summaryt$dy = round(summaryt$n/ 24)
+# 
+# 
+# 
+# str(summary$month)      # what type/format is it really?
+# unique(summary$month)   # actual values in your data
+# month_nums              # what you're matching against
 
 
 
@@ -380,7 +389,7 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
     fill = legend_label,
     #caption = "Data from months with effort below the red horizontal line are excluded from annual sound levels figure above"
   ) +
-  scale_x_discrete(labels = month.abb[month_nums]) + 
+  scale_x_discrete(drop = FALSE) + 
   scale_fill_manual(values = rev(colorRampPalette(c("darkblue", "lightblue"))(length(unique(summary$year))))) +
   theme_minimal() +
   theme(
@@ -936,11 +945,11 @@ pv2 <- pv2 +
   )  +
   theme(legend.position = "right",
         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
-        plot.title = ggtext::element_markdown(hjust = 0, size = 12),
-        axis.title.x = element_text(size = 14),           # X-axis label size
-        axis.title.y = element_text(size = 14),           # Y-axis label size
-        axis.text = element_text(size = 14),
-        legend.text = element_text(size = 12),
+        plot.title = ggtext::element_markdown(hjust = 0, size = 14),
+        axis.title.x = element_text(size = 12),           # X-axis label size
+        axis.title.y = element_text(size = 12),           # Y-axis label size
+        axis.text = element_text(size = 12),
+        legend.text = element_text(size = 9),
         axis.ticks.length.x = unit(0.25, "cm"), 
         axis.ticks.x = element_line(color = "grey", linewidth = 0.3), 
         axis.line.x = element_line(color = "grey", linewidth = 0.3)    
@@ -953,7 +962,7 @@ pv2
 
 #making SPL graph interactive
 
-pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 800, width = 800) %>%  
+pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 600, width = 600) %>%  
   
   layout(
     
@@ -1022,12 +1031,11 @@ p2 = ggplot(summary2, aes(x = as.character(year), y = dy, fill = as.factor(Seaso
   scale_fill_manual(values = seasont$values) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 16, face = "bold", hjust = 0),
-    axis.title.y = element_text(size = 14),
-    axis.text.y = element_text(size = 14),
-    axis.text.x = element_text(size = 14, hjust = 1, angle = 30),  
-    plot.subtitle = element_text(size = 12),
-    legend.text = element_text(size = 12),
+    plot.title = element_text(size = 13, face = "bold", hjust = 0),
+    axis.title.y = element_text(size = 11),
+    axis.text.y = element_text(size = 11),
+    axis.text.x = element_text(size = 11, hjust = 1, angle = 30),  
+    legend.text = element_text(size = 9),
     legend.position = "right" 
   )
 
@@ -1037,14 +1045,14 @@ p2
 
 
 # change height = based on how many seasons are in this sites dataset
-p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 300, width = 800) %>% 
+p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 200, width = 600) %>% 
   layout(
     autosize = TRUE,
     
     margin = list(t = 50,          # Tucks the title tightly above the bars
-                  b = 40,          # Leaves just enough room for the angled month text (Jan, Feb...)
+                  b = 20,          # Leaves just enough room for the angled month text (Jan, Feb...)
                   l = 50,          # Aligns perfectly with the top plot's left axis
-                  r = 50) # Ensure room for your caption at the bottom
+                  r = 40) # Ensure room for your caption at the bottom
     
     # legend = list(
     #   font = list(size = 13) # to make legend slightly shorter, less spacing between years didnt work
@@ -1056,37 +1064,76 @@ p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 300, width
 p2_interactive
 
 
+# 
+# #combine SPL and effort graphs
+# combined_layout2 <- browsable(
+#   div(
+#     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
+#     
+#     # top plot
+#     div(style = "height: 800px; width: 800px;", pv2_interactive),
+#     
+#     # caption
+#     p(HTML(caption_text1), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+#     
+#     # divider 
+#     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
+#     
+#     # bottom plot
+#     div(style = "height: 275px; width: 800px;", p2_interactive) ,
+#     
+#     # watermark
+#     div(
+#       "© 2026 soundscapemonitoring.us",
+#       style = "position: absolute; top: 50%; 5px; right: 5px; 
+#                font-size: 11px; color: rgba(0,0,0,0.4); 
+#                writing-mode: vertical-rl; 
+#                pointer-events: none;"
+#     )
+#   )
+# )
+# 
+# 
+# combined_layout2
 
-#combine SPL and effort graphs
-combined_layoutv2 <- browsable(
+
+
+
+
+
+#add watermark and grey border
+combined_layout2 <- browsable(
   div(
-    style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
+    style = "position: relative; display: flex; flex-direction: column; gap: 10px; 
+             font-family: sans-serif; padding: 10px 20px 10px 10px; width: 640px;
+             border: 1px solid #d3d3d3; border-radius: 4px; box-sizing: border-box;",
     
     # top plot
-    div(style = "height: 800px; width: 800px;", pv2_interactive),
+    div(style = "height: 600px; width: 600px;", pv2_interactive),
     
     # caption
-    p(HTML(caption_text1), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+    p(HTML(caption_text2), style = "font-size: 11px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
     
-    # divider 
-    tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
+    # divider
+    tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 275px; width: 800px;", p2_interactive) ,
+    div(style = "height: 200px; width: 600px;", p2_interactive),
     
     # watermark
     div(
       "© 2026 soundscapemonitoring.us",
-      style = "position: absolute; top: 50%; 5px; right: 5px; 
+      style = "position: absolute; top: 50%; right: 9px; transform: translateY(-50%);
+               padding: 6px 4px;
                font-size: 11px; color: rgba(0,0,0,0.4); 
                writing-mode: vertical-rl; 
+               text-orientation: sideways;
                pointer-events: none;"
     )
   )
 )
 
-
-combined_layoutv2
+combined_layout2
 
 
 #save html file to Dev contents folder
@@ -1100,45 +1147,7 @@ outDirC  =  paste0(outDir,"context/") #where to get context
 
 
 # Save the entire HTML layout bundle natively
-htmltools::save_html(combined_layoutv2, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPL.html"))
+htmltools::save_html(combined_layout2, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPL.html"))
 
 
 
- 
-# combining graph with lines above shading but not a matching legend to effort graph
-# 
-# combined_layout2 <- browsable(
-#   div(
-#     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
-#     
-#     # Top Plot (Spectrum) - Grand and tall
-#     div(style = "height: 800px; width: 800px;", p_interactive),
-#     
-#     # Top Chart Caption
-#     p(HTML(caption_text1), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
-#     
-#     # Elegant Divider Line
-#     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
-#     
-#     # Bottom Plot (Monthly Effort Bars) - Clean, short, and compact!
-#     div(style = "height: 275px; width: 800px;", p2_interactive) 
-#   )
-# )
-# 
-# # View the perfectly balanced application layout
-# combined_layout2
-# 
-# 
-# #save html file to Dev contents folder
-# #outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
-# outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
-# 
-# 
-# outDirG  =  paste0(outDir,"content/resources/") #where save graphics
-# outDirGe =  paste0(outDir,"content/resources/extra") #where extra save graphics
-# outDirC  =  paste0(outDir,"context/") #where to get context
-# 
-# 
-# # Save the entire HTML layout bundle natively
-# htmltools::save_html(combined_layout2, paste0(outDirG, "/plot_", toupper(site), "_interactiveSeasonalSPLv2.html"))
- 
