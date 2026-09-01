@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "mb01" 
+site  = "oc02" 
 site = tolower(site) 
 # 
 # #add for NRS
