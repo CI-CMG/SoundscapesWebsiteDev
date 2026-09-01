@@ -261,7 +261,9 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
         setTimeout(function() {
             if (frame.contentWindow && frame.contentWindow.document) {
                 var contentHeight = frame.contentWindow.document.documentElement.scrollHeight;
-                frame.style.height = contentHeight + 'px';
+                var contentWidth = frame.contentWindow.document.documentElement.scrollWidth;
+                frame.style.height = contentHeight + 'px'; 
+                frame.style.width = contentWidth + 'px'; 
             }
         }, 300);
     }
