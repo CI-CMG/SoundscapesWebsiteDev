@@ -220,7 +220,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     inputDir = "resources" 
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", uniqueIDs[0])
-    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="100%" height="1300px" style="border:none;"></iframe></div>'
+    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="600px" style="border:none;" scrolling="no" onload="resizePlotlyIframe(this)"></iframe></div>'
     
     for i in range(len(uniqueIDs)):
         path = f'{inputDir}/{generalFormat}'
@@ -242,7 +242,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
                     <script>
                     function {uniqueIDs[i]}{identifier}() {{
                         var frameElement = document.getElementById('{identifier}');
-                        frameElement.src = "{path}"; // Swap the iframe source
+                        frameElement.src = "{path}";
                         
                         const thisButton = document.getElementById('{uniqueIDs[i]}{identifier}button');
                         thisButton.style.backgroundColor = '#BA2F00';
@@ -255,4 +255,17 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     button_column = f'<div style="display: flex; flex-direction: column;">{buttons}</div>'
     container_end = '</div>'
     
-    return container_start + button_column + initialIframe + container_end + scripts
+    resize_script = """
+    <script>
+    function resizePlotlyIframe(frame) {
+        setTimeout(function() {
+            if (frame.contentWindow && frame.contentWindow.document) {
+                var contentHeight = frame.contentWindow.document.documentElement.scrollHeight;
+                frame.style.height = contentHeight + 'px';
+            }
+        }, 300);
+    }
+    </script>
+    """
+    
+    return container_start + button_column + initialIframe + container_end + scripts + resize_script
