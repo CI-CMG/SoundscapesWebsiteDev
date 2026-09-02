@@ -66,7 +66,17 @@ ribbonData <- mallData %>%
   filter(!is_na)          # drop the NA runs entirely, keep only real data segments
 
 
-
+#make it so hover appears along whole black dashed line
+vline_data <- bind_rows(FOIs, FOIsL) %>%
+  mutate(id = row_number()) %>%
+  rowwise() %>%
+  mutate(pts = list(data.frame(
+    x = FQstart,
+    y = seq(27, y_max, length.out = 100)
+  ))) %>%
+  ungroup() %>%
+  select(id, Label, FQstart, pts) %>%
+  unnest(pts)
 
 # create annual graph
 
@@ -86,6 +96,12 @@ pl = ggplot() +
                fill = "gray",
                alpha = 0.2,
                inherit.aes = FALSE) +
+  
+  geom_line(data = vline_data,
+            aes(x = x, y = y, group = id,
+                text = paste0(Label, "<br>Freq: ", round(FQstart, 1), " Hz")),
+            color = "black", linetype = "dashed", linewidth = 0.5,
+            inherit.aes = FALSE) +
   
   scale_x_log10(labels = label_number(),limits = (c(10,fqupper)), guide = "axis_logticks") +  # Log scale for x-axis
   #scale_x_continuous(limits = c(10, fqupper)) +
@@ -274,6 +290,24 @@ foi_labels <- lapply(1:nrow(FOIsRange), function(i) {
 #   )
 # })
 
+# to add labels to black dashed FOI lines
+# foi_vline_labels <- lapply(1:nrow(bind_rows(FOIs, FOIsL)), function(i) {
+#   d <- bind_rows(FOIs, FOIsL)
+#   list(
+#     x = log10(d$FQstart[i]),
+#     y = label_height,
+#     xref = "x", yref = "y",
+#     text = d$Label[i],
+#     textangle = -90,
+#     showarrow = FALSE,
+#     xanchor = "center",
+#     yanchor = "middle",
+#     font = list(size = 13, color = "black", family = "sans-serif")
+#   )
+# })
+
+
+
 
 #giving extra room at top of graph for a subtitle at certain NMS
 if (substr(site3, 1, 2) == "hi" | substr(site3, 1, 2) == "pm"){
@@ -315,8 +349,8 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%
     autosize = TRUE,
     
     yaxis = list(
-      autorange = FALSE,       # Prevents Plotly from adding its own padding
-      range     = c(27, y_max),   # Hard-locks the frame exactly to polygon edges
+      autorange = FALSE,       
+      range     = c(27, y_max),   
       ticks     = "outside",
       tickvals = c(30, 40, 50, 60, 70, 80, 90, 100, 110)
     ),
