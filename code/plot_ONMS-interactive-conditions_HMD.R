@@ -117,13 +117,6 @@ pl = ggplot() +
             aes(x = Frequency, y = SoundLevel, color = Year, fill = Year, group = Year,
                 text = paste0("Year: ", Year, "<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB") ),
             linewidth = 2) +
-
-  #median HMD values- all data
-  geom_line(data = mALL[mALL$Quantile == "50%",],
-            aes(x = Frequency, y = SoundLevel, group = Quantile,
-                text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB") ),
-            color = "black", linewidth = 1,
-            linetype = "dotted") +
   
   geom_ribbon(
     data = ribbonData %>% filter(Year == oldest_year),
@@ -136,7 +129,15 @@ pl = ggplot() +
     aes(x = Frequency, ymin = `25%`, ymax = `75%`,
         fill = Year, color = Year, group = interaction(Year, segment)),
     alpha = 0.1, show.legend = FALSE
-  )
+  ) + 
+  
+  
+  #median HMD values- all data
+  geom_line(data = mALL[mALL$Quantile == "50%",],
+            aes(x = Frequency, y = SoundLevel, group = Quantile,
+                text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB") ),
+            color = "black", linewidth = 1,
+            linetype = "dotted") 
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   # geom_ribbon(data = ribbonData %>% 
@@ -235,6 +236,8 @@ pl
 
 if (site == "cinms_b" | site == "as01"){
   label_height = 40
+} else if (site == "ci04" ){
+  label_height = 37
 }
 
 # for label text in the middle of the shading box
@@ -943,7 +946,13 @@ pv2 = ggplot() +
               aes(x = Frequency, ymin = `25%`, ymax = `75%`,
                   fill = Season, color = Season, group = interaction(Season, segment)),
               alpha = 0.3,
-              show.legend = TRUE)
+              show.legend = TRUE)+
+
+
+  #median HMD all seasons
+  geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel, group = Quantile,
+                                                    text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), color = "black", linewidth = 1,
+          linetype = "dotted")
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
   # geom_ribbon(data = ribbonDataS %>% 
@@ -971,12 +980,6 @@ pv2 = ggplot() +
 # }
 
 pv2 <- pv2 +
-  
-  
-  #median HMD all seasons
-  geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel, group = Quantile,
-                                                      text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), color = "black", linewidth = 1,
-            linetype = "dotted")+ 
   
   scale_color_manual(name = legend_label2, values = seasont$values) +
   scale_fill_manual(name = legend_label2, values = seasont$values) +
@@ -1050,7 +1053,6 @@ pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 600, width = 600) %>
 
 # Display the interactive plot
 pv2_interactive
-
 
 
 
