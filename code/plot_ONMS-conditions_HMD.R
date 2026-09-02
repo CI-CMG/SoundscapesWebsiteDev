@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("cinms_b")
+ONMSsites = c("ci01")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -1080,7 +1080,9 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     label_height = 33
   } else if (site == "pm01" |site == "pm02"){
     label_height = 32
-  } else {
+  } else if (site == 'ci01'){
+    label_height = 41
+    }else {
     label_height = 36
   }
   
@@ -1463,7 +1465,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   separator <- grid.rect(gp = gpar(fill = "black"), height = unit(2, "pt"), width = unit(1, "npc"))
   # arranged_plot = grid.arrange(p, separator, l, heights =c(4, 0.05, 0.8))
-  pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1.3)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
+  #pYear = grid.arrange(p, separator, p1, heights =c(4, 0.1, 1.3)) #make height of last graph larger when legend gets cut off  b/c of too many data years. default is 1
   
   pYear <- grid.arrange(
     p, separator, p1, watermark,
