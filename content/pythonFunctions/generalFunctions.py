@@ -214,13 +214,13 @@ def addGirafe(site):
 def embedMapViewer(srcLink):
     return f'<embed src="{srcLink}" style="width:900px; height: 800px;">'
     
-def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifier):
+def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifier, title=""):
     buttons = ""
     scripts = ""
     inputDir = "resources" 
     path = f'{inputDir}/{generalFormat}'
     path = path.replace("***", uniqueIDs[0])
-    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="600px" style="border:none;" scrolling="no" onload="resizePlotlyIframe(this)"></iframe></div>'
+    initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="600px" style="border:none;" scrolling="no" onload="resizePlotlyIframe(this)" title="{title}"></iframe></div>'
     
     for i in range(len(uniqueIDs)):
         path = f'{inputDir}/{generalFormat}'
