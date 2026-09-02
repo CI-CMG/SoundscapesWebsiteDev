@@ -86,6 +86,7 @@ display(HTML(gf.makeImage("sanctsound_amplitude_frequency.png", "amp&freqInfogra
 display(HTML(standardTextDict["SS how do we measure sound fc"]))
 ```
 
+::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
 
 ### Ocean Sound Conditions
 ```{python}
