@@ -85,6 +85,7 @@ display(HTML(standardTextDict["Soundscapes"]))
 display(HTML(gf.makeImage("sanctsound_amplitude_frequency.png", "amp&freqInfographic", 600, altText= "Infographic showing spectrogram cartoons ranging from low to high intensity of sound (amplitude measured in decibels) at different pitches (frequency measured in hertz).")))
 display(HTML(standardTextDict["SS how do we measure sound fc"]))
 ```
+:::
 
 ::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
 
