@@ -461,8 +461,11 @@ p1
 if (length(years_to_keep) > 3){
     height_int = 260
   
-} else if (length(years_to_keep) <= 3){
+} else if (length(years_to_keep) < 3){
     height_int = 200
+  
+}else if (length(years_to_keep) == 3){
+  height_int = 215
   
 }
 
@@ -571,7 +574,7 @@ combined_layout <- browsable(
     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 230px; width: 600px;", p1_interactive),
+    div(style = "height: 220px; width: 600px;", p1_interactive),
     
     # watermark
     div(
