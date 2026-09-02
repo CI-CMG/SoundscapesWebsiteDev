@@ -66,6 +66,7 @@ ribbonData <- mallData %>%
   filter(!is_na)          # drop the NA runs entirely, keep only real data segments
 
 
+
 #make it so hover appears along whole black dashed line
 vline_data <- bind_rows(FOIs, FOIsL) %>%
   mutate(id = row_number()) %>%
@@ -368,6 +369,10 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%
 
     # shapes = foi_shapes,
     annotations = foi_labels,
+    
+    hovermode = "closest",
+    hoverdistance = 4,   # try values between 1-5 to taste
+  
     
     # Increase the bottom margin (b) to ensure there is room for the caption text
     margin = list(b = 50, l = 50, r = 50, t = t)
