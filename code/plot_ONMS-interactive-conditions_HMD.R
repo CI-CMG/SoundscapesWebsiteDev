@@ -370,8 +370,9 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%
     # shapes = foi_shapes,
     annotations = foi_labels,
     
+    #make hover closer to lines
     hovermode = "closest",
-    hoverdistance = 4,   # try values between 1-5 to taste
+    hoverdistance = 4,
   
     
     # Increase the bottom margin (b) to ensure there is room for the caption text
@@ -911,6 +912,12 @@ pv2 = ggplot() +
                alpha = 0.2,
                inherit.aes = FALSE) +
   
+  geom_line(data = vline_data,
+            aes(x = x, y = y, group = id,
+                text = paste0(Label, "<br>Freq: ", round(FQstart, 1), " Hz")),
+            color = "black", linetype = "dashed", linewidth = 0.5,
+            inherit.aes = FALSE) +
+  
   scale_x_log10(labels = label_number(),limits = (c(10,fqupper)), guide = "axis_logticks") +  # Log scale for x-axis
   
   
@@ -1032,6 +1039,9 @@ pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 600, width = 600) %>
     # shapes = foi_shapes,
     annotations = foi_labels,
     
+    hovermode = "closest",
+    hoverdistance = 4,   
+    
     # Increase the bottom margin (b) to ensure there is room for the caption text
     margin = list(b = 50, l = 50, r = 50, t = 50)
     
@@ -1086,8 +1096,22 @@ p2
 
 
 
+#adjusting heigh of graph based on number of years displayed
+if (length(seas) > 3){
+  height_int2 = 260
+  
+} else if (length(seas) < 3){
+  height_int2 = 200
+  
+}else if (length(years_to_keep) == 3){
+  height_int2 = 220
+  
+}
+
+
+
 # change height = based on how many seasons are in this sites dataset
-p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 200, width = 600) %>% 
+p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = height_int2, width = 600) %>% 
   layout(
     autosize = TRUE,
     
@@ -1160,7 +1184,7 @@ combined_layout2 <- browsable(
     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 200px; width: 600px;", p2_interactive),
+    div(style = "height: 220px; width: 600px;", p2_interactive),
     
     # watermark
     div(
