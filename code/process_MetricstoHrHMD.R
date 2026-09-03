@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "hi03" 
+site  = "fgb01" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -345,15 +345,11 @@ if (length(inFiles) > 0) {
   } 
 }
 
-#had forgotten to remove 1-19 hz column in older data 
-# emma <- data_list[[180]]
-# gabbi <- data_list[[181]]
-# kaila <- data_list[[1]]
-# data_list[[1]] <- kaila
-# 
+
 #  f =1 
-# 
-# for (f in 1:72 ){
+
+#if some data has bins 0-19 but others doesnt
+# for (f in 1:545 ){
 # 
 #   #bin to hourly median values
 #   cDatah_day = data_list[[f]]
@@ -553,7 +549,8 @@ gps_chunks[[i]] <- matchGFS(data_chunks[[i]]
                             )
 }
 
-i = i +1
+
+# i = i +1
 # # Test just the first 2 rows to see the underlying error if matchGFS chunk gets stuck
 # test_chunk <- head(data_chunks[[1]], 2)
 # 
