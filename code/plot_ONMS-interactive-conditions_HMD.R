@@ -910,7 +910,7 @@ pv2 = ggplot() +
   
   geom_polygon(data = polygon_data,
                aes(x = x, y = y, group = id,  
-                   text = paste0("Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
+                   text = paste0(Label, "<br>Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
                fill = "gray",
                alpha = 0.2,
                inherit.aes = FALSE) +
@@ -997,15 +997,18 @@ pv2 <- pv2 +
   )  +
   theme(legend.position = "right",
         plot.caption = ggtext::element_markdown(hjust = 0, size = 12),
-        plot.title = ggtext::element_markdown(hjust = 0, size = 14),
+        plot.title = ggtext::element_markdown(hjust = 0, size = 12),
+        plot.subtitle = ggtext::element_markdown(hjust = 0, size = 12),
         axis.title.x = element_text(size = 12),           # X-axis label size
         axis.title.y = element_text(size = 12),           # Y-axis label size
         axis.text = element_text(size = 12),
         legend.text = element_text(size = 9),
         axis.ticks.length.x = unit(0.25, "cm"), 
         axis.ticks.x = element_line(color = "grey", linewidth = 0.3), 
+        axis.ticks.y = element_line(color = "grey", linewidth = 0.3), 
         axis.line.x = element_line(color = "grey", linewidth = 0.3)    
   ) 
+
 
 
 pv2
@@ -1127,7 +1130,7 @@ p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = height_int
     #   #, groupclick = "toggleitem"
     #   ),
     
-  )
+  )%>% config(modeBarButtonsToRemove = list('toImage'))
 
 p2_interactive
 
