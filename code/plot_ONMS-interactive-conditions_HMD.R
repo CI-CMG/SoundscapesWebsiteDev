@@ -382,7 +382,7 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%
     margin = list(b = 50, l = 50, r = 50, t = t)
     
   )%>%
-  plotly::config(modeBarButtonsToRemove = list("toImage"))
+  plotly::config(modeBarButtonsToRemove = list('toImage', 'select2d', 'lasso2d'))
 
 # Display the interactive plot
 pl_interactive
@@ -502,7 +502,7 @@ p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int
       font = list(size = 9.5)
     )
   )%>%
-  plotly::config(modeBarButtonsToRemove = list("toImage"))
+  plotly::config(modeBarButtonsToRemove = list('toImage', 'select2d', 'lasso2d'))
 
 # View the final result
 p1_interactive
@@ -1052,7 +1052,7 @@ pv2_interactive <- ggplotly(pv2, tooltip = "text", height = 600, width = 600) %>
     margin = list(b = 50, l = 50, r = 50, t = 50)
     
     
-  ) %>% config(modeBarButtonsToRemove = list('toImage'))
+  ) %>% config(modeBarButtonsToRemove = list('toImage', 'select2d', 'lasso2d'))
 
 # Display the interactive plot
 pv2_interactive
@@ -1130,7 +1130,7 @@ p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = height_int
     #   #, groupclick = "toggleitem"
     #   ),
     
-  )%>% config(modeBarButtonsToRemove = list('toImage'))
+  )%>% config(modeBarButtonsToRemove = list('toImage', 'select2d', 'lasso2d'))
 
 p2_interactive
 
