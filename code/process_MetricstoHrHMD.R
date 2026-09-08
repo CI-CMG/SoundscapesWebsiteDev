@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fgb01" 
+site  = "fk06" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -349,7 +349,7 @@ if (length(inFiles) > 0) {
 #  f =1 
 
 #if some data has bins 0-19 but others doesnt
-# for (f in 1:545 ){
+# for (f in 1:237 ){
 # 
 #   #bin to hourly median values
 #   cDatah_day = data_list[[f]]
