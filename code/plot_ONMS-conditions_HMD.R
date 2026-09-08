@@ -1066,12 +1066,19 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     
   } else if (site == "ci04"){
     
-    mALL <- mALL %>%
-      mutate(SoundLevel = ifelse(
-        (Frequency >= 2175 & Frequency <= 2567) & (Quantile == "50%"),
-        NA, 
-        SoundLevel
-      ))
+    # mALL <- mALL %>%
+    #   mutate(SoundLevel = ifelse(
+    #     (Frequency >= 2175 & Frequency <= 2567) & (Quantile == "50%"),
+    #     NA, 
+    #     SoundLevel
+    #   ))
+    # 
+    # mALL <- mALL %>%
+    #   mutate(SoundLevel = ifelse(
+    #     (Frequency >= 3115 & Frequency <= 4330) & (Quantile == "50%"),
+    #     NA, 
+    #     SoundLevel
+    #   ))
   } 
  
   
@@ -1367,12 +1374,12 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     
   } else if (site == "ci04"){
   
-  mALL <- mALL %>%
-    mutate(SoundLevel = ifelse(
-      (Frequency >= 2175 & Frequency <= 2567) & (Quantile == "50%"),
-      NA, 
-      SoundLevel
-    ))
+  # mALL <- mALL %>%
+  #   mutate(SoundLevel = ifelse(
+  #     (Frequency >= 2175 & Frequency <= 2567) & (Quantile == "50%"),
+  #     NA, 
+  #     SoundLevel
+  #   ))
   
   }
   
