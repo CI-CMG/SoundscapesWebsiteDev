@@ -34,7 +34,7 @@ library(PAMmisc)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fk06" 
+site  = "fk05" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -159,6 +159,7 @@ cat("CHECK: Read in data for: ",
   cat("Found ", length(inFilesON), "NCEI files for ", site, "(", as.character(min(dysON, na.rm = T)), " to ", as.character(max(dysON, na.rm = T)), 
       ") with", sum(duplicated(dysON)), "duplicated days\n")
   
+ 
 
 ## NMFS-GCP NRS sound files
 #PMEL_CINMS_201410_NRS05_20141018.nc
@@ -349,16 +350,16 @@ if (length(inFiles) > 0) {
 #  f =1 
 
 #if some data has bins 0-19 but others doesnt
-# for (f in 1:237 ){
-# 
-#   #bin to hourly median values
-#   cDatah_day = data_list[[f]]
-# 
-#   cDatah_day = cDatah_day[, -c(2:21)]
-# 
-#   data_list[[f]] = cDatah_day
-# 
-# }
+for (f in 1:638 ){
+
+  #bin to hourly median values
+  cDatah_day = data_list[[f]]
+
+  cDatah_day = cDatah_day[, -c(2:21)]
+
+  data_list[[f]] = cDatah_day
+
+}
 
 #combine list elements after processing each day seperately and saving into different list elements
 cDatah <- rbindlist(data_list)
