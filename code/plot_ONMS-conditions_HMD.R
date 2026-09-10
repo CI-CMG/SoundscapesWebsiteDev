@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("ci01")
+ONMSsites = c("as10")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -1530,8 +1530,30 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   }
   
   
+  if (site5 == "as10" && grepl("Humpback Whale", FOIst$Label[tt])) {
+    hmd_columns_foi = grep("HMD", colnames(gps))
+    gps_foi_season = gps %>% filter(mth %in% 7:12)
+    
+    foi_quantiles = apply(gps_foi_season[, hmd_columns_foi, drop = FALSE], 2, quantile,
+                          probs = c(0.99, 0.90, 0.75, 0.50, 0.25, 0.10, .01), na.rm = TRUE)
+    
+    FOIall = as.data.frame(foi_quantiles)
+    FOIall$Quantile = rownames(FOIall)
+    FOIall$Year = "all"
+    hmd_columns_foi2 = grep("HMD", colnames(FOIall))
+    mALL_foi = reshape2::melt(FOIall, id.vars = c("Quantile","Year"), measure.vars = hmd_columns_foi2)
+    mALL_foi$variable = as.numeric(as.character(gsub("HMD_", "", mALL_foi$variable)))
+    colnames(mALL_foi) = c("Quantile", "Year", "Frequency", "SoundLevel")
+    mALL_foi$FrequencyName = paste0("HMD_", mALL_foi$Frequency)
+  }
+  
+ 
+  
+  
   if ( nrow(FOIst) > 0 ) {
     for (tt in 1: nrow(FOIst) ){ # tt = 1       tt = 2
+      
+      mALL_thresh <- if (site5 == "as10" && grepl("Humpback Whale", FOIst$Label[tt])) mALL_foi else mALL
       
       #check to see if the FOI is broad band
       if (FOIst$FQstart [tt] == FOIst$FQend [tt] ){
@@ -1543,8 +1565,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         gpsFQ$closest_windMag = wspeeds[pmax(1, findInterval(gpsFQ$windMag, wspeeds)+1)]
         
         #Thresholds from all data percentiles
-        mALL$FrequencyName = paste0("HMD_", mALL$Frequency)
-        thresholds = mALL[mALL$FrequencyName == ftN,]
+        mALL_thresh$FrequencyName = paste0("HMD_", mALL_thresh$Frequency)
+        thresholds = mALL_thresh[mALL_thresh$FrequencyName == ftN,]
         threshold_min  = thresholds$SoundLevel[thresholds$Quantile == "1%"]
         threshold_mid  = thresholds$SoundLevel[thresholds$Quantile == "50%"]
         threshold_up   = thresholds$SoundLevel[thresholds$Quantile  == "75%"]
@@ -1579,8 +1601,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         
         # thresholds for typical-- BB 
         # calculate a BB measurement for TOL FQ- unlog, sum, re-log
-        mALL$FrequencyName = paste0("HMD_", mALL$Frequency)
-        thresholds = mALL[mALL$FrequencyName %in% ftN, ]
+        mALL_thresh$FrequencyName = paste0("HMD_", mALL_thresh$Frequency)
+        thresholds = mALL_thresh[mALL_thresh$FrequencyName %in% ftN, ]
         thresholds2 <- thresholds %>%
           group_by(Quantile) %>%
           summarise(
@@ -1633,11 +1655,27 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         dailyFQ_complete$yr[dailyFQ_complete$mth == 10] = dailyFQ_complete$yr[dailyFQ_complete$mth == 10] + seasonShift
       }
       
+      if (site5 == "as10" && grepl("Humpback Whale", FOIst$Label[tt])) {
+        dailyFQ_complete <- dailyFQ_complete %>% filter(mth %in% 7:12)
+      }
+      
       
       # make labels for graphics (changed below for HI)
-      monthly_sequence = seq.Date(as.Date("2021-01-01"), as.Date("2021-12-01"), by = "month")
-      month_names_seq  = format(monthly_sequence, "%b")  # Extracts full month names
-      days_of_year_for_months = yday(monthly_sequence)
+      # monthly_sequence = seq.Date(as.Date("2021-01-01"), as.Date("2021-12-01"), by = "month")
+      # month_names_seq  = format(monthly_sequence, "%b")  # Extracts full month names
+      # days_of_year_for_months = yday(monthly_sequence)
+      
+      if (site5 == "as10" && grepl("Humpback Whale", FOIst$Label[tt])) {
+        monthly_sequence = seq.Date(as.Date("2021-07-01"), as.Date("2021-12-01"), by = "month")
+        month_names_seq  = format(monthly_sequence, "%b")
+        days_of_year_for_months = yday(monthly_sequence)
+        x_limits = c(182, 365)
+      } else {
+        monthly_sequence = seq.Date(as.Date("2021-01-01"), as.Date("2021-12-01"), by = "month")
+        month_names_seq  = format(monthly_sequence, "%b")
+        days_of_year_for_months = yday(monthly_sequence)
+        x_limits = c(0, 365)
+      }
       
       ### annual status
       gpsFQ$yr = year(gpsFQ$UTC)
@@ -1653,6 +1691,10 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         gpsFQ$yr[gpsFQ$mth == 10] = gpsFQ$yr[gpsFQ$mth == 10] + seasonShift
       }
       
+      if (site5 == "as10" && grepl("Humpback Whale", FOIst$Label[tt])) {
+        gpsFQ <- gpsFQ %>% filter(mth %in% 7:12)
+      }
+     
       
       yrFQ = gpsFQ %>% group_by(yr) %>%
         summarise(
@@ -1822,6 +1864,9 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         dailyFQ$yr[dailyFQ$mth == 10] = dailyFQ$yr[dailyFQ$mth == 10] + seasonShift
       }
       
+      if (site5 == "as10" && grepl("Humpback Whale", FOIst$Label[tt])) {
+        dailyFQ <- dailyFQ %>% filter(mth %in% 7:12)
+      }
       
       
       # without NA on pies and as proportions
@@ -2025,7 +2070,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
           
           geom_line() +
           facet_wrap(~yr, ncol = 1)+
-          scale_x_continuous(limits = c(0,365), breaks = days_of_year_for_months, labels = month_names_seq) +
+          scale_x_continuous(limits = x_limits, breaks = days_of_year_for_months, labels = month_names_seq) +
           labs(
             title    = paste0("Are sound levels at ", toupper(site)," typical for ", ft, ",\nan indicator of ", FOIst$Label[tt], "?" ) , 
             #subtitle =  paste0(toupper(site), " (",siteInfo$`Oceanographic category`, ")"), #toupper(site),
