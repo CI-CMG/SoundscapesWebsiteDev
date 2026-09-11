@@ -350,7 +350,7 @@ if (length(inFiles) > 0) {
 #  f =1 
 
 #if some data has bins 0-19 but others doesnt
-for (f in 1:638 ){
+for (f in 1:590 ){
 
   #bin to hourly median values
   cDatah_day = data_list[[f]]

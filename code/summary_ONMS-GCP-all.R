@@ -32,7 +32,8 @@ projectNSS  = "sanctsound"# set this to deal with different metadata formats
 projectNNRS = "nrs"# set this to deal with different metadata formats
 
 #outDir =   "F:/CODE/GitHub/SoundscapesWebsite/"
-outDir =   "C:/Users/embe5980/SoundscapesWebsite/"
+outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
+#outDir =   "C:/Users/embe5980/SoundscapesWebsite/"
 outDirR =  paste0(outDir, "content/resources/") #save graphics
 outDirP =  paste0(outDir, "products/onms/")     #products
 
