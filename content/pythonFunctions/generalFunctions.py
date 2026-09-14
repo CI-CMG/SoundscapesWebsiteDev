@@ -222,6 +222,18 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     path = path.replace("***", uniqueIDs[0])
     initialIframe = f'<div style="flex-grow: 1;"><iframe id="{identifier}" src="{path}" width="600px" style="border:none;" scrolling="no" onload="resizePlotlyIframe(this)" title="{title}"></iframe></div>'
     
+    # Add info button to go above toggling buttons
+    plotlyExplanation="Example of plotly explanation text."
+    buttons += f'''
+        <button style="background-color: #FFFFFF;" onclick="document.getElementById(&#39;infoModal&#39;).showModal()"></button>
+            <dialog id="infoModal">
+                <p>{plotlyExplanation}</p>
+                <button style="padding: 10px; color: black; margin: 4px 0; background-color: white; width: 100px; display: block;" onclick="document.getElementById(&#39;infoModal&#39;).close()">
+                    Close
+                </button>
+            </dialog>
+    '''
+    
     for i in range(len(uniqueIDs)):
         path = f'{inputDir}/{generalFormat}'
         path = path.replace("***", uniqueIDs[i])
