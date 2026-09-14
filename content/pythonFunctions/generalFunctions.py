@@ -225,7 +225,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     # Add info button to go above toggling buttons
     plotlyExplanation="Example of plotly explanation text."
     buttons += f'''
-        <button style="background-color: #FFFFFF;" onclick="document.getElementById(&#39;infoModal&#39;).showModal()"></button>
+        <button style="background-color: #FFFFFF;" onclick="document.getElementById(&#39;infoModal&#39;).showModal()">Info</button>
             <dialog id="infoModal">
                 <p>{plotlyExplanation}</p>
                 <button style="padding: 10px; color: black; margin: 4px 0; background-color: white; width: 100px; display: block;" onclick="document.getElementById(&#39;infoModal&#39;).close()">
