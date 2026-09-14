@@ -39,7 +39,7 @@ outDirP =  paste0(outDir, "products/onms/")     #products
 
 # CONTEXT ####
 # assign region abbreviations 
-wc = c("oc","ci","mb","cb","fi") #west coast sanctuaries
+wc = c("oc","ci","mb","cb","fi", "ch") #west coast sanctuaries
 ec = c("sb","gr","fk","fg") #east coast sanctuaries
 pi = c("hi","pm","as") #greater pacific
 gl = c("lo") # great lakes
@@ -323,7 +323,7 @@ pTb = ggplot(outputONMS, aes(y = toupper(Site), x = Start_Date, xend = End_Date,
   scale_fill_manual(values = project_colors) +  # Use specific colors for instruments
   labs(x = "", y = "", title = "",
        caption = paste0("Audio data archived at NCEI as of ", format(Sys.Date(), "%B %d, %Y"))) +
-  facet_wrap(~Region,scales = "free_y") +
+  facet_wrap(~Region,scales = "free_y", nrow = 1) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, size = 12),
         axis.text.y = element_text(angle = 0, size = 12),
@@ -335,7 +335,7 @@ pTb = ggplot(outputONMS, aes(y = toupper(Site), x = Start_Date, xend = End_Date,
         #panel.border = element_rect(color = "gray", fill = NA, size = .1),
         panel.spacing = unit(2, "cm") )
 pTb
-ggsave(filename = paste0(outDirR, "/gantt_ONMS-SS-NRS.jpg"), plot = pTb, width = 8, height = 6, dpi = 300)
+ggsave(filename = paste0(outDirR, "/gantt_ONMS-SS-NRS.jpg"), plot = pTb, width = 15, height = 6, dpi = 300)
 
 # MAP DATA -- not working need to update data frame names ####
 #reformat for per site- total recordings 
