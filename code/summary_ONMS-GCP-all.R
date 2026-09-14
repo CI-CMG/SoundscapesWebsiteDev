@@ -26,10 +26,12 @@ DC = Sys.Date()
 typ = "audio"
 gcpDirONMS  = "gs://noaa-passive-bioacoustic/onms/audio" #ONMS
 gcpDirSS    = "gs://noaa-passive-bioacoustic/sanctsound/audio" #SANCTSOUND
-gcpDirNRS   = "gs://noaa-passive-bioacoustic/nrs/audio" #SANCTSOUND
+gcpDirNRS   = "gs://noaa-passive-bioacoustic/nrs/audio" #NRS
+gcpDirMBARCSOCAL  = "gs://noaa-passive-bioacoustic/mbarc_socal/audio" #MBARC_SOCAL
 projectNONMS = "onms" # set this to deal with different metadata formats
 projectNSS  = "sanctsound"# set this to deal with different metadata formats
 projectNNRS = "nrs"# set this to deal with different metadata formats
+projectNMBARCSOCAL = "mbarc_socal"# set this to deal with different metadata formats
 
 #outDir =   "F:/CODE/GitHub/SoundscapesWebsite/"
 outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
@@ -69,7 +71,12 @@ command = "gsutil"
 args =  c("ls", gcpDirNRS)
 subdirsNRS = system2(command, args, stdout = TRUE, stderr = TRUE)  
 
-subdirsALL = c(subdirsONMS, subdirsSS, subdirsNRS) 
+command = "gsutil"
+args =  c("ls", gcpDirMBARCSOCAL)
+subdirsMBARCSOCAL = system2(command, args, stdout = TRUE, stderr = TRUE)  
+subdirsMBARCSOCAL = subdirsMBARCSOCAL[1]
+
+subdirsALL = c(subdirsONMS, subdirsSS, subdirsNRS, subdirsMBARCSOCAL) 
 dirNames   = sapply(strsplit(basename( subdirsALL ), "/"), `[`, 1)
 cat("Processing... ", projectNONMS, length(dirNames), "directories" )
 
@@ -92,8 +99,8 @@ if ( length(tmp)  > 0 ) {
 # GET INFORMATION FROM METADATA FILES ####
 # loads one file at a time from GCP, no saving to local machine 
 
-## ONMS + SS ####
-subdirsALL = c(subdirsONMS, subdirsSS) 
+## ONMS + SS + MBARC_SOCAL ####
+subdirsALL = c(subdirsONMS, subdirsSS, subdirsMBARCSOCAL) 
 output = NULL
 dirNames   = sapply(strsplit(basename( subdirsALL ), "/"), `[`, 1)
 
@@ -167,6 +174,42 @@ for (s in 1:length(subdirsALL) ) { # s = 1
                                lat, lon) )
       
     }
+  } else if ( length(grep(projectNMBARCSOCAL, subdirsALL[s]) ) > 0 ) {  # check for format - sanctsound
+    
+    for (jf in 1:length( json_files) ) {
+      
+      url = paste0("https://storage.googleapis.com/", gsub ("gs://", '', paste(json_files[jf], collapse = "") ) )
+      # h = curl(url, "r")
+      # json_content = readLines(url)
+      # close(h)
+      # tmp = fromJSON(paste(url, collapse = ""))
+      # 
+      tmp = fromJSON(url)
+      
+      name  = tmp$DEPLOYMENT_NAME  
+      instr = tmp$INSTRUMENT_NAME
+      if ( length(instr ) == 0 ){
+        instr = tmp$INSTRUMENT_TYPE
+        start = as.Date( gsub("T"," ", tmp$DEPLOYMENT$AUDIO_START), format = "%Y-%m-%d")
+        end   = as.Date( gsub("T"," ", tmp$DEPLOYMENT$AUDIO_END), format = "%Y-%m-%d")
+        lat   = tmp$DEPLOYMENT$DEPLOY_LAT
+        lon   = tmp$DEPLOYMENT$DEPLOY_LON
+        
+      } else {
+        range = tmp$DATA_QUALITY$'1'$`Date Range`
+        start = as.Date( strsplit(range, " to ")[[1]],format = "%Y-%m-%d" )[1]
+        end   = as.Date( strsplit(range, " to ")[[1]],format = "%Y-%m-%d" )[2] 
+        lon   = tmp$LOCATION$lon
+        lat   = tmp$LOCATION$lat
+        
+      }
+      
+      #save to output data - each deployment
+      output = rbind(output, c(subdirsALL[s], jf, name, instr, 
+                               as.character(start), as.character(end), 
+                               lat, lon) )
+      
+    }
   }
 }
 ouputTest = output # output = ouputTest
@@ -184,6 +227,7 @@ output$Duration = difftime( output$End_Date, output$Start_Date,"days")
 output$Project1 = sapply(strsplit(output$Path, "/"), `[`, 4)
 output$Project [is.na(output$Region)]  = "SanctSound" 
 output$Project [!is.na(output$Region)] = "ONMS-sound" 
+output$Project [output$Site == "cinms_b"]  = "MBARC" 
 names(output )
 
 ## NRS ####
@@ -297,6 +341,11 @@ write.csv(outputONMS, file = paste0(outDirP, "/data_gantt_ONMS-SS-NRS__gantt_", 
 
 outputONMS$Region[outputONMS$Region == "East Coast"] <- "Eastern"
 
+
+#remove Caribbean region graph because we arent showing it on the website yet
+outputONMS <- outputONMS %>% filter(Region != "Caribbean")
+
+
 # GANTT CHART  ####
 ## COLOR ####
 uColors = unique(outputONMS$Region) 
@@ -311,10 +360,17 @@ region_colors <- c(
 uProject = unique(outputONMS$Project1) 
 outputONMS$Project1[outputONMS$Project1 == "onms"] = "ONMS-Sound"
 outputONMS$Project1[outputONMS$Project1 == "sanctsound"] = "SanctSound"
+outputONMS$Project1[outputONMS$Project1 == "mbarc_socal"] = "MBARC"
 project_colors <- c(
   "SanctSound" = "#C6E6F0",  
   "ONMS-Sound" = "#53B0D7",
+  "MBARC" = "#2A79B6",
   "NRS" = "#004295") 
+
+outputONMS$Project1 <- factor(outputONMS$Project1, levels = c("NRS",
+                                                              "ONMS-Sound",
+                                                              "SanctSound",  
+                                                              "MBARC"))
 
 ## geom_tile option ####
 pTb = ggplot(outputONMS, aes(y = toupper(Site), x = Start_Date, xend = End_Date, fill = Project1 ) ) +
