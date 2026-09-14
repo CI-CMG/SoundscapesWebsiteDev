@@ -266,7 +266,7 @@ The last set of icons toggle hover feature settings. The default hover mode is '
 """
     
     buttons += f'''
-        <button style="padding: 10px; color: black; marginTop: 10px; marginLeft: auto; marginRight: auto; background-color: white; width: 80px; height:  display: block;" onclick="document.getElementById(&#39;infoModal&#39;).showModal()">Info</button>
+        <button style="padding: 10px; color: black; margin-top: 20px; margin-left: auto; margin-right: auto; background-color: white; width: 80px; height:  display: block;" onclick="document.getElementById(&#39;infoModal&#39;).showModal()">Info</button>
             <dialog id="infoModal">
                 <p>{plotlyExplanation}</p>
                 <button style="padding: 10px; color: black; margin: 4px 0; background-color: white; width: 100px; display: block;" onclick="document.getElementById(&#39;infoModal&#39;).close()">
