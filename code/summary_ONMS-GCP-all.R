@@ -342,9 +342,12 @@ write.csv(outputONMS, file = paste0(outDirP, "/data_gantt_ONMS-SS-NRS__gantt_", 
 outputONMS$Region[outputONMS$Region == "East Coast"] <- "Eastern"
 
 
-#remove Caribbean region graph because we arent showing it on the website yet
+#remove Caribbean region from graph because we arent showing it on the website yet
 outputONMS <- outputONMS %>% filter(Region != "Caribbean")
 
+#remove NRS01 and 07 from graph because we arent showing it on the website yet
+outputONMS <- outputONMS %>% filter(Site != "nrs01" )
+outputONMS <- outputONMS %>% filter(Site != "nrs07" )
 
 # GANTT CHART  ####
 ## COLOR ####
@@ -364,33 +367,106 @@ outputONMS$Project1[outputONMS$Project1 == "mbarc_socal"] = "MBARC"
 project_colors <- c(
   "SanctSound" = "#C6E6F0",  
   "ONMS-Sound" = "#53B0D7",
-  "MBARC" = "#2A79B6",
+  "MBARC" = "#003166" ,
   "NRS" = "#004295") 
 
-outputONMS$Project1 <- factor(outputONMS$Project1, levels = c("NRS",
-                                                              "ONMS-Sound",
-                                                              "SanctSound",  
-                                                              "MBARC"))
+
 
 ## geom_tile option ####
-pTb = ggplot(outputONMS, aes(y = toupper(Site), x = Start_Date, xend = End_Date, fill = Project1 ) ) +
-  geom_tile(aes(x = Start_Date, width = as.numeric(End_Date - Start_Date) ) , 
-            color = "gray", height = 0.6) +  # Fill color by Instrument and outline in black
-  scale_fill_manual(values = project_colors) +  # Use specific colors for instruments
+# pTb = ggplot(outputONMS, aes(y = toupper(Site), x = Start_Date, xend = End_Date, fill = Project1 ) ) +
+#   geom_tile(aes(x = Start_Date, width = as.numeric(End_Date - Start_Date) ) , 
+#             color = "gray", height = 0.6) +  # Fill color by Instrument and outline in black
+#   scale_fill_manual(values = project_colors) +  # Use specific colors for instruments
+#   labs(x = "", y = "", title = "",
+#        caption = paste0("Audio data archived at NCEI as of ", format(Sys.Date(), "%B %d, %Y"))) +
+#   facet_wrap(~Region,scales = "free_y", nrow = 1) +
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 30, hjust = 1, size = 12),
+#         axis.text.y = element_text(angle = 0, size = 12),
+#         legend.position = "bottom", 
+#         legend.text = element_text(size = 14),
+#         legend.title = element_blank(),
+#         strip.text = element_text(size = 14),
+#         plot.caption = element_text(size = 14, hjust = 0.5),
+#         #panel.border = element_rect(color = "gray", fill = NA, size = .1),
+#         panel.spacing = unit(2, "cm") )
+# pTb
+
+
+# making fake empty sites so that regions with less sites than others dont have their sites looking so tall
+site_counts <- outputONMS %>%
+  distinct(Region, Site) %>%
+  count(Region, name = "n_sites")
+
+max_sites <- max(site_counts$n_sites)
+
+
+pad_df <- site_counts %>%
+  filter(n_sites < max_sites) %>%
+  rowwise() %>%
+  reframe({
+    total_pad <- max_sites - n_sites
+    bottom_n  <- floor(total_pad / 2)
+    top_n     <- ceiling(total_pad / 2)
+    tibble(
+      Region  = Region,
+      Site    = c(
+        if (bottom_n > 0) paste0("pad_", Region, "_b", seq_len(bottom_n)) else character(0),
+        if (top_n    > 0) paste0("pad_", Region, "_t", seq_len(top_n))    else character(0)
+      ),
+      pad_pos = c(rep("bottom", bottom_n), rep("top", top_n))
+    )
+  }) %>%
+  mutate(Start_Date = as.Date(NA), End_Date = as.Date(NA), Project1 = NA_character_)
+
+outputONMS_padded <- bind_rows(
+  outputONMS %>% mutate(pad_pos = NA_character_),
+  pad_df
+)
+
+level_order <- outputONMS_padded %>%
+  distinct(Region, Site, pad_pos) %>%
+  group_by(Region) %>%
+  group_modify(~ {
+    bottom <- .x %>% filter(pad_pos == "bottom") %>% arrange(Site)
+    sites  <- .x %>% filter(is.na(pad_pos))      %>% arrange(desc(Site))  # <- reversed
+    top    <- .x %>% filter(pad_pos == "top")    %>% arrange(Site)
+    bind_rows(bottom, sites, top)
+  }) %>%
+  pull(Site)
+
+outputONMS_padded <- outputONMS_padded %>%
+  mutate(SiteF = factor(toupper(Site), levels = toupper(unique(level_order))))
+
+outputONMS_padded$Project1 <- factor(outputONMS_padded$Project1, levels = c("SanctSound",
+                                                              "ONMS-Sound",
+                                                              
+                                                              "NRS",
+                                                              "MBARC"))
+
+
+
+pTb = ggplot(outputONMS_padded, aes(y = SiteF, x = Start_Date, xend = End_Date, fill = Project1)) +
+  geom_tile(aes(x = Start_Date, width = as.numeric(End_Date - Start_Date)),
+            color = "gray", height = 0.6, na.rm = TRUE) +
+  scale_fill_manual(values = project_colors, na.translate = FALSE) +
+  scale_y_discrete(labels = function(x) ifelse(grepl("^PAD_", x), "", x)) +
   labs(x = "", y = "", title = "",
        caption = paste0("Audio data archived at NCEI as of ", format(Sys.Date(), "%B %d, %Y"))) +
-  facet_wrap(~Region,scales = "free_y", nrow = 1) +
+  facet_wrap(~Region, scales = "free_y", nrow = 1) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, size = 12),
         axis.text.y = element_text(angle = 0, size = 12),
-        legend.position = "bottom", 
+        legend.position = "bottom",
         legend.text = element_text(size = 14),
         legend.title = element_blank(),
         strip.text = element_text(size = 14),
         plot.caption = element_text(size = 14, hjust = 0.5),
-        #panel.border = element_rect(color = "gray", fill = NA, size = .1),
-        panel.spacing = unit(2, "cm") )
+        panel.spacing = unit(2, "cm"))
 pTb
+
+
+
 ggsave(filename = paste0(outDirR, "/gantt_ONMS-SS-NRS.jpg"), plot = pTb, width = 15, height = 6, dpi = 300)
 
 # MAP DATA -- not working need to update data frame names ####

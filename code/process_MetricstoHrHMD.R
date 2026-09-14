@@ -349,8 +349,8 @@ if (length(inFiles) > 0) {
 
 #  f =1 
 
-#if some data has bins 0-19 but others doesnt
-for (f in 1:590 ){
+#if some data (manta) has bins 0-19 but others (pypam) doesnt
+for (f in 1:532 ){
 
   #bin to hourly median values
   cDatah_day = data_list[[f]]
