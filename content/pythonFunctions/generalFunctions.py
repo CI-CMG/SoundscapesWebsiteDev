@@ -254,15 +254,21 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     
     # Add info button to go below toggling buttons
     plotlyExplanation=f"""
-    The *new* interactive sound level graph offers many new useful features to explore annual and seasonal soundscape conditions. Hover over the grey shaded boxes and black vertical dash lines to see detailed information about the frequencies of interest, and hover over the colorful solid or black dotted median lines for details on the sound levels at each frequency bin by year, season, or overall median. Hover over the monitoring effort graph below to see the number of recording days for each month or season, as well as the threshold for the minimum number of days required for a month to be included in the annual plots. 
-    <br>
-    Select or deselect the visibility of a year or season's sound levels, as well as the effort bars, by clicking on either plot’s legend. Single click on the legend's year or season that you would like to deselect, or 'turn off', or double click on a legend's year or season to view only that line, and ‘turn off’ all others. Deselect all seasonal and yearly median data lines to view only the overall median line, and then double click any year or season’s legend text to make all lines visible again.
-    <br>
-    Icons at the top right of the sound level and effort figures let you change your mouse performance. Default is set to ‘Zoom’ <img src='{inputDir}/zoom.png'></img>, which lets you zoom into the data by drawing a box over the graph. You can also change to 'Pan' <img src='{inputDir}/pan.png'></img>, which allows you to grab and drag the graph. 
-    <br>
-    The next set of icons let you ‘Zoom in’ <img src='{inputDir}/zoomIn.png'></img>, ‘Zoom out’ <img src='{inputDir}/zoomOut.png'></img>, ‘Autoscale’ <img src='{inputDir}/autoscale.png'></img>, and ‘Reset axes’ <img src='{inputDir}/resetAxes.png'></img>.
-    <br>
-    The last set of icons toggle hover feature settings. The default hover mode is 'Show closest data on hover' <img src='{inputDir}/showClosestDataOnHover.png'></img>, which only shows one hover feature at a time. To see more than one feature at a time, select the 'Compare data on hover' <img src='{inputDir}/compareDataOnHover.png'></img> icon. 
+        The <b>new</b> interactive sound level graph offers many new useful features to explore annual and seasonal soundscape conditions. Hover over the grey shaded boxes and black vertical dash lines to see detailed information about the frequencies of interest, and hover over the colorful solid or black dotted median lines for details on the sound levels at each frequency bin by year, season, or overall median. Hover over the monitoring effort graph below to see the number of recording days for each month or season, as well as the threshold for the minimum number of days required for a month to be included in the annual plots. <br><br>
+
+        Select or deselect the visibility of a year or season's sound levels, as well as the effort bars, by clicking on either plot’s legend. Single click on the legend's year or season that you would like to deselect, or 'turn off', or double click on a legend's year or season to view only that line, and ‘turn off’ all others. Deselect all seasonal and yearly median data lines to view only the overall median line, and then double click any year or season’s legend text to make all lines visible again. <br><br>
+        
+        The following icons, which you can find at the top right of the sound level and effort figures, let you change your mouse performance, axes display, and hover feature settings. <br><br>
+        
+        <img src='{inputDir}/zoom.png'></img>, ‘Zoom’ is the default mouse selection, which lets you zoom into the data by drawing a box over the graph. <br><br>
+        <img src='{inputDir}/pan.png'></img>, 'Pan' is the other mouse performance option, which allows you to grab and drag the graph. <br><br>
+        <img src='{inputDir}/zoomIn.png'></img>, ‘Zoom in’ zooms you into the data on the graph. <br><br>
+        <img src='{inputDir}/zoomOut.png'></img>, ‘Zoom out’ zooms you out. <br><br>
+        <img src='{inputDir}/autoscale.png'></img>, ‘Autoscale’ scales the graph axes to what the interactive graph thinks is best. <br><br>
+        <img src='{inputDir}/resetAxes.png'></img>, ‘Reset axes’ sets the axes back to their original minimum and maximum values.<br><br>
+        <img src='{inputDir}/showClosestDataOnHover.png'></img>, 'Show closest data on hover' is the default hover mode, which only shows one hover feature at a time. <br><br>
+        <img src='{inputDir}/compareDataOnHover.png'></img>, 'Compare data on hover' shows more than one feature at a time. 
+
     """
     
     info_button = f'''
