@@ -266,7 +266,7 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
     """
     
     info_button = f'''
-        <button style="padding: 10px; color: black; margin: 10px; background-color: white; width: 250px; height:  display: block;" onclick="document.getElementById(&#39;infoModal&#39;).showModal()">How to interact with this graphic</button>
+        <button style="padding: 10px; color: black; margin: 10px; background-color: white; width: 275px; height:  display: block;" onclick="document.getElementById(&#39;infoModal&#39;).showModal()">How to interact with this graphic</button>
             <dialog id="infoModal">
                 <p>{plotlyExplanation}</p>
                 <button style="padding: 10px; color: black; margin: 4px 0; background-color: white; width: 100px; display: block;" onclick="document.getElementById(&#39;infoModal&#39;).close()">
