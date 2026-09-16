@@ -260,14 +260,14 @@ def makePlotlyButtonsWithLabels(uniqueIDs, buttonLabels, generalFormat, identifi
         
         The following icons, which you can find at the top right of the sound level and effort figures, let you change your mouse performance, axes display, and hover feature settings. <br><br>
         
-        <img src='{inputDir}/zoom.png'></img>, ‘Zoom’ is the default mouse selection, which lets you zoom into the data by drawing a box over the graph. <br><br>
-        <img src='{inputDir}/pan.png'></img>, 'Pan' is the other mouse performance option, which allows you to grab and drag the graph. <br><br>
-        <img src='{inputDir}/zoomIn.png'></img>, ‘Zoom in’ zooms you into the data on the graph. <br><br>
-        <img src='{inputDir}/zoomOut.png'></img>, ‘Zoom out’ zooms you out. <br><br>
-        <img src='{inputDir}/autoscale.png'></img>, ‘Autoscale’ scales the graph axes to what the interactive graph thinks is best. <br><br>
-        <img src='{inputDir}/resetAxes.png'></img>, ‘Reset axes’ sets the axes back to their original minimum and maximum values.<br><br>
-        <img src='{inputDir}/showClosestDataOnHover.png'></img>, 'Show closest data on hover' is the default hover mode, which only shows one hover feature at a time. <br><br>
-        <img src='{inputDir}/compareDataOnHover.png'></img>, 'Compare data on hover' shows more than one feature at a time. 
+        <img src='{inputDir}/zoom.png'></img>, ‘Zoom’ is the default mouse selection, which lets you zoom into the data by drawing a box over the graph. <br>
+        <img src='{inputDir}/pan.png'></img>, 'Pan' is the other mouse performance option, which allows you to grab and drag the graph. <br>
+        <img src='{inputDir}/zoomIn.png'></img>, ‘Zoom in’ zooms you into the data on the graph. <br>
+        <img src='{inputDir}/zoomOut.png'></img>, ‘Zoom out’ zooms you out. <br>
+        <img src='{inputDir}/autoscale.png'></img>, ‘Autoscale’ scales the graph axes to what the interactive graph thinks is best. <br>
+        <img src='{inputDir}/resetAxes.png'></img>, ‘Reset axes’ sets the axes back to their original minimum and maximum values.<br>
+        <img src='{inputDir}/showClosestDataOnHover.png'></img>, 'Show closest data on hover' is the default hover mode, which only shows one hover feature at a time. <br>
+        <img src='{inputDir}/compareDataOnHover.png'></img>, 'Compare data on hover' shows more than one feature at a time.
 
     """
     
