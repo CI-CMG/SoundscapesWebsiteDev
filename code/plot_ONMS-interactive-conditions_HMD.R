@@ -1108,7 +1108,7 @@ if (length(seas) > 3){
 } else if (length(seas) < 3){
   height_int2 = 200
   
-}else if (length(years_to_keep) == 3){
+}else if (length(seas) == 3){
   height_int2 = 220
   
 }
