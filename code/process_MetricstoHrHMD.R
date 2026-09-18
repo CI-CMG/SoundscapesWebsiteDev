@@ -550,12 +550,13 @@ gps_chunks[[i]] <- matchGFS(data_chunks[[i]]
                         #    , opendap=TRUE
                             )
 }
+# i = i +1
 
 # what PAMscapes expects internally
 # PAMscapes:::matchGFS  # or find the source on GitHub and search for "360" or "lon"
 # test <- matchGFS(data_chunks[[1]][1, ])
 
-# i = i +1
+
 # # Test just the first 2 rows to see the underlying error if matchGFS chunk gets stuck
 # test_chunk <- head(data_chunks[[1]], 2)
 # 
