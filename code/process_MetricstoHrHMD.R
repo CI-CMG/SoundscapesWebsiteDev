@@ -34,7 +34,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "wea_hua" 
+site  = "ci04" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -51,8 +51,8 @@ site = tolower(site)
 #dirGCP = paste0( "/Users/quca3108/ONMS/", site,"/") # NCEI GCP min HMD netCDFs
 #dirGCP = paste0( "C:/Users/emma.beretta/Documents/ONMS/", site,"/") # for NOAA computer
 #dirGCP = paste0( "C:/Users/embe5980/ONMS/", site,"/") # for CIRES computer
-#dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
-dirGCP = paste0( "E:/mbarc_cencal/products/sound_level_metrics/", site,"/")
+dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP workstation
+#dirGCP = paste0( "E:/mbarc_cencal/products/sound_level_metrics/", site,"/")
 #dirGCP = paste0( "E:/mbarc_socal/products/sound_level_metrics/mbarc_socal/", site,"/") # for GCP workstation - SITE SIOB 
 #dirGCP = paste0( "W:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/",gcpF,"/") #NRS GCP HMD netCDFs
 #dirGCP = paste0( "V:/DETECTOR_OUTPUT/PYTHON_SOUNDSCAPE_PYPAM/Raw/",gcpF,"/") #NEFSC GCP HMD netCDFs
@@ -550,7 +550,7 @@ gps_chunks[[i]] <- matchGFS(data_chunks[[i]]
                         #    , opendap=TRUE
                             )
 }
-# i = i +1
+ # i = i +1
 
 # what PAMscapes expects internally
 # PAMscapes:::matchGFS  # or find the source on GitHub and search for "360" or "lon"
@@ -651,7 +651,7 @@ if ( length(pFile) > 0 ){   #append old (processedData) and save out all process
   # setdiff(colnames(gps_clean), colnames(processedData))
   #print(names(processedData))
   
-  #processedData <- processedData[, -c(2:21)]
+  processedData <- processedData[, -c(2:21)]
   
   col_order = colnames(processedData)
   gps_clean1 = gps_clean[, col_order]
