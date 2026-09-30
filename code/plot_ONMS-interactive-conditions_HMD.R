@@ -478,7 +478,7 @@ p1
 
 #adjusting heigh of graph based on number of years displayed
 if (length(years_to_keep) > 3){
-    height_int = 260
+    height_int = 240
   
 } else if (length(years_to_keep) < 3){
     height_int = 200
@@ -597,7 +597,7 @@ combined_layout <- browsable(
     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 260px; width: 600px;", p1_interactive),
+    div(style = "height: 215px; width: 600px;", p1_interactive),
     
     # watermark
     div(
@@ -1208,7 +1208,7 @@ combined_layout2 <- browsable(
     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 260px; width: 600px;", p2_interactive),
+    div(style = "height: 215px; width: 600px;", p2_interactive),
     
     # watermark
     div(
