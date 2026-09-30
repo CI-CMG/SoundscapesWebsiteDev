@@ -169,7 +169,7 @@ display(HTML(standardTextDict["CH diel fish fc"]))
 #| echo: false
 #display(HTML(standardTextDict["Fish Chorus"]))
 
-display(HTML(gf.makeImage("NRS13_daily_humpback_song.pdf", "humpback nrs13", altText= "")))
+display(HTML(gf.makeImage("NRS13_daily_humpback_song.png", "humpback nrs13", altText= "")))
 
 # display(HTML(gf.makeImage("CH01_Box.png", "Seasonal Fish Choruses", altText= "Boxplots of presence of boccacio rockfish and plainfin midshipman chorusing by week in the Chumash Heritage National Marine Sanctuary, from June 2022 to November 2023. Fish vocalize here seasonally, between July and October.")))
 # display(HTML(standardTextDict["fish boxplot fc"]))
