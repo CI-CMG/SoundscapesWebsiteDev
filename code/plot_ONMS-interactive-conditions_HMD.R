@@ -68,6 +68,8 @@ ribbonData <- mallData %>%
 
 
 #make it so hover appears along whole black dashed line
+
+if (nrow(FOIs) > 0 || nrow(FOIsL) > 0){
 vline_data <- bind_rows(FOIs, FOIsL) %>%
   mutate(id = row_number()) %>%
   rowwise() %>%
@@ -78,6 +80,16 @@ vline_data <- bind_rows(FOIs, FOIsL) %>%
   ungroup() %>%
   select(id, Label, FQstart, pts) %>%
   unnest(pts)
+} else{
+  #vline_data = data.frame()
+  
+  vline_data <- tibble(
+    id = integer(),
+    Label = character(),
+    x = numeric(),   # change to as.Date(character()) or as.POSIXct(character()) if FQstart is a date/time
+    y = numeric()
+  )
+}
 
 # create annual graph
 
@@ -96,13 +108,17 @@ pl = ggplot() +
                    text = paste0(Label, "<br>Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
                fill = "gray",
                alpha = 0.2,
-               inherit.aes = FALSE) +
-  
-  geom_line(data = vline_data,
+               inherit.aes = FALSE) 
+
+  if (nrow(vline_data) >0 ){
+  pl = pl + geom_line(data = vline_data,
             aes(x = x, y = y, group = id,
                 text = paste0(Label, "<br>Freq: ", round(FQstart, 1), " Hz")),
             color = "black", linetype = "dashed", linewidth = 0.5,
-            inherit.aes = FALSE) +
+            inherit.aes = FALSE)
+    } 
+
+  pl = pl +
   
   scale_x_log10(labels = label_number(),limits = (c(10,fqupper)), guide = "axis_logticks") +  # Log scale for x-axis
   #scale_x_continuous(limits = c(10, fqupper)) +
@@ -390,15 +406,14 @@ pl_interactive
 
 
 
+as.character(month_nums)
 
-
-month_nums <- as.numeric(as.character(sort(unique(summary$month))))
+month_nums <- as.character(sort(unique(summary$month)))
+month_nums2 <- as.numeric(as.character(sort(unique(summary$month))))
 
 summary$month <- factor(summary$month,
                         levels = month_nums,
-                        labels = month.abb[month_nums])
-
-
+                        labels = month.abb[month_nums2])
 
 #effort graph interactive
 
@@ -411,11 +426,6 @@ summary$month <- factor(summary$month,
 # summaryt$dy = round(summaryt$n/ 24)
 # 
 # 
-# 
-# str(summary$month)      # what type/format is it really?
-# unique(summary$month)   # actual values in your data
-# month_nums              # what you're matching against
-
 
 
 p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
@@ -476,7 +486,11 @@ if (length(years_to_keep) > 3){
 }else if (length(years_to_keep) == 3){
   height_int = 215
   
-}
+} 
+# else if (length(years_to_keep) < 4){
+#   height_int = 280
+#   
+# }
 
 
 p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int, width = 600) %>% 
@@ -583,7 +597,7 @@ combined_layout <- browsable(
     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 220px; width: 600px;", p1_interactive),
+    div(style = "height: 260px; width: 600px;", p1_interactive),
     
     # watermark
     div(
@@ -913,13 +927,18 @@ pv2 = ggplot() +
                    text = paste0(Label, "<br>Min Freq: ", round(FQstart, 1) , " Hz<br>Max Freq: ", round(FQend, 1), " Hz")), # 
                fill = "gray",
                alpha = 0.2,
-               inherit.aes = FALSE) +
+               inherit.aes = FALSE) 
+
+  if (nrow(vline_data) > 0 ){
+  pv2 = pv2 + geom_line(data = vline_data,
+                      aes(x = x, y = y, group = id,
+                          text = paste0(Label, "<br>Freq: ", round(FQstart, 1), " Hz")),
+                      color = "black", linetype = "dashed", linewidth = 0.5,
+                      inherit.aes = FALSE) 
+    } 
+
+pv2 = pv2 +
   
-  geom_line(data = vline_data,
-            aes(x = x, y = y, group = id,
-                text = paste0(Label, "<br>Freq: ", round(FQstart, 1), " Hz")),
-            color = "black", linetype = "dashed", linewidth = 0.5,
-            inherit.aes = FALSE) +
   
   scale_x_log10(labels = label_number(),limits = (c(10,fqupper)), guide = "axis_logticks") +  # Log scale for x-axis
   
@@ -1189,7 +1208,7 @@ combined_layout2 <- browsable(
     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
     
     # bottom plot
-    div(style = "height: 220px; width: 600px;", p2_interactive),
+    div(style = "height: 260px; width: 600px;", p2_interactive),
     
     # watermark
     div(
