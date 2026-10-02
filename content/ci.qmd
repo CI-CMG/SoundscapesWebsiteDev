@@ -177,6 +177,12 @@ display(HTML(standardTextDict["vessel-CI"]))
 display(HTML(gf.makeImage("Ship_Wind_Animation_SPL_Hourly.gif", "CI vessels gif", altText= "")))
 display(HTML(standardTextDict["CI vessels fc"]))
 
+display(HTML(standardTextDict["spacer"]))
+
+display(HTML(standardTextDict["vessel2-CI"]))
+display(HTML(gf.makeImage("SB_Channel_noise.png", "CI vessels graph", altText= "")))
+display(HTML(standardTextDict["CI vessels2 fc"]))
+
 ```
 
 
