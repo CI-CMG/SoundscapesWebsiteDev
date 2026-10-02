@@ -252,7 +252,7 @@ pl
 
 if (site == "cinms_b" | site == "as01"){
   label_height = 40
-} else if (site == "ci04" ){
+} else if (site == "ci04" | site == "pm01" ){
   label_height = 37
 }
 
@@ -347,7 +347,7 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%
   layout(
 
     title = list(
-      text = paste0( header_text1, "<br>", "<span style='font-size:12px'>", subtitle_text, "</span>"),
+      text = paste0( header_text1, "<br>", "<span style='font-size:11.5px'>", subtitle_text, "</span>"),
       x = 0,          
       xanchor = "left",
       font = list(size = 16)
@@ -450,6 +450,7 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
     axis.title.y = element_text(size = 11),
     axis.text.y = element_text(size = 11),
     axis.text.x = element_text(size = 11, hjust = 1, angle = 30),  
+    legend.title = element_text(size = 9),
     legend.text = element_text(size = 9),
     legend.position = "right" 
   ) +
@@ -502,10 +503,14 @@ p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int
                   l = 50,          # Aligns perfectly with the top plot's left axis
                   r = 50), # Ensure room for your caption at the bottom
     
-    # legend = list(
-    #   font = list(size = 13) # to make legend slightly shorter, less spacing between years didnt work
-    #   #, groupclick = "toggleitem"
-    #   ),
+    legend = list(
+      x = 1.02,
+      xanchor = "left",
+      y = 1.25,          # push the top of the legend up into the title area
+      yanchor = "top",
+      font = list(size = 10),
+      tracegroupgap = 0  # removes extra spacing between entries
+    ),
     
     annotations = list(
       x = 0, y = -0.4, 
@@ -526,59 +531,6 @@ p1_interactive
 
 
 #combine effort and line graphs
-
-# 
-# combined_layout <- browsable(
-#   div(
-#     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
-#     
-#     # top plot
-#     div(style = "height: 800px; width: 800px;", pl_interactive),
-#     
-#     # caption
-#     p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
-#     
-#     # divider
-#     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
-#     
-#     # bottom plot
-#     div(style = "height: 275px; width: 800px;", p1_interactive) 
-#   )
-# )
-# 
-# 
-# combined_layout
-
-
-# 
-# #with watermark
-# combined_layout <- browsable(
-#   div(
-#     style = "position: relative; display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px; width: 600px;",
-#     
-#     # top plot
-#     div(style = "height: 600px; width: 600px;", pl_interactive),
-#     
-#     # caption
-#     p(HTML(caption_text2), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
-#     
-#     # divider
-#     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
-#     
-#     # bottom plot
-#     div(style = "height: 200px; width: 600px;", p1_interactive),
-#     
-#     # watermark
-#     div(
-#       "© 2026 soundscapemonitoring.us",
-#       style = "position: absolute; top: 50%; 5px; right: 5px; 
-#                font-size: 11px; color: rgba(0,0,0,0.4); 
-#                writing-mode: vertical-rl; 
-#                pointer-events: none;"
-#     )
-#   )
-# )
-
 
 
 combined_layout <- browsable(
@@ -1110,7 +1062,8 @@ p2 = ggplot(summary2, aes(x = as.character(year), y = dy, fill = as.factor(Seaso
     plot.title = element_text(size = 13, face = "bold", hjust = 0),
     axis.title.y = element_text(size = 11),
     axis.text.y = element_text(size = 11),
-    axis.text.x = element_text(size = 11, hjust = 1, angle = 30),  
+    axis.text.x = element_text(size = 11, hjust = 1, angle = 30), 
+    legend.title = element_text(size = 9),
     legend.text = element_text(size = 9),
     legend.position = "right" 
   )
@@ -1128,67 +1081,47 @@ if (length(seas) > 3){
   height_int2 = 200
   
 }else if (length(seas) == 3){
-  height_int2 = 220
+  height_int2 = 215
   
 }
 
 
+# 
+# # change height = based on how many seasons are in this sites dataset
+# p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = height_int2, width = 600) %>% 
+#   layout(
+#     autosize = TRUE,
+#     
+#     margin = list(t = 50,          # Tucks the title tightly above the bars
+#                   b = 20,          # Leaves just enough room for the angled month text (Jan, Feb...)
+#                   l = 50,          # Aligns perfectly with the top plot's left axis
+#                   r = 40) # Ensure room for your caption at the bottom
+#     
+#     # legend = list(
+#     #   font = list(size = 13) # to make legend slightly shorter, less spacing between years didnt work
+#     #   #, groupclick = "toggleitem"
+#     #   ),
+#     
+#   )%>% config(modeBarButtonsToRemove = list('toImage', 'select2d', 'lasso2d'))
+# 
+# p2_interactive
 
-# change height = based on how many seasons are in this sites dataset
+
 p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = height_int2, width = 600) %>% 
   layout(
     autosize = TRUE,
-    
-    margin = list(t = 50,          # Tucks the title tightly above the bars
-                  b = 20,          # Leaves just enough room for the angled month text (Jan, Feb...)
-                  l = 50,          # Aligns perfectly with the top plot's left axis
-                  r = 40) # Ensure room for your caption at the bottom
-    
-    # legend = list(
-    #   font = list(size = 13) # to make legend slightly shorter, less spacing between years didnt work
-    #   #, groupclick = "toggleitem"
-    #   ),
-    
-  )%>% config(modeBarButtonsToRemove = list('toImage', 'select2d', 'lasso2d'))
-
+    margin = list(t = 50, b = 20, l = 50, r = 40),
+    legend = list(
+      x = 1.02,
+      xanchor = "left",
+      y = 1.25,          # push the top of the legend up into the title area
+      yanchor = "top",
+      font = list(size = 9),
+      tracegroupgap = 0  # removes extra spacing between entries
+    )
+  ) %>% 
+  config(modeBarButtonsToRemove = list('toImage', 'select2d', 'lasso2d'))
 p2_interactive
-
-
-# 
-# #combine SPL and effort graphs
-# combined_layout2 <- browsable(
-#   div(
-#     style = "display: flex; flex-direction: column; gap: 10px; font-family: sans-serif; padding: 10px;",
-#     
-#     # top plot
-#     div(style = "height: 800px; width: 800px;", pv2_interactive),
-#     
-#     # caption
-#     p(HTML(caption_text1), style = "font-size: 13px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
-#     
-#     # divider 
-#     tags$hr(style = "width: 800px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),
-#     
-#     # bottom plot
-#     div(style = "height: 275px; width: 800px;", p2_interactive) ,
-#     
-#     # watermark
-#     div(
-#       "© 2026 soundscapemonitoring.us",
-#       style = "position: absolute; top: 50%; 5px; right: 5px; 
-#                font-size: 11px; color: rgba(0,0,0,0.4); 
-#                writing-mode: vertical-rl; 
-#                pointer-events: none;"
-#     )
-#   )
-# )
-# 
-# 
-# combined_layout2
-
-
-
-
 
 
 #add watermark and grey border
