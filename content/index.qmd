@@ -85,6 +85,15 @@ display(HTML(standardTextDict["Soundscapes"]))
 display(HTML(gf.makeImage("sanctsound_amplitude_frequency.png", "amp&freqInfographic", 600, altText= "Infographic showing spectrogram cartoons ranging from low to high intensity of sound (amplitude measured in decibels) at different pitches (frequency measured in hertz).")))
 display(HTML(standardTextDict["SS how do we measure sound fc"]))
 ```
+
+
+```{python}
+#| echo: false
+display(HTML(gf.makeImage("website_spectrogram.png", "spectrogramInfographic", altText= "Infographic showing spectrogram that highlights unique calls by species including dolphins, humpback whales, snapping shrimp and minke whale.")))
+display(HTML(standardTextDict["spectrogram fc"]))
+```
+
+
 :::
 
 ::: {style="border: 1px solid black; padding: 10px; margin-bottom: 20px;"}
