@@ -180,7 +180,7 @@ display(HTML(standardTextDict["Indicator description"]))
 <!-- # NEED TO ADD BUTTON: "See Table Results" table_***_AIShist.jpg -->
 <!-- ``` -->
 
-### When do right whales contribute to the soundscape, indicating their presence nearby?
+### When do North Atlantic right whales contribute to the soundscape, indicating their presence nearby?
 ```{python}
 #| echo: false
 display(HTML(standardTextDict["North Atlantic Right whales"]))
