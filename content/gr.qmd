@@ -134,7 +134,7 @@ display(HTML(standardTextDict["Indicator description"]))
 ```
 
 
-### When do North Atlantic whales contribute to the soundscape, indicating their presence nearby?
+### When do whales contribute to the soundscape, indicating their presence nearby?
 ```{python}
 #| echo: false
 
