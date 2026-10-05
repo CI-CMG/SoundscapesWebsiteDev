@@ -146,14 +146,14 @@ display(HTML(standardTextDict["hump heatmap fc"]))
 display(HTML(standardTextDict["fish-intro-PM"]))
 
 #display(HTML(standardTextDict["fish-1-PM"]))
-display(HTML(gf.makeImage("seasonal_bar_month_2_Parrotfish_crunch.png", "rasterfish1PM", altText= "Bar charts showing mean parrotfish detections per minute at two sites (PM01 and PM02) in Papahānaumokuākea National Marine Sanctuary across multiple years (2019–2020, 2020–2021, 2022–2023, 2023–2024). PM02 shows significantly higher mean detections and higher daily variability than PM01.")))
+display(HTML(gf.makeImage("parrotfish_white_background.png", "rasterfish1PM", altText= "Bar charts showing mean parrotfish detections per minute at two sites (PM01 and PM02) in Papahānaumokuākea National Marine Sanctuary across multiple years (2019–2020, 2020–2021, 2022–2023, 2023–2024). PM02 shows significantly higher mean detections and higher daily variability than PM01.")))
 
 display(HTML(standardTextDict["parrotfish fc"]))
 
 display(HTML(standardTextDict["spacer"]))
 
 display(HTML(standardTextDict["fish-2-PM"]))
-display(HTML(gf.makeImage("fish_nighttime_activity.png", "rasterfish2PM", altText= "Bar plot showing total nighttime acoustic activity by month and year for two sites, PM01 and PM02. Each panel represents a year, 2019–2020, 2020–2021, 2022–2023, 2023–2024, and bars are colored by month from October to June. Nighttime activity is higher at PM02 than PM01, with seasonal variation across months and years.")))
+display(HTML(gf.makeImage("nighttime_white_background.png", "rasterfish2PM", altText= "Bar plot showing total nighttime acoustic activity by month and year for two sites, PM01 and PM02. Each panel represents a year, 2019–2020, 2020–2021, 2022–2023, 2023–2024, and bars are colored by month from October to June. Nighttime activity is higher at PM02 than PM01, with seasonal variation across months and years.")))
 
 display(HTML(standardTextDict["nighttime fish fc"]))
 ```
