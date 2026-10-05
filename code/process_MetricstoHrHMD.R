@@ -34,7 +34,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "ci04" 
+site  = "fk08" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -651,7 +651,7 @@ if ( length(pFile) > 0 ){   #append old (processedData) and save out all process
   # setdiff(colnames(gps_clean), colnames(processedData))
   #print(names(processedData))
   
-  processedData <- processedData[, -c(2:21)]
+  #processedData <- processedData[, -c(2:21)]
   
   col_order = colnames(processedData)
   gps_clean1 = gps_clean[, col_order]
