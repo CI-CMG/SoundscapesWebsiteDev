@@ -97,11 +97,11 @@ pl = ggplot() +
   #wind model
   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windUpp,], 
             aes(x = variable, y = value, 
-                text = "Modeled Max Wind Noise"), color = "black", linewidth = 1) +
+                text = "Modeled Max Wind Noise"), color = "black", linewidth = .5) +
   
   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windLow,], 
             aes(x = variable, y = value, 
-                text = "Modeled Min Wind Noise"), color = "black", linewidth = 1) +
+                text = "Modeled Min Wind Noise"), color = "black", linewidth = .5) +
  
   geom_polygon(data = polygon_data,
                aes(x = x, y = y, group = id,  
@@ -132,7 +132,7 @@ pl = ggplot() +
   geom_line(data = mallData[mallData$Quantile == "50%",],
             aes(x = Frequency, y = SoundLevel, color = Year, fill = Year, group = Year,
                 text = paste0("Year: ", Year, "<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB") ),
-            linewidth = 2) +
+            linewidth = 1.25) +
   
   geom_ribbon(
     data = ribbonData %>% filter(Year == oldest_year),
@@ -252,7 +252,7 @@ pl
 
 if (site == "cinms_b" | site == "as01"){
   label_height = 40
-} else if (site == "ci04" | site == "pm01" ){
+} else if (site %in% c("ci04", "pm01", "pm02") ){
   label_height = 37
 }
 
@@ -405,7 +405,6 @@ pl_interactive
 
 
 
-
 as.character(month_nums)
 
 month_nums <- as.character(sort(unique(summary$month)))
@@ -494,7 +493,7 @@ if (length(years_to_keep) > 3){
 # }
 
 
-p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = height_int, width = 600) %>% 
+p1_interactive <- ggplotly(p1, tooltip = c("text", "group"), height = 215, width = 600) %>% 
   layout(
     autosize = TRUE,
     
@@ -868,11 +867,11 @@ pv2 = ggplot() +
   #wind model
   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windUpp,], 
             aes(x = variable, y = value, 
-                text = "Modeled Max Wind Noise"), color = "black", linewidth = 1) +
+                text = "Modeled Max Wind Noise"), color = "black", linewidth = .5) +
   
   geom_line(data = mwindInfo[as.character(mwindInfo$windSpeed) == windLow,], 
             aes(x = variable, y = value, 
-                text = "Modeled Min Wind Noise"), color = "black", linewidth = 1) +
+                text = "Modeled Min Wind Noise"), color = "black", linewidth = .5) +
   
   geom_polygon(data = polygon_data,
                aes(x = x, y = y, group = id,  
@@ -899,7 +898,7 @@ pv2 = pv2 +
   geom_line(data = mallDataS[mallDataS$Quantile == "50%",], 
             aes(x = Frequency, y = SoundLevel, color = Season, group = Season, fill = Season,
                 text = paste0("Season: ", Season, "<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), 
-            linewidth = 2,
+            linewidth = 1.25,
             key_glyph = draw_key_rect) +
   
   
@@ -922,7 +921,8 @@ pv2 = pv2 +
 
   #median HMD all seasons
   geom_line(data = mALL[mALL$Quantile == "50%",], aes(x = Frequency, y = SoundLevel, group = Quantile,
-                                                    text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), color = "black", linewidth = 1,
+                                                    text = paste0("Median across all years<br>Freq: ", trimws(format(Frequency, big.mark = ",")), " Hz<br>Sound Level: ", round(SoundLevel,1), " dB")), 
+            color = "black", linewidth = 1,
           linetype = "dotted")
   
   #for the oldest year, make the shading darker since it is hard to see at alpha = .1 for lightblue
@@ -1107,7 +1107,7 @@ if (length(seas) > 3){
 # p2_interactive
 
 
-p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = height_int2, width = 600) %>% 
+p2_interactive <- ggplotly(p2, tooltip = c("text", "group"), height = 215, width = 600) %>% 
   layout(
     autosize = TRUE,
     margin = list(t = 50, b = 20, l = 50, r = 40),

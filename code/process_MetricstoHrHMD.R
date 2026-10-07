@@ -34,7 +34,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "fgb01" 
+site  = "mb05" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -139,6 +139,12 @@ cat("CHECK: Read in data for: ",
   #dysON1 = character()
   #you may need to change the number of the segment where the date is getting taken from he file name below
   dysON2 = as.Date(sapply( strsplit(basename(pypamFiles), "_"), "[[", 4), format = "%Y%m%d")
+  
+  
+  pypamFiles2 = pypamFiles[615:726]
+  dysON22 = as.Date(sapply( strsplit(basename(pypamFiles2), "_"), "[[", 4), format = "%Y%m%d")
+  dysON2 = c(dysON2, dysON22)
+  
   
   #For the SIO formatted netcdf files (CINMS_B and HUA_WEA)
   # dysON1 <- as.Date(

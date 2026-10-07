@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("wea_hua")
+ONMSsites = c("ch01")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -796,7 +796,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     seasont <- season[order(seasont$Season), ]
     
   } else if(site == "ch01"){
-    summary2$Season <- factor(summary2$Season, levels = c("Post-Upwelling"))
+    #summary2$Season <- factor(summary2$Season, levels = c("Post-Upwelling"))
     
   } else if (sidx == "upwelling") {
     summary2$Season <- factor(summary2$Season, levels = c("Upwelling", "Post-Upwelling", "Winter"))
@@ -1547,6 +1547,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     mALL_foi$FrequencyName = paste0("HMD_", mALL_foi$Frequency)
   }
   
+
  
   
   
