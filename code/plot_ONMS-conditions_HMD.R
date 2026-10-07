@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("ch01")
+ONMSsites = c("oc02")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -201,6 +201,11 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     site3 = paste0("ne", site)
     site5 = "ne"
     outDirP = paste0("Y:/soundscape_website_products/ne/" )#products
+  } else if (site == "wea_hua"){
+    site1 = site
+    site3 = "ncwea_hua"
+    site5 = site
+    outDirP = paste0( outDir,"products/", substr(tolower(site), start = 1, stop =2),"/" )#products
   } else {
     site1 = site
     site3 = site
@@ -448,7 +453,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # edAG = as.Date( max(gpsAG$UTC) )
   # udaysAG = length( unique(as.Date(gpsAG$UTC)) )
   
-  if (site %in% c("ci04", "mb01", "mb02")){
+  if (site %in% c("ci04", "mb01", "mb02", "oc02")){
     gps <- gps %>%
           mutate(across(num_range("HMD_", 0:19), ~ NA))
   }

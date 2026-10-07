@@ -34,7 +34,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "mb05" 
+site  = "sb03" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -60,7 +60,7 @@ dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP wo
 
 #SANCTSOUND DATA DIRECTORIES
 #for when sanctsound data is in different directory than ONMS data: grnms, sbnms, hihwnms
-#dirGCPSS = paste0( "M:/FATESD/PASSIVE_ACOUSTIC_DATA_ANALYSIS/SANCTSOUND_SBNMS/SB01") # for GCP workstation - SBNMS
+#dirGCPSS = paste0( "M:/FATESD/PASSIVE_ACOUSTIC_DATA_ANALYSIS/SANCTSOUND_SBNMS/SB03") # for GCP workstation - SBNMS
 #dirGCPSS = paste0("E:/sanctsound/products/sound_level_metrics/gr01") # for GCP workstation - SBNMS (same data as above directory but pulling from NCEI. aditional folder to get to hmd data so if using this directory will need to adjust code looking for file path)
 #dirGCPSS = paste0( "X:/Emma_Beretta/HI01SanctSound") # for GCP workstation - HI01
 #dirGCPSS = paste0("E:/onms/products/sound_level_metrics/mb05/onms_mb05_20220425_20220621_hmd") #to get MB05_01
@@ -105,14 +105,14 @@ cat("CHECK: Read in data for: ",
 
 ## PyPAM soundscape (Sanctsound) FILES- NEFSC-GCP ####
 # e.g. NEFSC_SBNMS_201811_SB03_20181112.nc
-  # inFilesPY = list.files(dirGCPSS, pattern = "_[0-9]{8}\\.nc$", recursive = T, full.names = T)
-    inFilesPY = character()
-    tmp = sapply( strsplit(basename(inFilesPY), "[.]"), "[[", 1)
-  # if (length(tmp) != 0){
-  #   dysPy = as.Date(sapply( strsplit(tmp, "_"), "[", 5),format = "%Y%m%d")
-  #   cat("Found ", length(inFilesPY), "PyPAM files for ", site, "(", as.character( min(dysPy , na.rm = T) ), " to ", as.character(max(dysPy , na.rm = T)),
-  #     "with", sum( duplicated(dysPy)), "duplicated days\n (if NA for date range fix line 59)\n")
-  # }
+   #inFilesPY = list.files(dirGCPSS, pattern = "_[0-9]{8}\\.nc$", recursive = T, full.names = T)
+     inFilesPY = character()
+     tmp = sapply( strsplit(basename(inFilesPY), "[.]"), "[[", 1)
+  if (length(tmp) != 0){
+    dysPy = as.Date(sapply( strsplit(tmp, "_"), "[", 5),format = "%Y%m%d")
+    cat("Found ", length(inFilesPY), "PyPAM files for ", site, "(", as.character( min(dysPy , na.rm = T) ), " to ", as.character(max(dysPy , na.rm = T)),
+      "with", sum( duplicated(dysPy)), "duplicated days\n (if NA for date range fix line 59)\n")
+  }
 
 
 ## ONMS Sound FILES- NCEI-GCP ####
@@ -141,9 +141,10 @@ cat("CHECK: Read in data for: ",
   dysON2 = as.Date(sapply( strsplit(basename(pypamFiles), "_"), "[[", 4), format = "%Y%m%d")
   
   
-  pypamFiles2 = pypamFiles[615:726]
-  dysON22 = as.Date(sapply( strsplit(basename(pypamFiles2), "_"), "[[", 4), format = "%Y%m%d")
-  dysON2 = c(dysON2, dysON22)
+  #for ch01 
+  # pypamFiles2 = pypamFiles[615:726]
+  # dysON22 = as.Date(sapply( strsplit(basename(pypamFiles2), "_"), "[[", 4), format = "%Y%m%d")
+  # dysON2 = c(dysON2, dysON22)
   
   
   #For the SIO formatted netcdf files (CINMS_B and HUA_WEA)
@@ -357,16 +358,16 @@ if (length(inFiles) > 0) {
 #  f =1 
 
 #if some data (manta) has bins 0-19 but others (pypam) doesnt
-# for (f in 337:817 ){
-# 
-#   #bin to hourly median values
-#   cDatah_day = data_list[[f]]
-# 
-#   cDatah_day = cDatah_day[, -c(2:21)]
-# 
-#   data_list[[f]] = cDatah_day
-# 
-# }
+for (f in 1:543 ){
+
+  #bin to hourly median values
+  cDatah_day = data_list[[f]]
+
+  cDatah_day = cDatah_day[, -c(2:21)]
+
+  data_list[[f]] = cDatah_day
+
+}
 
 #combine list elements after processing each day seperately and saving into different list elements
 cDatah <- rbindlist(data_list)
@@ -591,6 +592,19 @@ gps_chunks[[i]] <- matchGFS(data_chunks[[i]]
 #put chunks back together
 gps <- dplyr::bind_rows(gps_chunks)
 
+
+# 
+# pFileSS = "X:/Emma_Beretta/SoundscapesWebsiteDev/products/sb/HMDdataOLD_sb03_HourlySPL-gfs_2026-08-03.Rda"
+# 
+# 
+#   load(pFileSS)
+#   
+#   SSData = outData[1: , ]
+
+
+
+#if not calculating wind
+gps <- cDatah
 
 # 
 # #FOR HI04, recombine new data with old
