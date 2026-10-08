@@ -34,7 +34,7 @@ library(devtools)
 # SET UP PARAMS ####
 rm(list=ls()) 
 DC = Sys.Date()
-site  = "sb03" 
+site  = "mb01" 
 site = tolower(site) 
 # 
 # #add for NRS
@@ -60,7 +60,7 @@ dirGCP = paste0( "E:/onms/products/sound_level_metrics/", site,"/") # for GCP wo
 
 #SANCTSOUND DATA DIRECTORIES
 #for when sanctsound data is in different directory than ONMS data: grnms, sbnms, hihwnms
-#dirGCPSS = paste0( "M:/FATESD/PASSIVE_ACOUSTIC_DATA_ANALYSIS/SANCTSOUND_SBNMS/SB03") # for GCP workstation - SBNMS
+#dirGCPSS = paste0( "M:/FATESD/PASSIVE_ACOUSTIC_DATA_ANALYSIS/SANCTSOUND_SBNMS/SB01") # for GCP workstation - SBNMS
 #dirGCPSS = paste0("E:/sanctsound/products/sound_level_metrics/gr01") # for GCP workstation - SBNMS (same data as above directory but pulling from NCEI. aditional folder to get to hmd data so if using this directory will need to adjust code looking for file path)
 #dirGCPSS = paste0( "X:/Emma_Beretta/HI01SanctSound") # for GCP workstation - HI01
 #dirGCPSS = paste0("E:/onms/products/sound_level_metrics/mb05/onms_mb05_20220425_20220621_hmd") #to get MB05_01
@@ -358,16 +358,16 @@ if (length(inFiles) > 0) {
 #  f =1 
 
 #if some data (manta) has bins 0-19 but others (pypam) doesnt
-for (f in 1:543 ){
-
-  #bin to hourly median values
-  cDatah_day = data_list[[f]]
-
-  cDatah_day = cDatah_day[, -c(2:21)]
-
-  data_list[[f]] = cDatah_day
-
-}
+# for (f in 1:939 ){
+# 
+#   #bin to hourly median values
+#   cDatah_day = data_list[[f]]
+# 
+#   cDatah_day = cDatah_day[, -c(2:21)]
+# 
+#   data_list[[f]] = cDatah_day
+# 
+# }
 
 #combine list elements after processing each day seperately and saving into different list elements
 cDatah <- rbindlist(data_list)

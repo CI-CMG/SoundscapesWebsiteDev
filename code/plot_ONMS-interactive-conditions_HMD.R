@@ -254,6 +254,8 @@ if (site == "cinms_b" | site == "as01"){
   label_height = 40
 } else if (site %in% c("ci04", "pm01", "pm02") ){
   label_height = 37
+} else if (site %in% c( "cox01") ){
+  label_height = 38
 }
 
 # for label text in the middle of the shading box
