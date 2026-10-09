@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("mb01")
+ONMSsites = c("ci05")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -483,16 +483,18 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
  #    # gpsAG <- gpsAG %>%
  #    #   mutate(across(num_range("HMD_", 2701:4995), ~ NA))
  #    
- #  } else if (site %in% c("NRS01","NRS02","NRS03", "NRS04", "NRS05","NRS06","NRS07","NRS08","NRS09","NRS10","NRS11","NRS12","NRS13")){
- #      #(site == "NRS05"){
- #      gps <- gps %>%
- #       mutate(across(num_range("HMD_", 1249:1252), ~ NA))
- # 
- #     # gpsAG <- gpsAG %>%
- #      # mutate(across(num_range("HMD_", 1249:1252), ~ NA))
- # 
- #      
- #  } else if (site == "fgb01" | site == "fk08"){
+ #  } else
+  if (site %in% c("NRS01","NRS02","NRS03", "NRS04", "NRS05","NRS06","NRS07","NRS08","NRS09","NRS10","NRS11","NRS12","NRS13")){
+      #(site == "NRS05"){
+      gps <- gps %>%
+       mutate(across(num_range("HMD_", 1249:1252), ~ NA))
+
+     # gpsAG <- gpsAG %>%
+      # mutate(across(num_range("HMD_", 1249:1252), ~ NA))
+
+
+  } 
+  #else if (site == "fgb01" | site == "fk08"){
  #    
  #    #make those columns na
  #    gps <- gps %>%
@@ -1129,6 +1131,8 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   }else if(tolower(substr(site3, 1, 2)) == 'as'){
     y_max = 102
   }else if(tolower(substr(site3, 1, 2)) == 'ne'){
+    y_max = 105
+  }else if(tolower(substr(site3, 1, 2)) == 'cb'){
     y_max = 105
   }else{
     y_max = NA
