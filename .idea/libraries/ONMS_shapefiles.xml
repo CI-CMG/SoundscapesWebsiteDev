@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="ONMS-shapefiles">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/CBNMS_shp.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/CINMS_shp.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/CHNMS_FinalPreferredAlternative.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/MallowsBay.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/PMNM_shp.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/OCNMS_shp.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/hihwnms_shp.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/ThunderBay.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/FloridaKeys.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/StellwagenBank.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/GFNMS_shp.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/Wisconsin.zip!/" />
+      <root url="jar://$PROJECT_DIR$/context/ONMS-shapefiles/MBNMS_shp.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

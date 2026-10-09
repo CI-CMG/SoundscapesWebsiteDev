@@ -72,7 +72,7 @@ website:
         text: Gray's Reef
       - href: content/fk.qmd
         text: Florida Keys
-        text: <br>
+      - text: <br>
       - text: <b>Alaska Region</b>
       - href: content/np.qmd
         text: Gulf of Alaska
