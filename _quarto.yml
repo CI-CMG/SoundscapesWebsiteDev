@@ -64,18 +64,24 @@ website:
       - text: <b>Eastern Region</b>
       - href: content/sb.qmd
         text: Stellwagen Bank
+      - href: content/ne.qmd
+        text: New England
       - href: content/fgb.qmd
         text: Flower Garden Banks
       - href: content/gr.qmd
         text: Gray's Reef
       - href: content/fk.qmd
         text: Florida Keys
-      - href: content/ne.qmd
-        text: New England
+        text: <br>
+      - text: <b>Alaska Region</b>
+      - href: content/np.qmd
+        text: Gulf of Alaska
       - text: <br>
       - text: <b>West Coast Region</b>
       - href: content/oc.qmd
         text: Olympic Coast
+      - href: content/nc.qmd
+        text: Humboldt Coast
       - href: content/cb.qmd
         text: Greater Farallones and Cordell Bank 
       - href: content/mb.qmd
@@ -84,8 +90,6 @@ website:
         text: Chumash Heritage
       - href: content/ci.qmd
         text: Channel Islands
-      - href: content/nc.qmd
-        text: Humboldt Coast
       - text: <br>
       - text: <b>Pacific Islands Region</b>
       - href: content/pm.qmd
@@ -94,10 +98,6 @@ website:
         text: American Samoa
       - href: content/hi.qmd
         text: Hawaiian Islands Humpback Whale
-      - text: <br>
-      - text: <b>Alaska Region</b>
-      - href: content/np.qmd
-        text: Gulf of Alaska
 
 format:
   html:
