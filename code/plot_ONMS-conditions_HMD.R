@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("hi08")
+ONMSsites = c("as10")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -293,7 +293,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     seasonShift = 0
   }else if ( sidx == "southernHem") {
     season = data.frame(
-      Season = c(  "Hurricane", "Tradewind", "Tradewind & Humpback" ),
+      Season = c(  "Hurricane", "Tradewind", "Tradewind\n& Humpback" ),
       Months = c("11,12,1,2,3,4",  "5,6,7", "8,9,10" ) ,
       values = c(  "#CC79A7", "#E69F00",  "#009E73") )
     seasonLabel = "Hurricane = Nov-Apr, Tradewind = May-Jul, Tradewind & Humpback = Aug-Oct"
@@ -370,6 +370,20 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   #   save(outData, file = paste0(outDirP, "HMDdata_", tolower(site), "_HourlySPL-gfs_", DC, ".Rda") )
   # 
   # }
+  
+  
+  #extra dataset in archive
+  # if (site == "gr01"){
+  # 
+  #   gps = gps[-(17533:21468),]
+  # 
+  #   outData = gps
+  #   save(outData, file = paste0(outDirP, "HMDdata_", tolower(site), "_HourlySPL-gfs_", DC, ".Rda") )
+  # }
+ 
+  
+  
+  
   
  if(site == 'as01'){
   gps <- gps %>%
@@ -865,64 +879,64 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   
   #(2) WIND category ####
-  gps$wind_category = NA
-  gps <- gps %>%
-    mutate(wind_category = case_when(
-      is.na(windMag) ~ NA_character_,
-      windMag < windL ~ "low",
-      windMag >= windL & windV <= windH ~ "med",
-      windMag > windH ~ "high"
-    ))
-  # Calculate the counts for wind each category
-  category_counts = gps %>%
-    count(wind_category) %>%
-    mutate(label = paste(wind_category, ":", n))
-  subtitle_text <- paste(category_counts$label, collapse = ", ")
-  
-  if (site3 == 'cinms_b'){
-    site3 = 'cisiob'
-  }
-  
-  windInfo = windModel[tolower(windModel$si) == site3,]
-  colnums = suppressWarnings(as.numeric(colnames(windInfo)))
- # widx = which(!is.na(colnums) & colnums == max(Fq))
- # windInfo = windInfo[,1:widx] #wind noise by frequency (columns) and speed (rows)
-  
-  #re-structure for ggplot
-  mwindInfo = reshape2::melt(windInfo, id.vars = c("windSpeed"), measure.vars = colnames(windInfo)[4:ncol(windInfo)])
-  mwindInfo$variable = as.numeric( as.character(mwindInfo$variable ))
- 
-   ## wind bar
-  gps$wind_category <- factor(gps$wind_category, levels = c("low", "med", "high"))
- 
-   # Create the horizontal stacked bar plot with the counts of wind speed categories
-  l = ggplot(gps, aes(x = "", fill = wind_category)) +
-    geom_bar(stat = "count", position = position_stack(reverse = TRUE)) +  # Stacked bar chart
-    coord_flip() +  # Flip the coordinates to make it horizontal
-    facet_wrap(~yr, ncol = 1)+
-    ggtitle("Percent time in different wind speed categories ") +  # Add the main title
-    theme_minimal() +
-    labs(x = NULL, y = NULL,
-         subtitle = paste0("low <", windL, " | med ", windL,"-",windH, " | high >",windH, "m/s")) +  # Remove x-axis label
-    theme(
-      plot.title = element_text(hjust = 0, size = 16),  # Align the title to the left
-      plot.subtitle = element_text(hjust = 0, size = 14),
-      strip.text  = element_text(size = 14),
-      axis.text.y = element_blank(),
-      axis.text.x = element_blank(),  # Remove x-axis labels (now categories will appear below)
-      axis.ticks.x = element_blank(),  # Remove x-axis ticks
-      axis.title.x = element_blank(),  # Remove x-axis title
-      legend.position = "bottom",  # Position the legend at the bottom
-      legend.title = element_blank(),  # Optional: remove legend title
-      legend.text = element_text(size = 12)  # Optional: adjust legend text size
-    ) +
-    #scale_x_discrete(labels = category_counts$wind_category) +  # Place the category labels under the plot
-    scale_fill_manual(values = c("low" = "blue",  "med" = "orange", "high" = "red") )
-  l
-  #save figure ####
-  ggsave(filename = paste0(outDirGe, "/plot_", toupper(site), "_HMDwindSpeed.jpg"), plot = l , width = 10, height = 12, dpi = 300)
-  
-  
+ #  gps$wind_category = NA
+ #  gps <- gps %>%
+ #    mutate(wind_category = case_when(
+ #      is.na(windMag) ~ NA_character_,
+ #      windMag < windL ~ "low",
+ #      windMag >= windL & windV <= windH ~ "med",
+ #      windMag > windH ~ "high"
+ #    ))
+ #  # Calculate the counts for wind each category
+ #  category_counts = gps %>%
+ #    count(wind_category) %>%
+ #    mutate(label = paste(wind_category, ":", n))
+ #  subtitle_text <- paste(category_counts$label, collapse = ", ")
+ #  
+ #  if (site3 == 'cinms_b'){
+ #    site3 = 'cisiob'
+ #  }
+ #  
+ #  windInfo = windModel[tolower(windModel$si) == site3,]
+ #  colnums = suppressWarnings(as.numeric(colnames(windInfo)))
+ # # widx = which(!is.na(colnums) & colnums == max(Fq))
+ # # windInfo = windInfo[,1:widx] #wind noise by frequency (columns) and speed (rows)
+ #  
+ #  #re-structure for ggplot
+ #  mwindInfo = reshape2::melt(windInfo, id.vars = c("windSpeed"), measure.vars = colnames(windInfo)[4:ncol(windInfo)])
+ #  mwindInfo$variable = as.numeric( as.character(mwindInfo$variable ))
+ # 
+ #   ## wind bar
+ #  gps$wind_category <- factor(gps$wind_category, levels = c("low", "med", "high"))
+ # 
+ #   # Create the horizontal stacked bar plot with the counts of wind speed categories
+ #  l = ggplot(gps, aes(x = "", fill = wind_category)) +
+ #    geom_bar(stat = "count", position = position_stack(reverse = TRUE)) +  # Stacked bar chart
+ #    coord_flip() +  # Flip the coordinates to make it horizontal
+ #    facet_wrap(~yr, ncol = 1)+
+ #    ggtitle("Percent time in different wind speed categories ") +  # Add the main title
+ #    theme_minimal() +
+ #    labs(x = NULL, y = NULL,
+ #         subtitle = paste0("low <", windL, " | med ", windL,"-",windH, " | high >",windH, "m/s")) +  # Remove x-axis label
+ #    theme(
+ #      plot.title = element_text(hjust = 0, size = 16),  # Align the title to the left
+ #      plot.subtitle = element_text(hjust = 0, size = 14),
+ #      strip.text  = element_text(size = 14),
+ #      axis.text.y = element_blank(),
+ #      axis.text.x = element_blank(),  # Remove x-axis labels (now categories will appear below)
+ #      axis.ticks.x = element_blank(),  # Remove x-axis ticks
+ #      axis.title.x = element_blank(),  # Remove x-axis title
+ #      legend.position = "bottom",  # Position the legend at the bottom
+ #      legend.title = element_blank(),  # Optional: remove legend title
+ #      legend.text = element_text(size = 12)  # Optional: adjust legend text size
+ #    ) +
+ #    #scale_x_discrete(labels = category_counts$wind_category) +  # Place the category labels under the plot
+ #    scale_fill_manual(values = c("low" = "blue",  "med" = "orange", "high" = "red") )
+ #  l
+ #  #save figure ####
+ #  ggsave(filename = paste0(outDirGe, "/plot_", toupper(site), "_HMDwindSpeed.jpg"), plot = l , width = 10, height = 12, dpi = 300)
+ #  
+ #  
   
   
   #(3) SEASONAL CONDITION PLOT ####
@@ -1578,10 +1592,12 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
       if (FOIst$FQstart [tt] == FOIst$FQend [tt] ){
         ftN = paste0("HMD_", FOIst$FQstart [tt]) #fqIn
         ft = FOIst$`Decidecade.(TOL)`[tt]
-        cols_to_select = c("UTC", "yr", "windMag",ftN )
+        cols_to_select = c("UTC", "yr", 
+         #                  "windMag",
+                           ftN )
         gpsFQ = gps %>% select(all_of(cols_to_select))
         wspeeds = unique( (windModel$windSpeed) )
-        gpsFQ$closest_windMag = wspeeds[pmax(1, findInterval(gpsFQ$windMag, wspeeds)+1)]
+        #gpsFQ$closest_windMag = wspeeds[pmax(1, findInterval(gpsFQ$windMag, wspeeds)+1)]
         
         #Thresholds from all data percentiles
         mALL_thresh$FrequencyName = paste0("HMD_", mALL_thresh$Frequency)
@@ -1611,7 +1627,9 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
         hmdn =  as.numeric( gsub("HMD_", "", colnames(gps)[hmdc]) )
         idx = hmdc[( hmdn >= FOIst$FQstart[tt] & hmdn <= FOIst$FQend [tt] ) ]
         ftN = colnames(gps)[idx]
-        cols_to_select = c("UTC", "yr", "windMag", ftN )
+        cols_to_select = c("UTC", "yr", 
+         #                  "windMag", 
+                           ftN )
         gpsFQ = gps %>% select(all_of(cols_to_select))
         tmpBB = gpsFQ %>% select(all_of(ftN))
         
@@ -1646,7 +1664,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
           HMD_25 = quantile(SpecBand, 0.25, na.rm = TRUE),
           HMD_50 = quantile(SpecBand, 0.50, na.rm = TRUE),
           HMD_75 = quantile(SpecBand, 0.75, na.rm = TRUE),
-          windspeed = quantile(windMag, 0.50, na.rm = TRUE),
+          #windspeed = quantile(windMag, 0.50, na.rm = TRUE),
           count_above_threshold   = sum(SpecBand > q75, na.rm = TRUE),
           percent_above_threshold = sum(SpecBand > q75, na.rm = TRUE) / 
             sum(!is.na(SpecBand)) * 100

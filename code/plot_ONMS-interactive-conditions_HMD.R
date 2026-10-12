@@ -7,6 +7,7 @@ library(htmltools)
 library(plotly)
 
 
+
 # create shaded regions for FOIs on both annual and seasonal graph
 polygon_data <- FOIsRange %>%
   mutate(id = row_number()) %>%  
@@ -252,7 +253,7 @@ pl
 
 if (site == "cinms_b" | site == "as01"){
   label_height = 40
-} else if (site %in% c("ci04", "pm01", "pm02", "fgb01", "fk08", "fk06", "fk05", "fk01", "hi01", "hi03", "hi04", "hi08") ){
+} else if (site %in% c("ci04", "pm01", "pm02") ){
   label_height = 37
 } else if (site %in% c( "cox01", "cox03", "ns02", "ns08", "wea_hua") ){
   label_height = 38
@@ -339,9 +340,7 @@ if (substr(site3, 1, 2) == "hi" | substr(site3, 1, 2) == "pm"){
 }
 
 
-if (site %in% c("hi01", "hi03", "hi04", "hi08")){
-subtitle_text = "*Humpback Year includes data from Dec of previous year through May of the given year. \nHumpback season excludes data from the Non season (Jun-Nov)."
-}
+
 
 #make annual graph interactive
 pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%  
@@ -351,7 +350,7 @@ pl_interactive <- ggplotly(pl, tooltip = "text", height = 600, width = 600) %>%
   layout(
 
     title = list(
-      text = paste0( header_text1, "<br>", "<span style='font-size:11px'>", subtitle_text, "</span>"),
+      text = paste0( header_text1, "<br>", "<span style='font-size:11.5px'>", subtitle_text, "</span>"),
       x = 0,          
       xanchor = "left",
       font = list(size = 16)
