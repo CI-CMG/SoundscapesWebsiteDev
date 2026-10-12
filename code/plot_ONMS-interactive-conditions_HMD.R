@@ -252,9 +252,9 @@ pl
 
 if (site == "cinms_b" | site == "as01"){
   label_height = 40
-} else if (site %in% c("ci04", "pm01", "pm02") ){
+} else if (site %in% c("ci04", "pm01", "pm02", "fgb01", "fk08") ){
   label_height = 37
-} else if (site %in% c( "cox01", "cox03", "ns02", "ns08") ){
+} else if (site %in% c( "cox01", "cox03", "ns02", "ns08", "wea_hua") ){
   label_height = 38
 }
 

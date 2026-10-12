@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("oc03")
+ONMSsites = c("fgb01")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -1113,7 +1113,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   }else if(tolower(substr(site3, 1, 2)) == 'hi'){
     y_max = 101
   }else if(tolower(substr(site3, 1, 2)) == 'sb'){
-    y_max = 150
+    y_max = 105
   }else if(tolower(substr(site3, 1, 3)) == 'fgb'){
     y_max = 115
   }else if(tolower(substr(site3, 1, 2)) == 'gr'){
@@ -1134,6 +1134,10 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
     y_max = 105
   }else if(tolower(substr(site3, 1, 2)) == 'cb'){
     y_max = 105
+  }else if(tolower(substr(site3, 1, 2)) == 'np'){
+    y_max = 105
+  }else if(tolower(substr(site3, 1, 2)) == 'nc'){
+    y_max = 95
   }else{
     y_max = NA
   }
