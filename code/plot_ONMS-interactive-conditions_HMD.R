@@ -32,6 +32,30 @@ polygon_data <- FOIsRange %>%
   ungroup()
 
 
+polygon_data <- FOIsRange %>%
+  mutate(width = log10(FQend) - log10(FQstart)) %>%   # width in log space, since your x axis is log
+  arrange(desc(width)) %>%                            # widest first (bottom), narrowest last (top)
+  mutate(id = row_number()) %>%
+  uncount(4) %>%
+  group_by(id) %>%
+  mutate(
+    corner = row_number(),
+    x = case_when(
+      corner == 1 ~ FQstart,
+      corner == 2 ~ FQstart,
+      corner == 3 ~ FQend,
+      corner == 4 ~ FQend
+    ),
+    y = case_when(
+      corner == 1 ~ 27,
+      corner == 2 ~ y_max,
+      corner == 3 ~ y_max,
+      corner == 4 ~ 27
+    )
+  ) %>%
+  ungroup()
+
+
 #ANNUAL LINE GRAPH
 
 #dealing with data gaps for plotly
@@ -90,6 +114,24 @@ vline_data <- bind_rows(FOIs, FOIsL) %>%
     x = numeric(),   # change to as.Date(character()) or as.POSIXct(character()) if FQstart is a date/time
     y = numeric()
   )
+}
+
+
+
+if (site == "wea_hua"){
+
+hover_vlines <- polygon_data %>%
+  distinct(id, Label, FQstart, FQend) %>%
+  filter(grepl("fin|blue", Label, ignore.case = TRUE)) %>%
+  mutate(minf = FQstart, maxf = FQend,
+         FQmid = sqrt(FQstart * FQend)) %>%          # halfway on the log axis
+  pivot_longer(c(FQstart, FQmid, FQend), names_to = "edge", values_to = "x") %>%
+  mutate(line_id = paste(id, edge)) %>%
+  rowwise() %>%
+  mutate(pts = list(data.frame(y = seq(27, y_max, length.out = 100)))) %>%
+  ungroup() %>%
+  unnest(pts)
+
 }
 
 # create annual graph
@@ -228,6 +270,15 @@ pl = ggplot() +
         axis.ticks.x = element_line(color = "grey", linewidth = 0.3), 
         axis.line.x = element_line(color = "grey", linewidth = 0.3)    
   ) 
+  
+  
+  if (nrow(hover_vlines) > 0) {
+    pl <- pl + geom_line(data = hover_vlines,
+                         aes(x = x, y = y, group = line_id,
+                             text = paste0(Label, "<br>Min Freq: ", round(minf, 1),
+                                           " Hz<br>Max Freq: ", round(maxf, 1), " Hz")),
+                         color = "transparent", linewidth = 3, inherit.aes = FALSE)
+  }
 
 pl
 
@@ -255,7 +306,7 @@ if (site == "cinms_b" | site == "as01"){
   label_height = 40
 } else if (site %in% c("ci04", "pm01", "pm02") ){
   label_height = 37
-} else if (site %in% c( "cox01", "cox03", "ns02", "ns08", "wea_hua") ){
+} else if (site %in% c( "cox01", "cox03", "ns02", "ns08", "wea_hua", "as10") ){
   label_height = 38
 }
 
@@ -984,6 +1035,13 @@ pv2 <- pv2 +
   ) 
 
 
+if (nrow(hover_vlines) > 0) {
+  pv2 <- pv2 + geom_line(data = hover_vlines,
+                       aes(x = x, y = y, group = line_id,
+                           text = paste0(Label, "<br>Min Freq: ", round(minf, 1),
+                                         " Hz<br>Max Freq: ", round(maxf, 1), " Hz")),
+                       color = "transparent", linewidth = 3, inherit.aes = FALSE)
+}
 
 pv2
 
