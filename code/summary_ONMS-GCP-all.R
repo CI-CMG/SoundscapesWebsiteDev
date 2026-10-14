@@ -447,7 +447,7 @@ outputONMS_padded$Project1 <- factor(outputONMS_padded$Project1, levels = c("San
 outputONMS_padded$Region <- factor(outputONMS_padded$Region, levels = c("Eastern",
                                                                             "Alaska",
                                                                             "West Coast",
-                                                                            "Pacific Island"))
+                                                                            "Pacific Islands"))
 
 
 pTb = ggplot(outputONMS_padded, aes(y = SiteF, x = Start_Date, xend = End_Date, fill = Project1)) +
