@@ -879,66 +879,66 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   
   
   #(2) WIND category ####
- #  gps$wind_category = NA
- #  gps <- gps %>%
- #    mutate(wind_category = case_when(
- #      is.na(windMag) ~ NA_character_,
- #      windMag < windL ~ "low",
- #      windMag >= windL & windV <= windH ~ "med",
- #      windMag > windH ~ "high"
- #    ))
- #  # Calculate the counts for wind each category
- #  category_counts = gps %>%
- #    count(wind_category) %>%
- #    mutate(label = paste(wind_category, ":", n))
- #  subtitle_text <- paste(category_counts$label, collapse = ", ")
- #  
- #  if (site3 == 'cinms_b'){
- #    site3 = 'cisiob'
- #  }
- #  
- #  windInfo = windModel[tolower(windModel$si) == site3,]
- #  colnums = suppressWarnings(as.numeric(colnames(windInfo)))
- # # widx = which(!is.na(colnums) & colnums == max(Fq))
- # # windInfo = windInfo[,1:widx] #wind noise by frequency (columns) and speed (rows)
- #  
- #  #re-structure for ggplot
- #  mwindInfo = reshape2::melt(windInfo, id.vars = c("windSpeed"), measure.vars = colnames(windInfo)[4:ncol(windInfo)])
- #  mwindInfo$variable = as.numeric( as.character(mwindInfo$variable ))
- # 
- #   ## wind bar
- #  gps$wind_category <- factor(gps$wind_category, levels = c("low", "med", "high"))
- # 
- #   # Create the horizontal stacked bar plot with the counts of wind speed categories
- #  l = ggplot(gps, aes(x = "", fill = wind_category)) +
- #    geom_bar(stat = "count", position = position_stack(reverse = TRUE)) +  # Stacked bar chart
- #    coord_flip() +  # Flip the coordinates to make it horizontal
- #    facet_wrap(~yr, ncol = 1)+
- #    ggtitle("Percent time in different wind speed categories ") +  # Add the main title
- #    theme_minimal() +
- #    labs(x = NULL, y = NULL,
- #         subtitle = paste0("low <", windL, " | med ", windL,"-",windH, " | high >",windH, "m/s")) +  # Remove x-axis label
- #    theme(
- #      plot.title = element_text(hjust = 0, size = 16),  # Align the title to the left
- #      plot.subtitle = element_text(hjust = 0, size = 14),
- #      strip.text  = element_text(size = 14),
- #      axis.text.y = element_blank(),
- #      axis.text.x = element_blank(),  # Remove x-axis labels (now categories will appear below)
- #      axis.ticks.x = element_blank(),  # Remove x-axis ticks
- #      axis.title.x = element_blank(),  # Remove x-axis title
- #      legend.position = "bottom",  # Position the legend at the bottom
- #      legend.title = element_blank(),  # Optional: remove legend title
- #      legend.text = element_text(size = 12)  # Optional: adjust legend text size
- #    ) +
- #    #scale_x_discrete(labels = category_counts$wind_category) +  # Place the category labels under the plot
- #    scale_fill_manual(values = c("low" = "blue",  "med" = "orange", "high" = "red") )
- #  l
- #  #save figure ####
- #  ggsave(filename = paste0(outDirGe, "/plot_", toupper(site), "_HMDwindSpeed.jpg"), plot = l , width = 10, height = 12, dpi = 300)
- #  
- #  
-  
-  
+  gps$wind_category = NA
+  gps <- gps %>%
+    mutate(wind_category = case_when(
+      is.na(windMag) ~ NA_character_,
+      windMag < windL ~ "low",
+      windMag >= windL & windV <= windH ~ "med",
+      windMag > windH ~ "high"
+    ))
+  # Calculate the counts for wind each category
+  category_counts = gps %>%
+    count(wind_category) %>%
+    mutate(label = paste(wind_category, ":", n))
+  subtitle_text <- paste(category_counts$label, collapse = ", ")
+
+  if (site3 == 'cinms_b'){
+    site3 = 'cisiob'
+  }
+
+  windInfo = windModel[tolower(windModel$si) == site3,]
+  colnums = suppressWarnings(as.numeric(colnames(windInfo)))
+ # widx = which(!is.na(colnums) & colnums == max(Fq))
+ # windInfo = windInfo[,1:widx] #wind noise by frequency (columns) and speed (rows)
+
+  #re-structure for ggplot
+  mwindInfo = reshape2::melt(windInfo, id.vars = c("windSpeed"), measure.vars = colnames(windInfo)[4:ncol(windInfo)])
+  mwindInfo$variable = as.numeric( as.character(mwindInfo$variable ))
+
+   ## wind bar
+  gps$wind_category <- factor(gps$wind_category, levels = c("low", "med", "high"))
+
+   # Create the horizontal stacked bar plot with the counts of wind speed categories
+  l = ggplot(gps, aes(x = "", fill = wind_category)) +
+    geom_bar(stat = "count", position = position_stack(reverse = TRUE)) +  # Stacked bar chart
+    coord_flip() +  # Flip the coordinates to make it horizontal
+    facet_wrap(~yr, ncol = 1)+
+    ggtitle("Percent time in different wind speed categories ") +  # Add the main title
+    theme_minimal() +
+    labs(x = NULL, y = NULL,
+         subtitle = paste0("low <", windL, " | med ", windL,"-",windH, " | high >",windH, "m/s")) +  # Remove x-axis label
+    theme(
+      plot.title = element_text(hjust = 0, size = 16),  # Align the title to the left
+      plot.subtitle = element_text(hjust = 0, size = 14),
+      strip.text  = element_text(size = 14),
+      axis.text.y = element_blank(),
+      axis.text.x = element_blank(),  # Remove x-axis labels (now categories will appear below)
+      axis.ticks.x = element_blank(),  # Remove x-axis ticks
+      axis.title.x = element_blank(),  # Remove x-axis title
+      legend.position = "bottom",  # Position the legend at the bottom
+      legend.title = element_blank(),  # Optional: remove legend title
+      legend.text = element_text(size = 12)  # Optional: adjust legend text size
+    ) +
+    #scale_x_discrete(labels = category_counts$wind_category) +  # Place the category labels under the plot
+    scale_fill_manual(values = c("low" = "blue",  "med" = "orange", "high" = "red") )
+  l
+  #save figure ####
+  ggsave(filename = paste0(outDirGe, "/plot_", toupper(site), "_HMDwindSpeed.jpg"), plot = l , width = 10, height = 12, dpi = 300)
+
+
+
+
   #(3) SEASONAL CONDITION PLOT ####
   
   if (substr(site3, 1, 2) == "hi" |substr(site3, 1, 2) == "pm"){
