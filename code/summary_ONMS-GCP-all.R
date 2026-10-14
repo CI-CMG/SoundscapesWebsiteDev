@@ -337,7 +337,7 @@ write.csv(outputONMS, file = paste0(outDirP, "/data_gantt_ONMS-SS-NRS__gantt_", 
 
 
 #option to load the file, if you already ran and just want to plot ####
-#load(paste0(outDirP, "/data_gantt_ONMS-SS-NRS_gantt_2026-04-01.Rda") )
+load(paste0(outDirP, "/data_gantt_ONMS-SS-NRS_gantt_2026-10-12.Rda") )
 
 outputONMS$Region[outputONMS$Region == "East Coast"] <- "Eastern"
 
@@ -444,6 +444,10 @@ outputONMS_padded$Project1 <- factor(outputONMS_padded$Project1, levels = c("San
                                                               "NRS",
                                                               "MBARC"))
 
+outputONMS_padded$Region <- factor(outputONMS_padded$Region, levels = c("Eastern",
+                                                                            "Alaska",
+                                                                            "West Coast",
+                                                                            "Pacific Island"))
 
 
 pTb = ggplot(outputONMS_padded, aes(y = SiteF, x = Start_Date, xend = End_Date, fill = Project1)) +
