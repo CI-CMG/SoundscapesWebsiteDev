@@ -401,9 +401,10 @@ outputONMS$Project1[outputONMS$Project1 == "sanctsound"] = "SanctSound"
 outputONMS$Project1[outputONMS$Project1 == "mbarc_socal"] = "MBARC"
 outputONMS$Project1[outputONMS$Project1 == "mbarc_cencal"] = "MBARC"
 project_colors <- c(
-  "SanctSound" = "#C6E6F0",  
+  #"SanctSound" = "#C6E6F0",  
   "ONMS-Sound" = "#53B0D7",
-  "MBARC" = "#003166" ,
+  "MBARC" = "#C6E6F0",
+    #"#003166" ,
   "NRS" = "#004295") 
 
 
