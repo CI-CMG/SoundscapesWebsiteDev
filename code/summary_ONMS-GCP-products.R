@@ -510,7 +510,7 @@ pTb
 
 
 
-ggsave(filename = paste0(outDirR, "/gantt_ONMS-NRS_HMDproducts.jpg"), plot = pTb, width = 15, height = 6, dpi = 300)
+ggsave(filename = paste0(outDirR, "/gantt_ONMS-MBARC-NRS_HMDproducts.jpg"), plot = pTb, width = 15, height = 6, dpi = 300)
 
 # MAP DATA -- not working need to update data frame names ####
 #reformat for per site- total recordings 
