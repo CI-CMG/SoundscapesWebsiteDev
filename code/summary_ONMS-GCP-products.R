@@ -113,7 +113,7 @@ subdirsALL = c(subdirsONMS,
 output = NULL
 dirNames   = sapply(strsplit(basename( subdirsALL ), "/"), `[`, 1)
 
-for (s in 1:length(subdirsALL) ) { # s = 26
+for (s in 1:length(subdirsALL) ) { # s = 3
   
   # read in files
   args = c("ls", "-r", subdirsALL[s])
@@ -125,22 +125,37 @@ for (s in 1:length(subdirsALL) ) { # s = 26
   
   if ( length(grep(projectNONMS, subdirsALL[s]) ) > 0 ) { # check for format - onms
     
-    for (jf in 1:length( json_files) ) {
+    deploy_dir <- dirname(json_files)
+    has_meta   <- endsWith(json_files, "-metadata.json")
+    json_files <- json_files[ has_meta | !(deploy_dir %in% deploy_dir[has_meta]) ]
+    
+    for (jf in 1:length( json_files) ) { #jf = 3
       
       url = paste0("https://storage.googleapis.com/", gsub ("gs://", '', paste(json_files[jf], collapse = "") ) )
-      # h = curl(url, "r")
-      # json_content = readLines(url)
-      # close(h)
-      # tmp = fromJSON(paste(url, collapse = ""))
       tmp = fromJSON(url)
       
-      name  = tmp$DATA_COLLECTION_NAME 
-      instr = tmp$DEPLOYMENT_TYPE
-      # start = as.Date( gsub("T"," ", tmp$START_TIME), format = "%Y-%m-%d")
-      # end   = as.Date( gsub("T"," ", tmp$END_TIME), format = "%Y-%m-%d")
-      start = as.Date( tmp$START_DATE, format = "%d-%b-%Y")
-      end   = as.Date( tmp$END_DATE, format = "%d-%b-%Y")
-      latlon   = tmp$SHAPE
+      if (endsWith(json_files[jf], "-metadata.json") ){
+        
+        name  = tmp$DATA_COLLECTION_NAME 
+        instr = tmp$DEPLOYMENT_TYPE
+        # start = as.Date( gsub("T"," ", tmp$START_TIME), format = "%Y-%m-%d")
+        # end   = as.Date( gsub("T"," ", tmp$END_TIME), format = "%Y-%m-%d")
+        start = as.Date( tmp$START_DATE, format = "%d-%b-%Y")
+        end   = as.Date( tmp$END_DATE, format = "%d-%b-%Y")
+        latlon   = tmp$SHAPE
+        
+        
+      } else{
+      
+        name  = tmp$DATA_COLLECTION_NAME 
+        instr = tmp$PLATFORM_NAME
+        start = as.Date( gsub("T"," ", tmp$DEPLOYMENT$AUDIO_START), format = "%Y-%m-%d")
+        end   = as.Date( gsub("T"," ", tmp$DEPLOYMENT$AUDIO_END), format = "%Y-%m-%d")
+        
+        latlon   = paste0("POINT(", tmp$DEPLOYMENT$DEPLOY_LON, " ", tmp$DEPLOYMENT$DEPLOY_LAT, ")")
+        
+      }
+      
       
       #save to output data - each deployment
       output = rbind(output, c(subdirsALL[s], jf, name, instr, 
@@ -407,10 +422,9 @@ outputONMS$Project1[outputONMS$Project1 == "sanctsound"] = "SanctSound"
 outputONMS$Project1[outputONMS$Project1 == "mbarc_socal"] = "MBARC"
 outputONMS$Project1[outputONMS$Project1 == "mbarc_cencal"] = "MBARC"
 project_colors <- c(
-  #"SanctSound" = "#C6E6F0",  
+  "SanctSound" = "#C6E6F0",  
   "ONMS-Sound" = "#53B0D7",
-  "MBARC" = "#C6E6F0",
-    #"#003166" ,
+  "MBARC" = "#003166" ,
   "NRS" = "#004295") 
 
 
@@ -492,7 +506,7 @@ outputONMS_padded$Region <- factor(outputONMS_padded$Region, levels = c("Eastern
                                                                         "West Coast",
                                                                         "Pacific Islands"))
 
-outputONMS_padded$End_Date[95] = "2023-07-04"
+outputONMS_padded$End_Date[102] = "2023-07-04"
 
 
 pTb = ggplot(outputONMS_padded, aes(y = SiteF, x = Start_Date, xend = End_Date, fill = Project1)) +
