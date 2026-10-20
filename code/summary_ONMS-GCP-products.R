@@ -68,6 +68,8 @@ subdirsONMS = system2(command, args, stdout = TRUE, stderr = TRUE)
 command = "gsutil"
 args =  c("ls", gcpDirSS)
 subdirsSS = system2(command, args, stdout = TRUE, stderr = TRUE)  
+keep <- c("sb01", "sb03", "gr01")
+subdirsSS <- subdirsSS[basename(subdirsSS) %in% keep]
 
 command = "gsutil"
 args =  c("ls", gcpDirNRS)
@@ -106,17 +108,19 @@ if ( length(tmp)  > 0 ) {
 
 ## ONMS + SS + MBARC_SOCAL + MBARC_CENCAL ####
 subdirsALL = c(subdirsONMS, 
-              # subdirsSS,  - no hmd SS data yet on archive
+               subdirsSS,  # only sb01, sb03, and gr01 on archive rn
                subdirsMBARCSOCAL, subdirsMBARCCENCAL) 
 output = NULL
 dirNames   = sapply(strsplit(basename( subdirsALL ), "/"), `[`, 1)
 
-for (s in 1:length(subdirsALL) ) { # s = 1
+for (s in 1:length(subdirsALL) ) { # s = 26
   
   # read in files
   args = c("ls", "-r", subdirsALL[s])
   sFiles = system2(command, args, stdout = TRUE, stderr = TRUE)  
-  json_files = grep("\\-metadata.json$", sFiles, value = TRUE) #metadata files
+  
+  json_files = grep("\\.json$", sFiles, value = TRUE) #metadata files
+  
   cat("Processing... ", dirNames[s], "[", s, " of ", length(subdirsALL),"]", "\n" )
   
   if ( length(grep(projectNONMS, subdirsALL[s]) ) > 0 ) { # check for format - onms
@@ -148,35 +152,37 @@ for (s in 1:length(subdirsALL) ) { # s = 1
     
   } else if ( length(grep(projectNSS, subdirsALL[s]) ) > 0 ) {  # check for format - sanctsound
     
-    # for (jf in 1:length( json_files) ) {
-    #   
-    #   url = paste0("https://storage.googleapis.com/", gsub ("gs://", '', paste(json_files[jf], collapse = "") ) )
-    #   
-    #   tmp = fromJSON(url)
-    #   
-    #   name  = tmp$DATA_COLLECTION_NAME 
-    #   instr = tmp$PLATFORM_NAME
-    #   range = tmp$DATA_QUALITY$'1'$`Date Range`
-    # 
-    #   if ( length(range ) == 0 ){
-    #     start = as.Date( gsub("T"," ", tmp$START_TIME), format = "%Y-%m-%d")
-    #     end   = as.Date( gsub("T"," ", tmp$END_TIME), format = "%Y-%m-%d")
-    #     latlon   = tmp$SHAPE
-    # 
-    #   } else {
-    #   
-    #     start = as.Date( strsplit(range, " to ")[[1]],format = "%Y-%m-%d" )[1]
-    #     end   = as.Date( strsplit(range, " to ")[[1]],format = "%Y-%m-%d" )[2] 
-    #     latlon   = tmp$SHAPE
-    #     
-    #   }
-    #   
-    #   #save to output data - each deployment
-    #   output = rbind(output, c(subdirsALL[s], jf, name, instr, 
-    #                            as.character(start), as.character(end), 
-    #                            latlon) )
-    #   
-    # }
+    json_files <- grep("HMD-metadata\\.json$", sFiles, value = TRUE)
+    
+    for (jf in 1:length( json_files) ) { #jf = 1
+
+      url = paste0("https://storage.googleapis.com/", gsub ("gs://", '', paste(json_files[jf], collapse = "") ) )
+
+      tmp = fromJSON(url)
+
+      name  = tmp$DATA_COLLECTION_NAME
+      instr = tmp$PLATFORM_NAME
+      range = tmp$DATA_QUALITY$'1'$`Date Range`
+
+      if ( length(range ) == 0 ){
+        start = as.Date( tmp$START_DATE, format = "%d-%b-%Y")
+        end   = as.Date( tmp$END_DATE, format = "%d-%b-%Y")
+
+      } else {
+
+        start = as.Date( strsplit(range, " to ")[[1]],format = "%Y-%m-%d" )[1]
+        end   = as.Date( strsplit(range, " to ")[[1]],format = "%Y-%m-%d" )[2]
+
+      }
+
+      latlon   = tmp$SHAPE
+      
+      #save to output data - each deployment
+      output = rbind(output, c(subdirsALL[s], jf, name, instr,
+                               as.character(start), as.character(end),
+                               latlon) )
+
+    }
     
   } else if ( length(grep(projectNMBARCSOCAL, subdirsALL[s]) ) > 0 ) {  # check for format - MBARC socal
     
@@ -372,7 +378,7 @@ write.csv(outputONMS, file = paste0(outDirP, "/data_gantt_ONMS-NRS__gantt_produc
 
 
 #option to load the file, if you already ran and just want to plot ####
-#load(paste0(outDirP, "/data_gantt_ONMS-SS-NRS_gantt_2026-10-12.Rda") )
+#load(paste0(outDirP, "/data_gantt_ONMS-SS-NRS_gantt_products_2026-10-19.Rda") )
 
 outputONMS$Region[outputONMS$Region == "East Coast"] <- "Eastern"
 
