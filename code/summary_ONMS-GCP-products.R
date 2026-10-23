@@ -385,11 +385,11 @@ outputC = rbind(outputS,  outNRS2S)
 #outputC$Region
 
 ## SAVE ALL ####
-save(outputC, file = paste0(outDirP, "/data_gantt_ONMS-NRS_gantt_products", DC, ".Rda") ) #all data
+save(outputC, file = paste0(outDirP, "/data_gantt_ONMS-SS-NRS_gantt_products_", DC, ".Rda") ) #all data
 ## SAVE ONMS long-term only ####
 outputONMS = outputC[!is.na(outputC$Region),]
-save(outputONMS,      file = paste0(outDirP, "/data_gantt_ONMS-NRS_gantt_products", DC, ".Rda") )
-write.csv(outputONMS, file = paste0(outDirP, "/data_gantt_ONMS-NRS__gantt_products", DC, ".csv") )
+save(outputONMS,      file = paste0(outDirP, "/data_gantt_ONMS-NRS_gantt_products_", DC, ".Rda") )
+write.csv(outputONMS, file = paste0(outDirP, "/data_gantt_ONMS-NRS_gantt_products_", DC, ".csv") )
 
 
 #option to load the file, if you already ran and just want to plot ####
