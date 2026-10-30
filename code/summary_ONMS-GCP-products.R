@@ -507,10 +507,12 @@ outputONMS_padded$Region <- factor(outputONMS_padded$Region, levels = c("Eastern
                                                                         "Pacific Islands"))
 
 outputONMS_padded$End_Date[102] = "2023-07-04"
+outputONMS_padded$End_Date[65] = "2024-01-29"
 
 
 pTb = ggplot(outputONMS_padded, aes(y = SiteF, x = Start_Date, xend = End_Date, fill = Project1)) +
-  geom_tile(aes(x = Start_Date, width = as.numeric(End_Date - Start_Date)),
+  geom_tile(aes(x = Start_Date + (End_Date - Start_Date) / 2,
+                width = as.numeric(End_Date - Start_Date)),
             color = "gray", height = 0.6, na.rm = TRUE) +
   scale_fill_manual(values = project_colors, na.translate = FALSE) +
   scale_y_discrete(labels = function(x) ifelse(grepl("^PAD_", x), "", x)) +
