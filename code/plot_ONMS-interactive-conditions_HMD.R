@@ -132,6 +132,8 @@ hover_vlines <- polygon_data %>%
   ungroup() %>%
   unnest(pts)
 
+} else {
+  hover_vline = data.frame()
 }
 
 # create annual graph
@@ -304,7 +306,7 @@ pl
 
 if (site == "cinms_b" | site == "as01"){
   label_height = 40
-} else if (site %in% c("ci04", "pm01", "pm02") ){
+} else if (site %in% c("ci04", "pm01", "pm02", "fk01") ){
   label_height = 37
 } else if (site %in% c( "cox01", "cox03", "ns02", "ns08", "wea_hua", "as10") ){
   label_height = 38
@@ -1196,7 +1198,7 @@ combined_layout2 <- browsable(
     div(style = "height: 600px; width: 600px;", pv2_interactive),
     
     # caption
-    p(HTML(caption_text2), style = "font-size: 11px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
+    p(HTML(caption_text1), style = "font-size: 11px; color: black; margin: 0; padding-left: 5px; line-height: 1.4;"),
     
     # divider
     tags$hr(style = "width: 600px; border: none; border-top: 1.5px solid black; margin: 5px 0;"),

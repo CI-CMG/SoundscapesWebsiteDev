@@ -507,7 +507,7 @@ outputONMS_padded$Region <- factor(outputONMS_padded$Region, levels = c("Eastern
                                                                         "Pacific Islands"))
 
 outputONMS_padded$End_Date[102] = "2023-07-04"
-outputONMS_padded$End_Date[65] = "2024-01-29"
+#outputONMS_padded$End_Date[65] = "2024-01-29"
 
 
 pTb = ggplot(outputONMS_padded, aes(y = SiteF, x = Start_Date, xend = End_Date, fill = Project1)) +

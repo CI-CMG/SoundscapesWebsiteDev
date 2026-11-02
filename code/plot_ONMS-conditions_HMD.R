@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("oc02")
+ONMSsites = c("fk01")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -458,7 +458,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   } else if (site %in% c("cinms_b", "wea_hua")){
     gps <- gps %>%
       mutate(across(num_range("HMD_", 80076:90053), ~ NA))
-  }
+  } 
   
   #Removing frequencies that have instrument issues that were not marked in data quality matrix
   #DIPS at ~3k Hz. They vary by site.
