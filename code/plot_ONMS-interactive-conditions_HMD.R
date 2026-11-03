@@ -133,7 +133,7 @@ hover_vlines <- polygon_data %>%
   unnest(pts)
 
 } else {
-  hover_vline = data.frame()
+  hover_vlines = data.frame()
 }
 
 # create annual graph
