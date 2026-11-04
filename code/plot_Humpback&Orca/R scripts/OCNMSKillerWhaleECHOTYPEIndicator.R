@@ -28,8 +28,13 @@ OC02_02 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_H
 
 OC02_04 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-04.csv', stringsAsFactors = FALSE)
 
-OC02_05 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-05.csv', stringsAsFactors = FALSE)
+OC02_05 <- read.xlsx('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-05.xlsx')
 
+#fixing format and error found in OC02_01 log
+OC02_01$end_time[4] <- "2019-03-10T21:50:28Z"
+
+# remove columns killerwhale_presence (always 1) and killerwhale_echo_types (always NaN) 
+OC02_01 <- OC02_01[,c(1, 4, 5, 6)]
 
 #Clean up! 
 OC02_01 <- OC02_01[-1,]
@@ -37,16 +42,22 @@ OC02_02 <- OC02_02[-1,]
 OC02_04 <- OC02_04[-1,]
 OC02_05 <- OC02_05[-1,]
 
-OC02 <- rbind(OC02_01, OC02_02, OC02_04, OC02_05)
 
-#fixing error found in OC02_01 log
-OC02$end_time[4] <- "2019-03-10T21:50:28Z"
+
+OC02 <- bind_rows(OC02_01, OC02_02, OC02_04, OC02_05)
+
+OC02 <- OC02 %>%
+  rename(Echotype = X)
+
+OC02 <- OC02 %>%
+  rename(Subtype = X.1)
+
+OC02 <- OC02 %>%
+  rename(Comments = X.2)
 
 OC02$start_time <- ymd_hms(OC02$start_time)
 OC02$end_time <- ymd_hms(OC02$end_time)
 
-# remove columns killerwhale_presence (always 1) and killerwhale_echo_types (always NaN) 
-OC02 <- OC02[, c(1, 4)]
 
 #format
 OC02$start_time <- as.POSIXct(OC02$start_time)
