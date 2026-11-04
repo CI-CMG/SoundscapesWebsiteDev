@@ -30,22 +30,29 @@ OC02_04 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_H
 
 OC02_05 <- read.xlsx('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-05.xlsx')
 
+
+#Clean up! 
 #fixing format and error found in OC02_01 log
 OC02_01$end_time[4] <- "2019-03-10T21:50:28Z"
 
 # remove columns killerwhale_presence (always 1) and killerwhale_echo_types (always NaN) 
 OC02_01 <- OC02_01[,c(1, 4, 5, 6)]
 
-#Clean up! 
 OC02_01 <- OC02_01[-1,]
 OC02_02 <- OC02_02[-1,]
 OC02_04 <- OC02_04[-1,]
 OC02_05 <- OC02_05[-1,]
 
+OC02_05 <- OC02_05 %>%
+  rename(X = X3)
 
+OC02_05 <- OC02_05 %>%
+  rename(X.1 = X4)
 
 OC02 <- bind_rows(OC02_01, OC02_02, OC02_04, OC02_05)
 
+
+#format
 OC02 <- OC02 %>%
   rename(Echotype = X)
 
@@ -58,13 +65,17 @@ OC02 <- OC02 %>%
 OC02$start_time <- ymd_hms(OC02$start_time)
 OC02$end_time <- ymd_hms(OC02$end_time)
 
-
-#format
 OC02$start_time <- as.POSIXct(OC02$start_time)
 OC02$end_time <- as.POSIXct(OC02$end_time)
 
+#removing rows where find wouldnt open, didnt exists, or no kw calls were found
+OC02 <- OC02[-192, ]
+OC02 <- OC02[-190, ]
+OC02 <- OC02[-11, ]
+OC02 <- OC02[-10, ]
 
-#creating a function that will expand each log so that we have a row for each hour where a fish was singing 
+
+#creating a function that will expand each log so that we have a row for each hour where a kw was singing 
 generate_hours <- function(start_time, end_time) {
   # Create a sequence of hours between start_time and end_time
   seq_hours <- seq(from = floor_date(start_time, "hour"), 
@@ -78,36 +89,10 @@ generate_hours <- function(start_time, end_time) {
 # Apply the function to each row of the data
 OC02Hour <- OC02 %>%
   rowwise() %>%
-  do(generate_hours( .$start_time, .$end_time)) %>%
+  do(data.frame(Echotype = .$Echotype,
+                generate_hours(.$start_time, .$end_time))) %>%
   ungroup() %>%
-  #remove duplicate hours so that we have one row for every hour where there were orca calls
-  distinct()
-
-
-#pulling out just hour so we can sum across each one 
-#MB05Hour$ChorusHour <- hour(MB05Hour$hour)
-
-#changing utc to pst/pdt 
-# MB05Hour$date <- substr(MB05Hour$hour, 1, 10)
-# MB05Hour$date <- as.Date(MB05Hour$date)
-
-#daylight savings -8, otherwise -7
-# MB05HourPST <- MB05Hour %>%
-#   mutate(
-#     ChorusHourP = ifelse(date >= as.Date("2022-11-06") & date <= as.Date("2023-03-11"), ChorusHour - 8, ChorusHour - 7)
-#   )
-
-#make pt from utc
-# MB05HourPST <- MB05Hour %>%
-#   mutate(
-#     hour_PT = with_tz(hour, tzone = "America/Los_Angeles"),
-#     ChorusHourPT = hour(hour_PT)
-#   )
-
-#group count of fish chorusing for each hour and fish species
-# MB05_summary <- MB05HourPST %>%
-#  group_by(ChorusHourPT, fish) %>%
-#  summarise(count = n())
+  distinct() 
 
 
 #need to add a end detection time column
@@ -126,6 +111,15 @@ detData <- loadDetectionData(x= OC02Hour,
 runDetectionExplorer(detData)
 
 
+unique(OC02$Echotype)
+
+
+OC02$Echotype <- gsub(' T','Transient', OC02$Echotype)
+OC02$Echotype <- gsub('T','Transient', OC02$Echotype)
+OC02$Echotype <- gsub('NRKW','Northern resident killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('SRKW','Southern resident killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('UNK','Unknown killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('URK','Unknown resident killer whales', OC02$Echotype)
 
 
 #NEW PLOTS - INDICATOR GRAPHICS
@@ -349,9 +343,6 @@ orca_cleaned <- OC02_weekly %>%
   select(-is_off_effort)
 
 
-library(dplyr)
-library(tidyr)
-
 # 1. Create a complete sequence of weeks from your data's start to end
 full_weeks <- data.frame(
   week = seq(min(OC02_weekly$week), 
@@ -393,6 +384,74 @@ ggplot(orca_complete, aes(x = week, y = total_hours_present, group = group_id)) 
 
 
 
+
+
+
+
+
+#NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+
+
+OC02_weekly <- OC02Hour %>%
+  mutate(week = as.Date(floor_date(hour_presence, "week"))) %>%
+  group_by(week, Echotype) %>%
+  summarise(total_hours_present = sum(Orca, na.rm = TRUE), .groups = "drop") %>%
+  complete(
+    week = seq(min(week), max(week), by = "1 week"),
+    Echotype,
+    fill = list(total_hours_present = 0)
+  ) %>%
+  arrange(Echotype, week)
+
+
+
+
+OC02_offeffort <- data.frame(
+  start = as.Date(c("2019-04-25", "2019-10-31", "2020-10-02")),
+  end   = as.Date(c("2019-07-10", "2020-07-11", "2021-06-05"))
+)
+
+orca_complete <- OC02_weekly %>%
+  rowwise() %>%
+  mutate(
+    is_off = any(week >= OC02_offeffort$start & week <= OC02_offeffort$end),
+    total_hours_present = if_else(is_off, NA_real_, as.numeric(total_hours_present))
+  ) %>%
+  ungroup() %>%
+  select(-is_off)
+
+
+
+curveOC02 <- ggplot(orca_complete,
+                    aes(x = week, y = total_hours_present,
+                        color = Echotype, fill = Echotype)) +
+  geom_point(alpha = 0.6, na.rm = TRUE) +
+  stat_smooth(method = "gam", formula = y ~ s(x, k = 20),
+              se = TRUE, alpha = 0.2, na.rm = TRUE) +
+  geom_rect(
+    data = OC02_offeffort,
+    aes(xmin = start, xmax = end - days(4), ymin = 0, ymax = 72),
+    inherit.aes = FALSE, fill = "gray95") +
+  scale_x_date(date_labels = "%b %Y",
+               date_breaks = "3 months",
+               date_minor_breaks = "1 month") +
+  coord_cartesian(ylim = c(0, 72)) +
+  scale_y_continuous(expand = c(0, 0),
+                     breaks = c(24, 48, 72, 96, 120, 144, 168)) +
+  labs(title = "OC02", x = "Week",
+       y = "Total hours with orca call presence",
+       color = "Echotype", fill = "Echotype") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+curveOC02
+
+
+
+curveOC02 + facet_wrap(~ Echotype, ncol = 1)
+
+
+#END NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
 ###plot ####
 
