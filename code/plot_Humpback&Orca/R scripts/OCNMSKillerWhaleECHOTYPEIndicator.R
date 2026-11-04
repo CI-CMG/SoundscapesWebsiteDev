@@ -10,7 +10,7 @@ library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(reshape)
-library(rJava)
+#library(rJava)
 library(xlsx)
 library(openxlsx)
 library(devtools)
@@ -22,13 +22,13 @@ library(patchwork)
 rm(list=ls()) 
 
 #Load in
-OC02_01 <- read.csv('C:/Users/embe5980/SoundscapesWebsite/code/plot_Humpback&Orca/data/OCNMS SS/noaaSanctSound_OC02_01_killerwhale.csv', stringsAsFactors = FALSE)
+OC02_01 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-01.csv', stringsAsFactors = FALSE)
 
-OC02_02 <- read.csv('C:/Users/embe5980/SoundscapesWebsite/code/plot_Humpback&Orca/data/OCNMS SS/noaaSanctSound_OC02_02_killerwhale.csv', stringsAsFactors = FALSE)
+OC02_02 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-02.csv', stringsAsFactors = FALSE)
 
-OC02_04 <- read.csv('C:/Users/embe5980/SoundscapesWebsite/code/plot_Humpback&Orca/data/OCNMS SS/noaaSanctSound_OC02_04_killerwhale.csv', stringsAsFactors = FALSE)
+OC02_04 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-04.csv', stringsAsFactors = FALSE)
 
-OC02_05 <- read.csv('C:/Users/embe5980/SoundscapesWebsite/code/plot_Humpback&Orca/data/OCNMS SS/noaaSanctSound_OC02_05_killerwhale.csv', stringsAsFactors = FALSE)
+OC02_05 <- read.csv('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/data/OCNMS ECHO/OC-02/OC-02-05.csv', stringsAsFactors = FALSE)
 
 
 #Clean up! 

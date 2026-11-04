@@ -306,7 +306,7 @@ pl
 
 if (site == "cinms_b" | site == "as01"){
   label_height = 40
-} else if (site %in% c("ci04", "pm01", "pm02", "fk01") ){
+} else if (site %in% c("ci04", "pm01", "pm02", "fk01", "fk06", "fk05", "fk08") ){
   label_height = 37
 } else if (site %in% c( "cox01", "cox03", "ns02", "ns08", "wea_hua", "as10") ){
   label_height = 38
@@ -623,7 +623,7 @@ combined_layout
 
 
 #save html file to Dev contents folder
-outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
+outDir = "C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
 
 
@@ -1223,7 +1223,7 @@ combined_layout2
 
 
 #save html file to Dev contents folder
-outDir = "X:/Emma_Beretta/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
+outDir = "C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/" #for GCP workstation remote desktop Emma
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsiteDev/" #local
 
 

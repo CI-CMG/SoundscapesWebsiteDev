@@ -166,29 +166,29 @@ combined <- bind_rows(dfs, .id = "source_file")
 ##initial formatting####
 #get data ready for line graph (NRS13 song)
 
-  combined <- combined %>%
-    rename(HourStart = Hour)
-  
-  combined <- combined %>%
-    rename(Song = "Song Presence")
-  
-  combined <- combined %>% 
-    mutate(HourEnd = lead(HourStart))
-  
+combined <- combined %>%
+  rename(HourStart = Hour)
 
-  combinedT <- combined |>
-    mutate(Song = if_else(NoData == 1, NA_real_, Song))
-  
-  # Create detection dataset w/ effort
-  detData <- loadDetectionData(
-    x = combinedT,
-    source = "csv",
-    detectionType = "auto",
-    wide = TRUE,
-    tz = "UTC",
-    columnMap = list(UTC = "HourStart", end = "HourEnd"),
-    speciesCols = "Song",
-    detectedValues = c("1", "0", NA))
+combined <- combined %>%
+  rename(Song = "Song Presence")
+
+combined <- combined %>% 
+  mutate(HourEnd = lead(HourStart))
+
+
+combinedT <- combined |>
+  mutate(Song = if_else(NoData == 1, NA_real_, Song))
+
+# Create detection dataset w/ effort
+detData <- loadDetectionData(
+  x = combinedT,
+  source = "csv",
+  detectionType = "auto",
+  wide = TRUE,
+  tz = "UTC",
+  columnMap = list(UTC = "HourStart", end = "HourEnd"),
+  speciesCols = "Song",
+  detectedValues = c("1", "0", NA))
 
 
 
