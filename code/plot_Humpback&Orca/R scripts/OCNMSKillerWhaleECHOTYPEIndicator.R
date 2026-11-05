@@ -75,6 +75,27 @@ OC02 <- OC02[-11, ]
 OC02 <- OC02[-10, ]
 
 
+unique(OC02$Echotype)
+
+
+OC02$Echotype <- gsub('T','Transient', OC02$Echotype)
+OC02$Echotype <- gsub(' Transient','Transient', OC02$Echotype)
+OC02$Echotype <- gsub('NRKW/SRKW','NRKW,SRKW', OC02$Echotype)
+OC02$Echotype <- gsub('SRKW,NRKW','NRKW,SRKW', OC02$Echotype)
+OC02$Echotype <- gsub('UNK','Unknown killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('SRKW','Southern resident killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('NRKW','Northern resident killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('URK','Unknown resident killer whales', OC02$Echotype)
+
+
+OC02$Echotype <- gsub('NRKW?','Northern resident killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('URKW','Unknown resident killer whales', OC02$Echotype)
+
+
+#questions for Lindsey: include the ? logs and what to do about hours that had two echotypes? probably split and add one point to each echoype line instead of having them joined
+
+
+
 #creating a function that will expand each log so that we have a row for each hour where a kw was singing 
 generate_hours <- function(start_time, end_time) {
   # Create a sequence of hours between start_time and end_time
@@ -110,16 +131,6 @@ detData <- loadDetectionData(x= OC02Hour,
 
 runDetectionExplorer(detData)
 
-
-unique(OC02$Echotype)
-
-
-OC02$Echotype <- gsub(' T','Transient', OC02$Echotype)
-OC02$Echotype <- gsub('T','Transient', OC02$Echotype)
-OC02$Echotype <- gsub('NRKW','Northern resident killer whales', OC02$Echotype)
-OC02$Echotype <- gsub('SRKW','Southern resident killer whales', OC02$Echotype)
-OC02$Echotype <- gsub('UNK','Unknown killer whales', OC02$Echotype)
-OC02$Echotype <- gsub('URK','Unknown resident killer whales', OC02$Echotype)
 
 
 #NEW PLOTS - INDICATOR GRAPHICS
