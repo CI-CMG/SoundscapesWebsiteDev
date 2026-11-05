@@ -86,10 +86,10 @@ OC02$Echotype <- gsub('UNK','Unknown killer whales', OC02$Echotype)
 OC02$Echotype <- gsub('SRKW','Southern resident killer whales', OC02$Echotype)
 OC02$Echotype <- gsub('NRKW','Northern resident killer whales', OC02$Echotype)
 OC02$Echotype <- gsub('URK','Unknown resident killer whales', OC02$Echotype)
+OC02$Echotype <- gsub('Unknown resident killer whalesW','Unknown resident killer whales', OC02$Echotype)
 
 
 OC02$Echotype <- gsub('NRKW?','Northern resident killer whales', OC02$Echotype)
-OC02$Echotype <- gsub('URKW','Unknown resident killer whales', OC02$Echotype)
 
 
 #questions for Lindsey: include the ? logs and what to do about hours that had two echotypes? probably split and add one point to each echoype line instead of having them joined
