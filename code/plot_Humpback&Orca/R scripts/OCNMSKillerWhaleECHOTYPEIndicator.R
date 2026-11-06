@@ -403,6 +403,15 @@ ggplot(orca_complete, aes(x = week, y = total_hours_present, group = group_id)) 
 #NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
 
+OC02Hour <- OC02Hour %>%
+  separate_rows(Echotype, sep = "\\s*[,/]\\s*") %>%   # split on comma or slash
+ # mutate(Echotype = trimws(gsub("\\?", "", Echotype))) %>%   # drop "?" and stray spaces
+  filter(Echotype != "") %>%
+  distinct()   # avoid duplicate hour + echotype rows
+
+OC02HourT %>% count(Echotype, sort = TRUE)   # check the result
+
+
 OC02_weekly <- OC02Hour %>%
   mutate(week = as.Date(floor_date(hour_presence, "week"))) %>%
   group_by(week, Echotype) %>%
