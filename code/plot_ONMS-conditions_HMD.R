@@ -35,7 +35,7 @@ rm(list=ls())
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("ns05")
+ONMSsites = c("hi00")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -830,7 +830,7 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   }
   
   
-  if(substr(site, 1, 2) == "pm" | substr(site, 1, 2) == "hi"){
+  if(substr(site, 1, 2) == "pm" | substr(site3, 1, 2) == "hi"){
     legend_label2 = "Humpback\nSeason"
   } else {
     legend_label2 = "Season"
