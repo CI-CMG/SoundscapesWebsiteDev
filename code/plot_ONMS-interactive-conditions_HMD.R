@@ -472,15 +472,10 @@ summary$month <- factor(summary$month,
 
 #effort graph interactive
 
-# summaryt <- gpsAG %>%
-#   mutate(
-#     year  = year(UTC),  # Extract Year
-#     month = format(UTC, "%m")  
-#   ) %>%
-#   count(year, month) 
-# summaryt$dy = round(summaryt$n/ 24)
-# 
-# 
+if (site == "pm01" | site == "pm02"){
+summary$month <- factor(as.character(summary$month),
+                        levels = month.abb[c(10:12, 1:7)])
+}
 
 
 p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
@@ -532,7 +527,7 @@ p1 = ggplot(summary, aes(x = month, y = dy, fill = as.factor(year),
 p1
 
 
-#adjusting heigh of graph based on number of years displayed
+#adjusting height of graph based on number of years displayed
 if (length(years_to_keep) > 3){
     height_int = 240
   
