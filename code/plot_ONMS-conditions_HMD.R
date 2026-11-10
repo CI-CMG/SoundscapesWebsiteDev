@@ -31,11 +31,11 @@ rm(list=ls())
 
 #SITES ####
 # ONMSsites = c("sb01", "sb03", "hi01", "hi03", "hi04", "hi08", "pm01", "pm02", "fgb01", "fk01", "fk05", "fk06", "fk08", "as01", "mb01", "mb02", "oc02")
-# NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06" , "np02"
+# NRSsites "oc03", "hi00","ci05","sb09","as10","cb11","ch13","fgb06", "ne08" , "np02"
 #NMFS NE #site names: "cox01","cox03","ns02","ns05","ns08","ustr06","ustr09","ne08"
 # "CINMS_B"
 
-ONMSsites = c("np02")
+ONMSsites = c("fk06")
 
 ## directories ####
 #outDir   =  "C:/Users/embe5980/SoundscapesWebsite/" # Emma local git repo 
@@ -319,44 +319,104 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   # these sites have duplicate data (two deployments overlapped) so we need to average dB values 
   # between Jan 29 2024 and March 15 2024
   # should be good now sinc I saved non duplicate data to products, but keeping incase we need to fix this issue again
-
-  if (site == "oc02"){
-    
-    dups <- gps %>%
-      count(UTC, name = "n") %>%
-      filter(n > 1)
-    
-    overlaps <- dups %>%
-      arrange(UTC) %>%
-      mutate(gap = as.numeric(difftime(UTC, lag(UTC), units = "hours")),
-             block = cumsum(is.na(gap) | gap > 1)) %>%
-      group_by(block) %>%
-      summarize(start = min(UTC),
-                end   = max(UTC),
-                n_timestamps = n(),
-                .groups = "drop")
-    
-    overlaps
-    
-    gps_avg <- gps %>%
-      group_by(UTC) %>%
-      summarize(
-        across(starts_with("HMD"), mean),
-        across(-starts_with("HMD"), first),
-        .groups = "drop"
-      )
-
-    nrow(gps) - nrow(gps_avg) == sum(dups$n - 1)
-     
-    gps_old <- gps
-    gps <- gps_avg
-
-    #save new data without duplicate rows
-    outData = gps
-    save(outData, file = paste0(outDirP, "HMDdata_", tolower(site), "_HourlySPL-gfs_", DC, ".Rda") )
-
-   }
+  # 
+  # if (site == "oc02"){
+  #   
+  #   dups <- gps %>%
+  #     count(UTC, name = "n") %>%
+  #     filter(n > 1)
+  #   
+  #   overlaps <- dups %>%
+  #     arrange(UTC) %>%
+  #     mutate(gap = as.numeric(difftime(UTC, lag(UTC), units = "hours")),
+  #            block = cumsum(is.na(gap) | gap > 1)) %>%
+  #     group_by(block) %>%
+  #     summarize(start = min(UTC),
+  #               end   = max(UTC),
+  #               n_timestamps = n(),
+  #               .groups = "drop")
+  #   
+  #   overlaps
+  #   
+  #   gps_avg <- gps %>%
+  #     group_by(UTC) %>%
+  #     summarize(
+  #       across(starts_with("HMD"), mean),
+  #       across(-starts_with("HMD"), first),
+  #       .groups = "drop"
+  #     )
+  # 
+  #   nrow(gps) - nrow(gps_avg) == sum(dups$n - 1)
+  #    
+  #   gps_old <- gps
+  #   gps <- gps_avg
+  # 
+  #   #save new data without duplicate rows
+  #   outData = gps
+  #   save(outData, file = paste0(outDirP, "HMDdata_", tolower(site), "_HourlySPL-gfs_", DC, ".Rda") )
+  # 
+  #  }
+  # 
   
+  
+  #fk06 data has some duplicate rows 
+  
+# if (site == "fk06") { 
+#   # 1. Find timestamps that appear more than once
+#   dup_times <- gps %>%
+#     count(UTC) %>%
+#     filter(n > 1) %>%
+#     pull(UTC)
+#   
+#   # 2. For each duplicated timestamp, count how many DISTINCT value-sets exist
+#   conflicts <- gps %>%
+#     filter(UTC %in% dup_times) %>%
+#     group_by(UTC) %>%
+#     summarise(
+#       n_rows = n(),
+#       n_unique_rows = n_distinct(across(starts_with("HMD_"))),
+#       .groups = "drop"
+#     ) %>%
+#     filter(n_unique_rows > 1)
+#   
+#   conflicts
+#   
+#   
+#   conflicts2 <- gps %>%
+#     filter(UTC %in% conflicts$UTC) %>%
+#     group_by(UTC) %>%
+#     summarise(
+#       n_rows = n(),
+#       n_all_na = sum(if_all(starts_with("HMD_"), is.na)),
+#       n_with_data = sum(!if_all(starts_with("HMD_"), is.na)),
+#       n_unique_data = n_distinct(
+#         pick(starts_with("HMD_"))[!if_all(starts_with("HMD_"), is.na), ]
+#       ),
+#       .groups = "drop"
+#     )
+#   
+#   
+#   
+#   df_clean <- gps %>%
+#     filter(!(UTC %in% dup_times & if_all(starts_with("HMD_"), is.na))) %>%
+#     distinct()
+#   
+#   # verify: should be TRUE
+#   n_distinct(df_clean$UTC) == nrow(df_clean)
+#   
+#   # and confirm no real data was lost: should be TRUE
+#   nrow(distinct(filter(gps, !if_all(starts_with("HMD_"), is.na)), UTC, across(starts_with("HMD_")))) ==
+#     nrow(filter(df_clean, !if_all(starts_with("HMD_"), is.na)))
+#   
+#   gps_old <- gps
+#   gps <- df_clean
+#   
+#   #save new data without duplicate rows
+#   outData = gps
+#   save(outData, file = paste0(outDirP, "HMDdata_", tolower(site), "_HourlySPL-gfs_", DC, ".Rda") )
+#   
+# }
+#   
   
   #extra dataset in archive
   # if (site == "gr01"){
@@ -2442,9 +2502,5 @@ for (uu in 1:length(ONMSsites)) { # uu = 1
   #save(gps, file = paste0(outDirP, "/data_", tolower(site), "_HourlySPL-gfs-season-spectrumlevel_", DC, ".Rda") )
   
 }
-
-
-
-
 
 
