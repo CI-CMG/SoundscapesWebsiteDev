@@ -33,7 +33,7 @@ OC02_05 <- read.xlsx('C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_
 
 #Clean up! 
 #fixing format and error found in OC02_01 log
-OC02_01$end_time[4] <- "2019-03-10T21:50:28Z"
+OC02_01$end_time[5] <- "2019-03-10T21:50:28Z"
 
 # remove columns killerwhale_presence (always 1) and killerwhale_echo_types (always NaN) 
 OC02_01 <- OC02_01[,c(1, 4, 5, 6)]
@@ -74,14 +74,12 @@ OC02 <- OC02[-190, ]
 OC02 <- OC02[-11, ]
 OC02 <- OC02[-10, ]
 
-
-unique(OC02$Echotype)
-
-
+#rename logs 
 OC02$Echotype <- gsub('T','Transient', OC02$Echotype)
 OC02$Echotype <- gsub(' Transient','Transient', OC02$Echotype)
 OC02$Echotype <- gsub('NRKW/SRKW','NRKW,SRKW', OC02$Echotype)
 OC02$Echotype <- gsub('SRKW,NRKW','NRKW,SRKW', OC02$Echotype)
+OC02$Echotype <- gsub("\\?", "", OC02$Echotype)
 OC02$Echotype <- gsub('UNK','Unknown killer whales', OC02$Echotype)
 OC02$Echotype <- gsub('SRKW','Southern resident killer whales', OC02$Echotype)
 OC02$Echotype <- gsub('NRKW','Northern resident killer whales', OC02$Echotype)
@@ -89,11 +87,7 @@ OC02$Echotype <- gsub('URK','Unknown resident killer whales', OC02$Echotype)
 OC02$Echotype <- gsub('Unknown resident killer whalesW','Unknown resident killer whales', OC02$Echotype)
 
 
-OC02$Echotype <- gsub('NRKW?','Northern resident killer whales', OC02$Echotype)
-
-
-#questions for Lindsey: include the ? logs and what to do about hours that had two echotypes? probably split and add one point to each echoype line instead of having them joined
-
+unique(OC02$Echotype)
 
 
 #creating a function that will expand each log so that we have a row for each hour where a kw was singing 
@@ -121,284 +115,9 @@ OC02Hour <- OC02Hour %>% mutate(end_time = hour_presence + hours(1))
 
 OC02Hour$Orca <- 1
 
-#From Taiki - make detection datasets
-detData <- loadDetectionData(x= OC02Hour,
-                             source='csv', detectionType='auto', wide=TRUE,
-                             tz='UTC',
-                             columnMap=list(UTC='hour_presence', end='end_time'),
-                             speciesCols='Orca',
-                             detectedValues='1')
-
-runDetectionExplorer(detData)
-
-
-
-#NEW PLOTS - INDICATOR GRAPHICS
-
-#BOXPLOT ####
-# 03/08/2019 to 10/21/2021
-
-plotDetectionBoxplot(x=detData, group='species', bin='hour/week', combineYears=TRUE)+
-  theme(legend.position = "none",
-        plot.title = element_text(face = "bold")) +
-  labs(title = " OC02: Weekly variation of killer whale calls b/w Mar 2019 and Oct 2021")
-
-
-
-
 
 
 #LINE GRAPH ####
-
-##initial formatting####
-#get data ready for line graph 
-#WATCH OUT because this makes Song and NonSong numeric, which is needed for line graph, but character is needed for effort graphs
-# otherCsv1 <- otherCsv1 %>%
-#   mutate(
-#     datetime = mdy_hm(Hour),  # convert to POSIXct
-#     Song = as.numeric(Song),
-#     NonSong = as.numeric(NonSong)
-#   )
-# 
-# 
-# 
-# #get detection data for all three sites to then be able to get off effort
-# # Put the three data frames into a list:
-# otherCsv_list <- list(otherCsv1, otherCsv2, otherCsv3)
-# 
-# # List to store outputs
-# detData_list <- list()
-# 
-# #format data to get detection dataset
-# for (i in seq_along(otherCsv_list)) { #i = 1
-#   
-#   otherCsv <- otherCsv_list[[i]]
-#   
-#   otherCsv <- otherCsv %>%
-#     rename(HourStart = Hour)
-#   
-#   otherCsv <- otherCsv %>% 
-#     mutate(HourEnd = lead(HourStart))
-#   
-#   #filling in end hour for last hour bin 
-#   otherCsv$HourEnd[26520] <- "11/22/2021 8:00"
-#   
-#   otherCsvSong <- otherCsv %>%
-#     select(-NonSong) %>%
-#     mutate(Humpback = Song) %>%
-#     select(-Song)
-#   
-#   # Create detection dataset w/ effort
-#   detData_list[[i]] <- loadDetectionData(
-#     x = otherCsvSong,
-#     source = "csv",
-#     detectionType = "auto",
-#     wide = TRUE,
-#     tz = "UTC",
-#     columnMap = list(UTC = "HourStart", end = "HourEnd"),
-#     speciesCols = "Humpback",
-#     detectedValues = c("1", "0", NA))
-# }
-# 
-# names(detData_list) <- c("detData1E", "detData2E", "detData3E")
-# 
-# 
-
-###format data ####
-#format data for Line graph 
-
-OC02_weekly <- OC02Hour %>%
-  mutate(
-    week = floor_date(hour_presence, "week")
-  ) %>%
-  group_by(week) %>%
-  summarise(
-    total_hours_present = sum(Orca, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  complete(
-    week = seq(min(week), max(week), by = "1 week"),
-    fill = list(total_hours_present = 0)
-  ) %>%
-  arrange(week)
-
-
-
-
-OC02_weekly <- OC02_weekly %>%
-  filter(
-    !(
-      (week >= as.Date("2019-04-25") & week <= as.Date("2019-07-10")) |
-        (week >= as.Date("2019-10-31") & week <= as.Date("2020-07-11")) |
-        (week >= as.Date("2020-10-02") & week <= as.Date("2021-06-05"))
-    )
-  )
-
-
-
-
-
-###effort ####
-
-#OLD WAY to get effort when off effort week = when 1 hour of na or more
-#use detection dataset to mark when off effort
-#effort <- detData_list[[1]]
-# mark which times on vs off effort
-#effort$on_effort <- !is.na(effort$detectedFlag)
-# note when effort changes from on to off so we can group them
-#effort$eff_change <- FALSE
-#effort$eff_change[2:nrow(effort)] <- effort$on_effort[1:(nrow(effort)-1)] != effort$on_effort[2:nrow(effort)]
-# label the groups with numbers
-#effort$eff_group <- cumsum(effort$eff_change)
-# get the start and end times of each off effort group
-#effortOff1 <- effort %>%
-# filter(on_effort == FALSE) %>%
-# group_by(eff_group) %>%
-# summarise(start=min(UTC), end=max(end))
-#off_effort_weeks <- effortOff1 %>%
-# rowwise() %>%
-# mutate(
-#  week_seq = list(seq(
-#    from = floor_date(start, "week"),
-#    to   = floor_date(end,   "week"),
-#     by   = "1 week"
-#   ))
-#  ) %>%
-# unnest(week_seq) %>%
-# ungroup() %>%
-# distinct(week_seq) %>%     # avoid duplicates
-# mutate(
-#   xmin = week_seq,
-#   xmax = week_seq + weeks(1)
-# )
-#plot after removing data from off effort weeks
-#MB01_weekly_clean <- MB01_weekly %>%
-# anti_join(off_effort_weeks, by = c("week" = "week_seq"))
-
-# 
-# #NEW EFFORT for MB01 when na > 75% of hours in week
-# effort <- detData_list[[1]]
-# 
-# # Mark on-effort (non-NA)
-# effort$on_effort <- !is.na(effort$detectedFlag)
-# 
-# # Extract week
-# effort$week <- floor_date(effort$UTC, "week")
-# 
-# # Count NA hours per week
-# weekly_effort_summary <- effort %>%
-#   group_by(week) %>%
-#   summarize(
-#     na_hours = sum(is.na(detectedFlag)),
-#     total_hours = n()
-#   ) %>%
-#   mutate(
-#     off_effort = na_hours >= 126 
-#   )
-# 
-# #dataset with off effort weeks
-# off_effort_weeksMB01 <- weekly_effort_summary %>%
-#   filter(off_effort) %>%
-#   mutate(
-#     xmin = week,
-#     xmax = week + weeks(1)
-#   )
-# 
-# 
-# #get rid of off effort data points
-# MB01_weekly_clean <- MB01_weekly %>%
-#   anti_join(weekly_effort_summary %>% filter(off_effort),
-#             by = c("week"))
-# 
-# 
-# 
-
-
-
-#off effort weeks
-OC02_offeffort <- data.frame(
-  start = c("04-25-2019", "10-31-2019", "10-02-2020"),
-  end = c("07-10-2019", "07-11-2020", "06-05-2021")
-)
-
-
-OC02_offeffort$start <- as.Date(OC02_offeffort$start, format = "%m-%d-%Y")
-OC02_offeffort$end <- as.Date(OC02_offeffort$end, format = "%m-%d-%Y")
-
-# Create a cleaned version of your data
-# daily_cleaned <- OC02_weekly
-# 
-# for(i in 1:nrow(OC02_offeffort)) {
-#   gap_start <- OC02_offeffort$start[i]
-#   gap_end   <- OC02_offeffort$end[i]
-#   
-#   # Set the sound level to NA for these Julian days
-#   daily_cleaned$HMD_50[daily_cleaned$Julian >= start & 
-#                          daily_cleaned$Julian <= end] <- NA
-# }
-
-
-
-library(dplyr)
-library(ivreg) # Only if using interval joins, otherwise base dplyr works
-
-# Assume primary data is 'orca_data' and off-effort is 'off_effort'
-orca_cleaned <- OC02_weekly %>%
-  # Create a temporary flag by checking if 'week_start' is between any off-effort start/end
-  rowwise() %>%
-  mutate(is_off_effort = any(week >= OC02_offeffort$start & 
-                               week <= OC02_offeffort$end)) %>%
-  ungroup() %>%
-  # Set hours to NA if the flag is TRUE
-  mutate(total_hours_present = ifelse(is_off_effort, NA, total_hours_present)) %>%
-  select(-is_off_effort)
-
-
-# 1. Create a complete sequence of weeks from your data's start to end
-full_weeks <- data.frame(
-  week = seq(min(OC02_weekly$week), 
-             max(OC02_weekly$week), 
-             by = "1 week")
-)
-
-# 2. Join existing data and identify off-effort weeks
-orca_complete <- full_weeks %>%
-  left_join(OC02_weekly, by = "week") %>%
-  rowwise() %>%
-  mutate(
-    # Check if this week_start falls within any off-effort start/end window
-    is_off = any(week >= OC02_offeffort$start & week <= OC02_offeffort$end),
-    # Set hours to NA if it was missing from orca_data OR if it's an off-effort week
-    total_hours_present = if_else(is_off, NA_real_, total_hours_present)
-  ) %>%
-  ungroup() %>%
-  select(-is_off)
-
-
-
-
-
-
-# 1. Identify continuous blocks of data
-orca_complete <- orca_complete %>%
-  mutate(has_data = !is.na(total_hours_present),
-         # Create a group ID that changes every time a gap (NA) occurs
-         group_id = cumsum(is.na(total_hours_present) != lag(is.na(total_hours_present), default = FALSE)))
-
-# 2. Add 'group = group_id' to your ggplot mapping
-ggplot(orca_complete, aes(x = week, y = total_hours_present, group = group_id)) +
-  geom_point() +
-  coord_cartesian(ylim = c(0, 168))+
-  stat_smooth(method = "gam", formula = y ~ s(x, k = 8), # k adjusted for segments
-              na.rm = FALSE)
-
-
-
-
-
-
-
-
 
 #NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
@@ -441,6 +160,14 @@ orca_complete <- OC02_weekly %>%
   select(-is_off)
 
 
+orca_complete$Echotype <- factor(orca_complete$Echotype,
+                              levels = c("Northern resident killer whales", 
+                                         "Southern resident killer whales", 
+                                         "Unknown resident killer whales", 
+                                         "Transient", 
+                                         "Unknown killer whales"))
+
+
 
 curveOC02 <- ggplot(orca_complete,
                     aes(x = week, y = total_hours_present,
@@ -468,7 +195,7 @@ curveOC02
 
 
 
-curveOC02 + facet_wrap(~ Echotype, ncol = 1)
+curveOC02 <- curveOC02 + facet_wrap(~ Echotype, ncol = 2)
 
 
 #END NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -586,9 +313,9 @@ curvewtitle
 
 
 #save
-outDir = "C:/Users/embe5980/SoundscapesWebsite/code/plot_Humpback&Orca/plots"
+outDir = "C:/Users/pam_user/Desktop/SoundscapesWebsiteDev"
 
-ggsave(filename = paste0(outDir, "/plot_OC02OrcaDetectionsV4.jpg"), plot = curvewtitle, dpi = 300)
+ggsave(filename = paste0(outDir, "/plot_OC02OrcaEchotypeDet.jpg"), plot = curvewtitle, dpi = 300)
 
 
 
@@ -596,7 +323,7 @@ ggsave(filename = paste0(outDir, "/plot_OC02OrcaDetectionsV4.jpg"), plot = curve
 
 
 # Save a data frame to CSV
-write.csv(OC02_weekly, ".csv", row.names = FALSE)
+write.csv(orca_complete, ".csv", row.names = FALSE)
 
 
 #chcking if GAM is appropraite
@@ -617,5 +344,31 @@ write.csv(OC02_weekly, ".csv", row.names = FALSE)
 #ggplot(MB01_weekly_clean, aes(x = week, y = total_hours_present)) +
 # geom_point(alpha = 0.5) +
 #geom_line(aes(y = fit), color = "blue", size = 1)
+
+
+
+#PAMSCAPES graph
+#From Taiki - make detection datasets
+detData <- loadDetectionData(x= OC02Hour,
+                             source='csv', detectionType='auto', wide=TRUE,
+                             tz='UTC',
+                             columnMap=list(UTC='hour_presence', end='end_time'),
+                             speciesCols='Orca',
+                             detectedValues='1')
+
+runDetectionExplorer(detData)
+
+
+
+#NEW PLOTS - INDICATOR GRAPHICS
+
+#BOXPLOT ####
+# 03/08/2019 to 10/21/2021
+
+plotDetectionBoxplot(x=detData, group='species', bin='hour/week', combineYears=TRUE)+
+  theme(legend.position = "none",
+        plot.title = element_text(face = "bold")) +
+  labs(title = " OC02: Weekly variation of killer whale calls b/w Mar 2019 and Oct 2021")
+
 
 
