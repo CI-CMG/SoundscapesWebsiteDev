@@ -36,7 +36,7 @@ rm(list=ls())
 DC = Sys.Date()
 site  = "ci04" 
 site = tolower(site) 
-# 
+
 # #add for NRS
  # gcpF = "PMEL_OSP" #"PMEL_NEOFFSHORE"
  # prodName = "NP" #"NE" 

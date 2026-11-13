@@ -313,7 +313,7 @@ curvewtitle
 
 
 #save
-outDir = "C:/Users/pam_user/Desktop/SoundscapesWebsiteDev"
+outDir = "C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/plots"
 
 ggsave(filename = paste0(outDir, "/plot_OC02OrcaEchotypeDet.jpg"), plot = curvewtitle, dpi = 300)
 
