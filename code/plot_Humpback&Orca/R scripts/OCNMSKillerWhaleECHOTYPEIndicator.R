@@ -301,7 +301,7 @@ curveOC02
 curvewtitle <- (curveOC02) +
   plot_layout(guides = "collect") +
   plot_annotation(
-    title = "Passive acoustic monitoring of orca in Olympic Coast National Marine Sanctuary",
+    title = "Passive acoustic monitoring of killer whales in Olympic Coast National Marine Sanctuary",
     theme = theme(
       plot.title = element_text(face = "bold")
     )
