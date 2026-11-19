@@ -75,8 +75,8 @@ OC02 <- OC02[-11, ]
 OC02 <- OC02[-10, ]
 
 #rename logs 
-OC02$Echotype <- gsub('T','Transient', OC02$Echotype)
-OC02$Echotype <- gsub(' Transient','Transient', OC02$Echotype)
+OC02$Echotype <- gsub('T','Biggs killer whales', OC02$Echotype)
+OC02$Echotype <- gsub(' Transient','Biggs killer whales', OC02$Echotype)
 OC02$Echotype <- gsub('NRKW/SRKW','NRKW,SRKW', OC02$Echotype)
 OC02$Echotype <- gsub('SRKW,NRKW','NRKW,SRKW', OC02$Echotype)
 OC02$Echotype <- gsub("\\?", "", OC02$Echotype)
@@ -164,7 +164,7 @@ orca_complete$Echotype <- factor(orca_complete$Echotype,
                               levels = c("Northern resident killer whales", 
                                          "Southern resident killer whales", 
                                          "Unknown resident killer whales", 
-                                         "Transient", 
+                                         "Biggs killer whales", 
                                          "Unknown killer whales"))
 
 
@@ -186,7 +186,7 @@ curveOC02 <- ggplot(orca_complete,
   scale_y_continuous(expand = c(0, 0),
                      breaks = c(24, 48, 72, 96, 120, 144, 168)) +
   labs(title = "OC02", x = "Week",
-       y = "Total hours with orca call presence",
+       y = "Total hours with killer whale call presence",
        color = "Echotype", fill = "Echotype") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -197,12 +197,13 @@ curveOC02
 
 curveOC02 <- curveOC02 + facet_wrap(~ Echotype, ncol = 2)
 
+curveOC02
 
 #END NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
 ###plot ####
 
-####curve graph MB01 ####
+####curve graph  ####
 #with GAM curve of best fit
 curveOC02 <- ggplot(orca_complete, aes(x = week, y = total_hours_present)) +
   geom_point() +
@@ -252,7 +253,7 @@ curveOC02
 curvewtitle <- (curveOC02) +
   plot_layout(guides = "collect") +
   plot_annotation(
-    title = "Passive acoustic monitoring of orca in Olympic Coast National Marine Sanctuary",
+    title = "Passive acoustic monitoring of killer whale in Olympic Coast National Marine Sanctuary",
     theme = theme(
       plot.title = element_text(face = "bold")
     )
