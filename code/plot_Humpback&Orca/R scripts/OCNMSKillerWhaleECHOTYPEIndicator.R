@@ -199,105 +199,6 @@ curveOC02 <- curveOC02 + facet_wrap(~ Echotype, ncol = 2)
 
 curveOC02
 
-#END NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-
-###plot ####
-
-####curve graph  ####
-#with GAM curve of best fit
-curveOC02 <- ggplot(orca_complete, aes(x = week, y = total_hours_present)) +
-  geom_point() +
-  stat_smooth(method = "gam", formula = y ~ s(x, k = 20),
-              se = TRUE,
-              color = "steelblue",
-              fill = "steelblue",
-              na.rm = FALSE,
-              alpha = 0.2) +
-  geom_rect(
-    data = OC02_offeffort,
-    aes(xmin = start , xmax = end - days(4), ymin = 0, ymax = 72),
-    inherit.aes = FALSE,
-    fill = "white") +
-  scale_x_date(
-    date_labels = "%b %Y",   # shows abbreviated month + year on x-axis
-    date_breaks = "3 months",
-    date_minor_breaks = "1 month"  # one tick per month
-  ) +
-  geom_rect(
-    data = OC02_offeffort,
-    aes(xmin = start , xmax = end - days(4), ymin = 0, ymax = 2),
-    inherit.aes = FALSE,
-    fill = "grey") +
-  scale_x_date(
-    date_labels = "%b %Y",   # shows abbreviated month + year on x-axis
-    date_breaks = "3 months",
-    date_minor_breaks = "1 month"  # one tick per month
-  ) +
-  theme_classic() +
-  #theme_minimal() +
-  coord_cartesian(ylim = c(0, 72))+
-  scale_y_continuous(expand = c(0, 0),
-                     breaks = c(24, 48, 72, 96, 120, 144, 168))+
-  labs(
-    title = "OC02",
-    x = "Week",
-    y = "Total hours with orca call presence"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  guides(fill = "none")
-
-
-curveOC02
-
-
-curvewtitle <- (curveOC02) +
-  plot_layout(guides = "collect") +
-  plot_annotation(
-    title = "Passive acoustic monitoring of killer whale in Olympic Coast National Marine Sanctuary",
-    theme = theme(
-      plot.title = element_text(face = "bold")
-    )
-  )
-
-curvewtitle
-
-
-###plot ####
-
-####curve graph MB01 ####
-#with GAM curve of best fit
-curveOC02 <- ggplot(OC02_weekly, aes(x = week, y = total_hours_present)) +
-  geom_point() +
-  stat_smooth(method = "gam", formula = y ~ s(x, k = 20),
-              se = TRUE,
-              color = "steelblue",
-              fill = "steelblue",
-              alpha = 0.2) +
-  geom_rect(
-    data = OC02_offeffort,
-    aes(xmin = start , xmax = end - days(4), ymin = 0, ymax = 72),
-    inherit.aes = FALSE,
-    fill =  "gray95") +
-  scale_x_date(
-    date_labels = "%b %Y",   # shows abbreviated month + year on x-axis
-    date_breaks = "3 months",
-    date_minor_breaks = "1 month"  # one tick per month
-  ) +
-  coord_cartesian(ylim = c(0, 72))+
-  scale_y_continuous(expand = c(0, 0),
-                     breaks = c(24, 48, 72, 96, 120, 144, 168))+
-  labs(
-    title = "OC02",
-    x = "Week",
-    y = "Total hours with orca call presence"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  guides(fill = "none")
-
-
-curveOC02
-
 
 curvewtitle <- (curveOC02) +
   plot_layout(guides = "collect") +
@@ -319,57 +220,182 @@ outDir = "C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orc
 ggsave(filename = paste0(outDir, "/plot_OC02OrcaEchotypeDet.jpg"), plot = curvewtitle, dpi = 300)
 
 
-
-
-
-
 # Save a data frame to CSV
 write.csv(orca_complete, ".csv", row.names = FALSE)
 
 
-#chcking if GAM is appropraite
-#acf(MB01_weekly_clean$total_hours_present)
-
-#library(mgcv)
-
-# Create a time variable if you don't already have one
-#MB01_weekly_clean$time <- 1:nrow(MB01_weekly_clean)
-
-# Fit the GAM with AR(1) correlation
-#gamm_fit <- gamm(total_hours_present ~ s(week, k=20), 
-# correlation = corAR1(form = ~ week),
-# data = MB01_weekly_clean)
-
-#MB01_weekly_clean$fit <- gamm_fit$gam$fitted.values
-
-#ggplot(MB01_weekly_clean, aes(x = week, y = total_hours_present)) +
-# geom_point(alpha = 0.5) +
-#geom_line(aes(y = fit), color = "blue", size = 1)
 
 
 
-#PAMSCAPES graph
-#From Taiki - make detection datasets
-detData <- loadDetectionData(x= OC02Hour,
-                             source='csv', detectionType='auto', wide=TRUE,
-                             tz='UTC',
-                             columnMap=list(UTC='hour_presence', end='end_time'),
-                             speciesCols='Orca',
-                             detectedValues='1')
+#END NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+#v2 killer whale graph
 
-runDetectionExplorer(detData)
+OC02v2 <- OC02
 
+#rename logs 
+OC02v2$Echotype <- gsub('Southern resident killer whales','Resident killer whales', OC02v2$Echotype)
+OC02v2$Echotype <- gsub('Northern resident killer whales','Resident killer whales', OC02v2$Echotype)
+OC02v2$Echotype <- gsub('Unknown resident killer whales','Resident killer whales', OC02v2$Echotype)
+OC02v2$Echotype <- gsub("Northern resident killer whales,Southern resident killer whales",'Resident killer whales', OC02v2$Echotype)
+OC02v2$Echotype <- gsub("Unknown resident killer whales,Southern resident killer whales",'Resident killer whales', OC02v2$Echotype)
+OC02v2$Echotype <- gsub("Resident killer whales,Resident killer whales",'Resident killer whales', OC02v2$Echotype)
 
-
-#NEW PLOTS - INDICATOR GRAPHICS
-
-#BOXPLOT ####
-# 03/08/2019 to 10/21/2021
-
-plotDetectionBoxplot(x=detData, group='species', bin='hour/week', combineYears=TRUE)+
-  theme(legend.position = "none",
-        plot.title = element_text(face = "bold")) +
-  labs(title = " OC02: Weekly variation of killer whale calls b/w Mar 2019 and Oct 2021")
+unique(OC02v2$Echotype)
 
 
+# Apply the function to each row of the data
+OC02Hour2 <- OC02v2 %>%
+  rowwise() %>%
+  do(data.frame(Echotype = .$Echotype,
+                generate_hours(.$start_time, .$end_time))) %>%
+  ungroup() %>%
+  distinct() 
+
+
+#need to add a end detection time column
+OC02Hour2 <- OC02Hour2 %>% mutate(end_time = hour_presence + hours(1))
+
+OC02Hour2$Orca <- 1
+
+
+
+#LINE GRAPH ####
+
+#NEW STUFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+
+
+OC02Hour2 <- OC02Hour2 %>%
+  separate_rows(Echotype, sep = "\\s*[,/]\\s*") %>%   # split on comma or slash
+  # mutate(Echotype = trimws(gsub("\\?", "", Echotype))) %>%   # drop "?" and stray spaces
+  filter(Echotype != "") %>%
+  distinct()   # avoid duplicate hour + echotype rows
+
+OC02HourT %>% count(Echotype, sort = TRUE)   # check the result
+
+
+OC02_weekly2 <- OC02Hour2 %>%
+  mutate(week = as.Date(floor_date(hour_presence, "week"))) %>%
+  group_by(week, Echotype) %>%
+  summarise(total_hours_present = sum(Orca, na.rm = TRUE), .groups = "drop") %>%
+  complete(
+    week = seq(min(week), max(week), by = "1 week"),
+    Echotype,
+    fill = list(total_hours_present = 0)
+  ) %>%
+  arrange(Echotype, week)
+
+
+
+
+orca_complete2 <- OC02_weekly2 %>%
+  rowwise() %>%
+  mutate(
+    is_off = any(week >= OC02_offeffort$start & week <= OC02_offeffort$end),
+    total_hours_present = if_else(is_off, NA_real_, as.numeric(total_hours_present))
+  ) %>%
+  ungroup() %>%
+  select(-is_off)
+
+
+orca_complete2$Echotype <- factor(orca_complete2$Echotype,
+                                 levels = c("Resident killer whales", 
+                                            "Biggs killer whales", 
+                                            "Unknown killer whales"))
+
+
+
+curveOC02v2 <- ggplot(orca_complete2,
+                    aes(x = week, y = total_hours_present,
+                        color = Echotype, fill = Echotype)) +
+  geom_point(alpha = 0.6, na.rm = TRUE) +
+  stat_smooth(method = "gam", formula = y ~ s(x, k = 20),
+              se = TRUE, alpha = 0.2, na.rm = TRUE) +
+  geom_rect(
+    data = OC02_offeffort,
+    aes(xmin = start, xmax = end - days(4), ymin = 0, ymax = 72),
+    inherit.aes = FALSE, fill = "gray95") +
+  scale_x_date(date_labels = "%b %Y",
+               date_breaks = "3 months",
+               date_minor_breaks = "1 month") +
+  coord_cartesian(ylim = c(0, 72)) +
+  scale_y_continuous(expand = c(0, 0),
+                     breaks = c(24, 48, 72, 96, 120, 144, 168)) +
+  labs(title = "OC02", x = "Week",
+       y = "Total hours with killer whale call presence",
+       color = "Echotype", fill = "Echotype") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+curveOC02v2
+
+
+
+curvewtitle2 <- (curveOC02v2) +
+  plot_layout(guides = "collect") +
+  plot_annotation(
+    title = "Passive acoustic monitoring of killer whales in Olympic Coast National Marine Sanctuary",
+    theme = theme(
+      plot.title = element_text(face = "bold")
+    )
+  )
+
+curvewtitle2
+
+
+
+
+#save
+outDir = "C:/Users/pam_user/Desktop/SoundscapesWebsiteDev/code/plot_Humpback&Orca/plots"
+
+ggsave(filename = paste0(outDir, "/plot_OC02OrcaEchotypeDetv2.jpg"), plot = curvewtitle2, dpi = 300)
+
+
+
+
+
+# #chcking if GAM is appropraite
+# #acf(MB01_weekly_clean$total_hours_present)
+# 
+# #library(mgcv)
+# 
+# # Create a time variable if you don't already have one
+# #MB01_weekly_clean$time <- 1:nrow(MB01_weekly_clean)
+# 
+# # Fit the GAM with AR(1) correlation
+# #gamm_fit <- gamm(total_hours_present ~ s(week, k=20), 
+# # correlation = corAR1(form = ~ week),
+# # data = MB01_weekly_clean)
+# 
+# #MB01_weekly_clean$fit <- gamm_fit$gam$fitted.values
+# 
+# #ggplot(MB01_weekly_clean, aes(x = week, y = total_hours_present)) +
+# # geom_point(alpha = 0.5) +
+# #geom_line(aes(y = fit), color = "blue", size = 1)
+# 
+# 
+# 
+# #PAMSCAPES graph
+# #From Taiki - make detection datasets
+# detData <- loadDetectionData(x= OC02Hour,
+#                              source='csv', detectionType='auto', wide=TRUE,
+#                              tz='UTC',
+#                              columnMap=list(UTC='hour_presence', end='end_time'),
+#                              speciesCols='Orca',
+#                              detectedValues='1')
+# 
+# runDetectionExplorer(detData)
+# 
+# 
+# 
+# #NEW PLOTS - INDICATOR GRAPHICS
+# 
+# #BOXPLOT ####
+# # 03/08/2019 to 10/21/2021
+# 
+# plotDetectionBoxplot(x=detData, group='species', bin='hour/week', combineYears=TRUE)+
+#   theme(legend.position = "none",
+#         plot.title = element_text(face = "bold")) +
+#   labs(title = " OC02: Weekly variation of killer whale calls b/w Mar 2019 and Oct 2021")
+# 
+# 
 
