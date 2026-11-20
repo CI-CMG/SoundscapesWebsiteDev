@@ -20,6 +20,7 @@ project:
     - content/ne.qmd
     - content/np.qmd
     - content/nc.qmd
+    - content/es.qmd
 
 website: 
   page-navigation: true
@@ -66,6 +67,8 @@ website:
         text: Stellwagen Bank
       - href: content/ne.qmd
         text: New England
+      - href: content/es.qmd
+        text: South Carolina Estuaries
       - href: content/gr.qmd
         text: Gray's Reef
       - href: content/fgb.qmd
