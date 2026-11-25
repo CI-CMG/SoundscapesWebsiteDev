@@ -40,7 +40,7 @@ for i in range(len(headerLocations)):
 ```
 
 ---
-title: "Estuarine Soundscape Observatory Network in the Southeast, South Carolina"
+title: "Estuarine Soundscape Observatory Network in the Southeast (ESONS) – South Carolina"
 date: "today"
 output: 
   html_document: 
